@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import { User, Session, Artist } from 'spotify-client';
-import Interface from './components/Interface';
+import View from './components/View';
 
 class App extends Component {
     constructor(props) {
@@ -52,7 +52,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        // const url = 'https://floating-earth-14232.herokuapp.com/api/artists';
         const url = '/api/artists';
         fetch(url)
             .then(res => res.json())
@@ -65,27 +64,7 @@ class App extends Component {
                 this.setState({ artists: res });
             });
     }
-    // componentDidMount() {
-    //     fetch('/api')
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error(`status ${response.status}`);
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(json => {
-    //             this.setState({
-    //                 message: json.message,
-    //                 fetching: false
-    //             });
-    //         })
-    //         .catch(e => {
-    //             this.setState({
-    //                 message: `API call failed: ${e}`,
-    //                 fetching: false
-    //             });
-    //         });
-    // }
+
     handleChangeArtist = e => {
         this.setState({
             inputArtist: e.target.value
@@ -120,35 +99,7 @@ class App extends Component {
     };
 
     handleSubmitArtist = e => {
-        //save this for last
         e.preventDefault();
-
-        // let config = {
-        //     limit: 2,
-        //     offset: 0,
-        //     or: 'Rolling Stones',
-        //     market: 'US'
-        // };
-        // // Artist.where('aerosmith',config)
-        // //     .then( ... )
-
-        // Session.config({
-        //     clientId: process.env.REACT_APP_SPOTIFY_ID,
-        //     secretId: process.env.REACT_APP_SPOTIFY_SECRET,
-        //     scopes: ['playlist-modify-public'],
-        //     redirect_uri: 'http://localhost:3000/'
-        // });
-
-        // let token = window.location.hash.split('&')[0].split('=')[1];
-        // if (token) {
-        //     Session.token = token;
-        // } else {
-        //     Session.login().then(url => {
-        //         window.location.href = url;
-        //     });
-
-        //     Artist.where('aerosmith', config).then(res => console.log(res));
-        // }
 
         const { artists, inputArtist, inputRating } = this.state;
         const num = artists.length;
@@ -158,20 +109,16 @@ class App extends Component {
             'background: red; color: #83f52c'
         );
         console.log(inputArtist);
-        // https://floating-earth-14232.herokuapp.com/api/artists
-        // const url = 'https://floating-earth-14232.herokuapp.com/api/artists';
         const url = '/api/artists';
         fetch(url, {
             body: JSON.stringify({
                 name: inputArtist,
                 rating: inputRating
-            }), // must match 'Content-Type' header
+            }),
             headers: {
-                // 'user-agent': 'Mozilla/4.0 MDN Example',
                 'content-type': 'application/json'
             },
-            method: 'POST' // *GET, POST, PUT, DELETE, etc.
-            // mode: 'cors', // no-cors, cors, *same-origin
+            method: 'POST'
         })
             .then(res => res.json())
             .then(res => {
@@ -260,7 +207,6 @@ class App extends Component {
     };
 
     handleRemoveArtist = id => {
-        // const url = 'https://floating-earth-14232.herokuapp.com/api/artist/';
         const url = '/api/artist';
         fetch(url + id, { method: 'delete' })
             .then(res => res.json())
@@ -315,7 +261,7 @@ class App extends Component {
         console.log('State |||||||---------->');
         console.log(this.state);
         return (
-            <Interface
+            <View
                 {...{
                     /*UI VALUES*/
                     inputArtist,
@@ -348,7 +294,7 @@ class App extends Component {
                 handleSubmitRating={this.handleSubmitRating}
             >
                 {/*  */}
-            </Interface>
+            </View>
         );
     }
 }

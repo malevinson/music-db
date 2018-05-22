@@ -1,7 +1,7 @@
 import React from 'react';
-// import styles from './Interface.css';
+// import styles from './View.css';
 
-const Interface = props => {
+const View = props => {
     const {
         //UI VALUES
         inputArtist,
@@ -36,7 +36,7 @@ const Interface = props => {
         <div>
             <form onSubmit={handleSubmitReminder}>
                 <label>
-                    Popup (steals focus)
+                    Popup (steals browser focus)
                     <input type="checkbox" name="popup" checked={checkboxPopup} onChange={handleChangeCheckboxPopup} />
                 </label>
                 <br />
@@ -115,4 +115,4 @@ const Interface = props => {
     );
 };
 
-export default Interface;
+export default View;
