@@ -2,8 +2,60 @@ const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const SpotifyWebApi = require('spotify-web-api-node');
 
 const PORT = process.env.PORT || 5000;
+
+var spotifyApi = new SpotifyWebApi({
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET
+    //   redirectUri : 'http://www.example.com/callback'
+});
+
+spotifyApi.clientCredentialsGrant().then(
+    function(data) {
+        console.log('The access token expires in ' + data.body['expires_in']);
+        console.log('The access token is ' + data.body['access_token']);
+
+        spotifyApi.setAccessToken(data.body['access_token']);
+        console.log('LOG |||||||---------->');
+        console.log(getArtistImage('Taylor Swift'));
+    },
+    function(err) {
+        console.log('Something went wrong when retrieving an access token', err);
+    }
+);
+
+function getArtistImage(artistQuery) {
+    return new Promise(function(resolve, reject) {
+        spotifyApi.searchArtists(artistQuery).then(
+            function(data) {
+                console.log('LOG |||||||---------->');
+                console.log('in spotify response');
+                if (
+                    data.body &&
+                    data.body.artists &&
+                    data.body.artists.items &&
+                    data.body.artists.items[0] &&
+                    data.body.artists.items[0].images
+                ) {
+                    const img = data.body.artists.items[0].images[2].url;
+                    console.log(img);
+                    // return img;
+                    resolve(img);
+                }
+            },
+            function(err) {
+                reject(err);
+                console.error(err);
+            }
+        );
+    });
+}
 
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
@@ -20,8 +72,124 @@ if (cluster.isMaster) {
 } else {
     const app = express();
 
+    app.use(morgan('dev'));
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+
+    // ------DB CONNECTION --------
+    const url = app.get('env') === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost:27017/musicDb';
+
+    mongoose.connect(url);
+
+    const db = mongoose.connection;
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function() {
+        console.log('DB connection alive');
+    });
+
+    const Artist = require('../Artist.js');
+
     // Priority serve any static files.
     app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+
+    // START ROUTER NEW
+
+    const router = express.Router();
+
+    router.use(function(req, res, next) {
+        console.log('Something is happening.');
+        next();
+    });
+
+    router
+        .route('/artists')
+        // create an artist (accessed at POST http://localhost:8080/api/artists)
+        .post(function(req, res) {
+            var artist = new Artist();
+            const name = req.body.name;
+            artist.name = name;
+            console.log('req.body |||||||---------->');
+            console.log(req.body);
+
+            console.log('Name |||||||---------->');
+            console.log(name);
+
+            if (req.body.rating) {
+                artist.rating = req.body.rating;
+            }
+            getArtistImage(name)
+                .catch(function(err) {
+                    console.log(err);
+                })
+                .then(image => {
+                    //
+                    artist.image = image;
+                    artist.save(function(err) {
+                        if (err) res.send(err);
+                        console.log('LOG |||||||---------->');
+                        console.log('artist created');
+
+                        res.json({ artist });
+                    });
+                });
+        })
+        // get all the artist (accessed at GET http://localhost:8080/api/artists)
+        .get(function(req, res) {
+            Artist.find(function(err, artists) {
+                if (err) res.send(err);
+
+                res.json(artists);
+            });
+        });
+
+    // on routes that end in /api/artists/:artist_id
+    // ----------------------------------------------------
+    router
+        .route('/artist/:artist_id')
+
+        // get the artist with that id
+        .get(function(req, res) {
+            Artist.findById(req.params.artist_id, function(err, artist) {
+                if (err) res.send(err);
+                res.json(artist);
+            });
+        })
+
+        // update the artist with this id
+        .put(function(req, res) {
+            Artist.findById(req.params.artist_id, function(err, artist) {
+                if (err) res.send(err);
+
+                artist.name = req.body.name;
+                artist.save(function(err) {
+                    if (err) res.send(err);
+
+                    res.json({ message: 'Artist updated!' });
+                });
+            });
+        })
+
+        // delete the artist with this id
+        .delete(function(req, res) {
+            Artist.remove(
+                {
+                    _id: req.params.artist_id
+                },
+                function(err, artist) {
+                    if (err) res.send(err);
+
+                    res.json({
+                        _id: req.params.artist_id
+                    });
+                }
+            );
+        });
+
+    app.use('/api', router);
+
+    // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 
     // Answer API requests.
     app.get('/api', function(req, res) {
