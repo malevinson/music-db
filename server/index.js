@@ -20,10 +20,7 @@ spotifyApi.clientCredentialsGrant().then(
     function(data) {
         console.log('The access token expires in ' + data.body['expires_in']);
         console.log('The access token is ' + data.body['access_token']);
-
         spotifyApi.setAccessToken(data.body['access_token']);
-        console.log('LOG |||||||---------->');
-        console.log(getArtistImage('Taylor Swift'));
     },
     function(err) {
         console.log('Something went wrong when retrieving an access token', err);
@@ -34,8 +31,6 @@ function getArtistImage(artistQuery) {
     return new Promise(function(resolve, reject) {
         spotifyApi.searchArtists(artistQuery).then(
             function(data) {
-                console.log('LOG |||||||---------->');
-                console.log('in spotify response');
                 if (
                     data.body &&
                     data.body.artists &&
@@ -44,9 +39,9 @@ function getArtistImage(artistQuery) {
                     data.body.artists.items[0].images
                 ) {
                     const img = data.body.artists.items[0].images[2].url;
-                    console.log(img);
-                    // return img;
                     resolve(img);
+                } else {
+                    reject('Could not find artist image');
                 }
             },
             function(err) {
@@ -110,29 +105,22 @@ if (cluster.isMaster) {
             var artist = new Artist();
             const name = req.body.name;
             artist.name = name;
-            console.log('req.body |||||||---------->');
-            console.log(req.body);
-
-            console.log('Name |||||||---------->');
-            console.log(name);
 
             if (req.body.rating) {
                 artist.rating = req.body.rating;
             }
             getArtistImage(name)
-                .catch(function(err) {
-                    console.log(err);
-                })
                 .then(image => {
-                    //
                     artist.image = image;
                     artist.save(function(err) {
                         if (err) res.send(err);
-                        console.log('LOG |||||||---------->');
-                        console.log('artist created');
-
+                        console.log('artist created:');
                         res.json({ artist });
                     });
+                })
+                .catch(function(err) {
+                    console.log(err);
+                    res.status(500).json({ error: err });
                 });
         })
         // get all the artist (accessed at GET http://localhost:8080/api/artists)
@@ -148,6 +136,7 @@ if (cluster.isMaster) {
     // ----------------------------------------------------
     router
         .route('/artist/:artist_id')
+        // console.log('in put route');
 
         // get the artist with that id
         .get(function(req, res) {
@@ -159,10 +148,13 @@ if (cluster.isMaster) {
 
         // update the artist with this id
         .put(function(req, res) {
+            console.log('in put function');
             Artist.findById(req.params.artist_id, function(err, artist) {
                 if (err) res.send(err);
+                console.log('in findById');
 
                 artist.name = req.body.name;
+                artist.rating = req.body.rating;
                 artist.save(function(err) {
                     if (err) res.send(err);
 
@@ -173,13 +165,15 @@ if (cluster.isMaster) {
 
         // delete the artist with this id
         .delete(function(req, res) {
+            console.log('in delete');
             Artist.remove(
                 {
                     _id: req.params.artist_id
                 },
                 function(err, artist) {
                     if (err) res.send(err);
-
+                    console.log('artist deleted:');
+                    // console.log(_id);
                     res.json({
                         _id: req.params.artist_id
                     });

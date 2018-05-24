@@ -1,5 +1,5 @@
 import React from 'react';
-// import styles from './View.css';
+import './View.css';
 
 const View = props => {
     const {
@@ -8,21 +8,23 @@ const View = props => {
         inputRating,
         inputReminder,
         checkboxPopup,
+        inputRatingEdit,
         checkboxSound,
         ratingArrowUp,
+        currentEdit,
         reminderText,
         //FUNCTIONS
         handleClickNumber,
         handleAddPin,
         handleRemoveArtist,
         handleRemovePin,
+        handleUpdateArtist,
         handleClickName,
         handleClickRating,
         handleChangeArtist,
         handleChangeReminder,
         handleChangeRating,
-        handleSubmitName,
-        handleSubmitRating,
+        handleEditRating,
         handleSubmitArtist,
         handleSubmitReminder,
         handleChangeCheckboxSound,
@@ -89,6 +91,8 @@ const View = props => {
                     return a.rating - b.rating;
                 })
                 .map(artist => {
+                    console.log(artist);
+                    // console.log(artist._id);
                     return (
                         <div className="container" key={artist._id}>
                             <div
@@ -98,8 +102,22 @@ const View = props => {
                             >
                                 Remove
                             </div>
-                            <div className="rating">{artist.rating}</div>
-                            <img src={artist.image} className="photo" />
+                            {currentEdit === artist._id ? (
+                                <label>
+                                    edit rating<input
+                                        placeholder={artist.rating}
+                                        name="editrating"
+                                        value={inputRatingEdit}
+                                        onChange={handleEditRating}
+                                    />
+                                    <button onClick={e => handleUpdateArtist(e, artist._id)}>Update Rating</button>
+                                </label>
+                            ) : (
+                                <div onClick={() => handleClickNumber(artist._id)} className="rating">
+                                    {artist.rating}
+                                </div>
+                            )}
+                            <img src={artist.image} alt="album art" className="photo" />
                             <div className="name">{artist.name}</div>
                             <button
                                 onClick={() => {

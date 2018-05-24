@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { User, Session, Artist } from 'spotify-client';
 import View from './components/View';
 
 class App extends Component {
@@ -10,44 +9,18 @@ class App extends Component {
             /*UI VALUES */
             inputArtist: '',
             inputRating: '',
+            inputRatingEdit: '',
             inputReminder: '',
             checkboxPopup: false,
             checkboxSound: true,
             ratingArrowUp: false,
             reminderText: 'Start Timer',
             timerStartTime: null,
+            currentEdit: '',
             /*APP STATE */
             pinned: [],
-            artists: [
-                {
-                    name: 'Taylor Swift',
-                    id: 0,
-                    rating: Math.round(Math.random() * 1000, 2),
-                    img: 'https://i.scdn.co/image/33bc9128ad82f7d39847b6db6a49d5416502e7e7',
-                    pinned: false
-                },
-                {
-                    name: 'Led Zepplin',
-                    id: 1,
-                    rating: Math.round(Math.random() * 1000, 2),
-                    img: 'https://i.scdn.co/image/33bc9128ad82f7d39847b6db6a49d5416502e7e7',
-                    pinned: false
-                },
-                {
-                    name: 'Abba',
-                    id: 2,
-                    rating: Math.round(Math.random() * 1000, 2),
-                    img: 'https://i.scdn.co/image/33bc9128ad82f7d39847b6db6a49d5416502e7e7',
-                    pinned: false
-                },
-                {
-                    name: 'Bob Marley',
-                    id: 3,
-                    rating: Math.round(Math.random() * 1000, 2),
-                    img: 'https://i.scdn.co/image/33bc9128ad82f7d39847b6db6a49d5416502e7e7',
-                    pinned: false
-                }
-            ]
+            artists: [],
+            ids: {}
         };
     }
 
@@ -56,13 +29,27 @@ class App extends Component {
         fetch(url)
             .then(res => res.json())
             .then(res => {
-                console.log(
-                    '%c' + '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
-                    'background: red; color: #83f52c'
-                );
-                console.log(res);
-                this.setState({ artists: res });
+                let ids = {};
+                res.forEach((artist, index) => {
+                    ids[artist._id] = index;
+                });
+                this.setState({
+                    ids,
+                    artists: res
+                });
             });
+        // fetch('/users', {
+        //     method: 'GET'
+        // }).then(function(response) {
+        //     if (response.status >= 400) {
+        //         throw new Error("Bad response from server");
+        //     }
+        //     return response.json();
+        // }).then(function(data) {
+        //     self.setState({users: data});
+        // }).catch(err => {
+        // console.log('caught it!',err);
+        // })
     }
 
     handleChangeArtist = e => {
@@ -90,8 +77,8 @@ class App extends Component {
         });
     };
 
-    handleClickNumber = e => {
-        //edit rating
+    handleClickNumber = id => {
+        this.setState({ currentEdit: id });
     };
 
     handleClickName = e => {
@@ -101,38 +88,45 @@ class App extends Component {
     handleSubmitArtist = e => {
         e.preventDefault();
 
-        const { artists, inputArtist, inputRating } = this.state;
-        const num = artists.length;
-
-        console.log(
-            '%c' + '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
-            'background: red; color: #83f52c'
-        );
-        console.log(inputArtist);
+        const { inputArtist, inputRating } = this.state;
         const url = '/api/artists';
-        fetch(url, {
-            body: JSON.stringify({
-                name: inputArtist,
-                rating: inputRating
-            }),
-            headers: {
-                'content-type': 'application/json'
-            },
-            method: 'POST'
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log(
-                    '%c' + '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
-                    'background: red; color: #83f52c'
-                );
-                console.log(res);
-                this.setState(prevState => {
-                    return {
-                        artists: prevState.artists.concat(res.artist)
-                    };
-                });
+
+        const requestBody = { name: inputArtist, rating: inputRating };
+
+        this.buildRequest(url, requestBody, 'POST', data => {
+            this.setState(prevState => {
+                return {
+                    artists: prevState.artists.concat(data.artist),
+                    ids: {
+                        ...this.state.ids,
+                        [data.artist._id]: prevState.artists.length
+                    }
+                };
             });
+        });
+
+        // fetch(url, {
+        //     body: JSON.stringify({
+        //         name: inputArtist,
+        //         rating: inputRating
+        //     }),
+        //     headers: {
+        //         'content-type': 'application/json'
+        //     },
+        //     method: 'POST'
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         this.setState(prevState => {
+        //             return {
+        //                 artists: prevState.artists.concat(res.artist),
+        //                 ids: {
+        //                     ...this.state.ids,
+        //                     [res.artist._id]: prevState.artists.length
+        //                 }
+        //             };
+        //         });
+        //     });
     };
 
     triggerReminder() {
@@ -141,18 +135,15 @@ class App extends Component {
 
     handleSubmitReminder = e => {
         e.preventDefault();
-        //reset visual timer, then refactor this
         this.setState({ timerStartTime: Date.now() }, () => {
             const { inputReminder, reminderText } = this.state;
-            let timer;
             let timerId;
             let stopwatchId;
             let storedTimer;
             if (reminderText === 'Start Timer' && inputReminder.length && !isNaN(inputReminder)) {
                 function renderTime() {
-                    console.log((storedTimer * 1000 - (Date.now() - timerStartTime)) / 1000);
+                    // console.log((storedTimer * 1000 - (Date.now() - timerStartTime)) / 1000);
                 }
-                const { timerStartTime } = this.state;
                 storedTimer = inputReminder;
                 timerId = setInterval(this.triggerReminder, 1000 * storedTimer);
                 renderTime();
@@ -207,41 +198,108 @@ class App extends Component {
     };
 
     handleRemoveArtist = id => {
-        const url = '/api/artist';
+        const url = '/api/artist/';
+
         fetch(url + id, { method: 'delete' })
+            .then(res => {
+                return res.json();
+            })
+            .then(res => {
+                let prevState = this.state.artists;
+                // prevState.forEach((artist, i) => {
+                //     if (artist._id === res._id) {
+                //         index = i;
+                //     }
+                // });
+
+                let idList = this.state.ids;
+                let index = idList[id];
+                delete idList[id];
+                prevState.splice(index, 1);
+                this.setState({ artists: prevState, ids: idList });
+            });
+    };
+
+    handleUpdateArtist = (e, id) => {
+        e.preventDefault();
+
+        const { inputRatingEdit } = this.state;
+
+        const url = '/api/artist/';
+        const stateIdArtist = this.state.ids[id];
+        const currentArtistData = this.state.artists[this.state.ids[id]];
+        const newData = {
+            ...currentArtistData,
+            rating: inputRatingEdit
+        };
+        fetch(url + id, {
+            body: JSON.stringify(newData),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'PUT'
+        })
             .then(res => res.json())
             .then(res => {
-                console.log('LOG |||||||---------->');
-                console.log(res);
-                //remove id
-                let prevState = this.state.artists;
-                // this.setState(prevState => {
-                let index;
-                prevState.forEach((artist, i) => {
-                    console.log(
-                        '%c' +
-                            '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
-                        'background: red; color: #83f52c'
-                    );
-                    console.log(artist._id);
-                    if (artist._id === res._id) {
-                        index = i;
-                    }
-                });
-                // var index = prevState.indexOf(res);
-                console.log(
-                    '%c' + '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
-                    'background: red; color: #83f52c'
-                );
-                console.log(index);
-                if (index > -1) {
-                    prevState.splice(index, 1);
-                    // return { artists: prevState };
+                const newList = this.state.artists;
+                newList[stateIdArtist] = newData;
 
-                    this.setState({ artists: prevState });
-                    // });
-                }
+                this.setState(prevState => {
+                    return {
+                        artists: newList,
+                        currentEdit: ''
+                    };
+                });
             });
+
+        // fetch('/users/new', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(data)
+        // })
+        //     .then(function(response) {
+        //         if (response.status >= 400) {
+        //             throw new Error('Bad response from server');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(function(data) {
+        //         console.log(data);
+        //         if (data == 'success') {
+        //             this.setState({ msg: 'Thanks for registering' });
+        //         }
+        //     })
+        //     .catch(function(err) {
+        //         console.log(err);
+        //     });
+    };
+
+    buildRequest(url, requestBody, method, callback) {
+        let status;
+        fetch(url, {
+            body: JSON.stringify(requestBody),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method
+        })
+            .then(res => {
+                status = res.status;
+                return res.json();
+            })
+            .then(data => {
+                if (status >= 400) {
+                    throw new Error(data.error);
+                }
+                callback(data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    handleEditRating = e => {
+        this.setState({ inputRatingEdit: e.target.value });
     };
 
     render() {
@@ -251,15 +309,19 @@ class App extends Component {
             inputRating,
             inputReminder,
             checkboxPopup,
+            inputRatingEdit,
             checkboxSound,
+            currentEdit,
             //APP STATE
             artists,
             pinned,
             ratingArrowUp,
             reminderText
         } = this.state;
+
         console.log('State |||||||---------->');
         console.log(this.state);
+
         return (
             <View
                 {...{
@@ -267,10 +329,12 @@ class App extends Component {
                     inputArtist,
                     inputRating,
                     inputReminder,
+                    inputRatingEdit,
                     checkboxPopup,
                     checkboxSound,
                     ratingArrowUp,
                     reminderText,
+                    currentEdit,
                     /*APP STATE*/
                     artists,
                     pinned
@@ -282,6 +346,7 @@ class App extends Component {
                 handleChangeReminder={this.handleChangeReminder}
                 handleAddPin={this.handleAddPin}
                 handleRemoveArtist={this.handleRemoveArtist}
+                handleEditRating={this.handleEditRating}
                 handleRemovePin={this.handleRemovePin}
                 handleChangeRating={this.handleChangeRating}
                 handleClickName={this.handleClickName}
@@ -290,8 +355,7 @@ class App extends Component {
                 handleSubmitReminder={this.handleSubmitReminder}
                 handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
                 handleChangeCheckboxSound={this.handleChangeCheckboxSound}
-                handleSubmitName={this.handleSubmitName}
-                handleSubmitRating={this.handleSubmitRating}
+                handleUpdateArtist={this.handleUpdateArtist}
             >
                 {/*  */}
             </View>

@@ -1,0 +1,6 @@
+.container {
+    /* border: 0.1rem solid green   */
+    width: 200px;
+    display: inline-block;
+    /* height: 150px    */
+}
