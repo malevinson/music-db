@@ -82,6 +82,22 @@ class App extends Component {
         });
     };
 
+    refactor() {
+        let model = {
+            home: {
+                //cant delte other keys
+                input: ''
+            }
+        };
+
+        let routeKey = Object.keys(model)[0];
+        let uiStateKey = Object.keys(model[routeKey])[0];
+
+        this.setState({
+            [routeKey]: { ...this.state[routeKey], [uiStateKey]: !this.state[routeKey][uiStateKey] }
+        });
+    }
+
     handleSubmitArtist = e => {
         e.preventDefault();
 
