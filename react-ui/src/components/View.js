@@ -6,11 +6,12 @@ const View = props => {
         //UI VALUES
         inputArtist,
         inputRating,
+        activeSortButton,
         inputReminder,
         checkboxPopup,
         inputRatingEdit,
         checkboxSound,
-        ratingArrowUp,
+        sortArrowUp,
         currentEdit,
         reminderText,
         //FUNCTIONS
@@ -85,10 +86,17 @@ const View = props => {
             {[]
                 .concat(artists)
                 .sort((a, b) => {
-                    if (ratingArrowUp) {
-                        return b.rating - a.rating;
+                    if (activeSortButton === 'Rating') {
+                        if (sortArrowUp) {
+                            return b.rating - a.rating;
+                        }
+                        return a.rating - b.rating;
+                    } else if (activeSortButton === 'Name') {
+                        if (sortArrowUp) {
+                            return b.name - a.name;
+                        }
+                        return a.name - b.name;
                     }
-                    return a.rating - b.rating;
                 })
                 .map(artist => {
                     console.log(artist);

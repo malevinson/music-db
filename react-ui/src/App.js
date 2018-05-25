@@ -13,7 +13,8 @@ class App extends Component {
             inputReminder: '',
             checkboxPopup: false,
             checkboxSound: true,
-            ratingArrowUp: false,
+            sortArrowUp: false,
+            activeSortButton: 'Rating',
             reminderText: 'Start Timer',
             timerStartTime: null,
             currentEdit: '',
@@ -54,7 +55,10 @@ class App extends Component {
     handleClickRating = e => {
         e.preventDefault();
         this.setState(prevState => {
-            return { ratingArrowUp: !prevState.ratingArrowUp };
+            return {
+                sortArrowUp: !prevState.sortArrowUp,
+                activeSortButton: 'Rating'
+            };
         });
     };
 
@@ -69,7 +73,13 @@ class App extends Component {
     };
 
     handleClickName = e => {
-        //sort by name
+        e.preventDefault();
+        this.setState(prevState => {
+            return {
+                sortArrowUp: !prevState.sortArrowUp,
+                activeSortButton: 'Name'
+            };
+        });
     };
 
     handleSubmitArtist = e => {
@@ -255,10 +265,11 @@ class App extends Component {
             inputRatingEdit,
             checkboxSound,
             currentEdit,
+            activeSortButton,
             //APP STATE
             artists,
             pinned,
-            ratingArrowUp,
+            sortArrowUp,
             reminderText
         } = this.state;
 
@@ -271,11 +282,12 @@ class App extends Component {
                     /*UI VALUES*/
                     inputArtist,
                     inputRating,
+                    activeSortButton,
                     inputReminder,
                     inputRatingEdit,
                     checkboxPopup,
                     checkboxSound,
-                    ratingArrowUp,
+                    sortArrowUp,
                     reminderText,
                     currentEdit,
                     /*APP STATE*/
