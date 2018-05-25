@@ -41,12 +41,12 @@ function getArtistImage(artistQuery) {
                     const img = data.body.artists.items[0].images[2].url;
                     resolve(img);
                 } else {
-                    reject('Could not find artist image');
+                    reject('Invalid artist or could not find artist image');
                 }
             },
             function(err) {
-                reject(err);
                 console.error(err);
+                reject(err);
             }
         );
     });
@@ -113,7 +113,8 @@ if (cluster.isMaster) {
                 .then(image => {
                     artist.image = image;
                     artist.save(function(err) {
-                        if (err) res.send(err);
+                        // if (err) res.send(err);
+                        if (err) res.status(500).json({ error: 'Error saving new artist after getting artist image.' });
                         console.log('artist created:');
                         res.json({ artist });
                     });
@@ -126,8 +127,9 @@ if (cluster.isMaster) {
         // get all the artist (accessed at GET http://localhost:8080/api/artists)
         .get(function(req, res) {
             Artist.find(function(err, artists) {
-                if (err) res.send(err);
-
+                // if (err) res.send(err);
+                if (err) res.status(500).json({ error: 'Error fetching all saved artists.' });
+                console.log('got all artists');
                 res.json(artists);
             });
         });
@@ -141,23 +143,27 @@ if (cluster.isMaster) {
         // get the artist with that id
         .get(function(req, res) {
             Artist.findById(req.params.artist_id, function(err, artist) {
-                if (err) res.send(err);
+                // if (err) res.send(err);
+                if (err) res.status(500).json({ error: 'Could not find artist with the id: ' + req.params.artist_id });
+                console.log('got that specific artist');
                 res.json(artist);
             });
         })
 
         // update the artist with this id
         .put(function(req, res) {
-            console.log('in put function');
             Artist.findById(req.params.artist_id, function(err, artist) {
-                if (err) res.send(err);
-                console.log('in findById');
+                // if (err) res.send(err);
+                if (err) res.status(500).json({ error: err });
 
                 artist.name = req.body.name;
                 artist.rating = req.body.rating;
                 artist.save(function(err) {
-                    if (err) res.send(err);
-
+                    // if (err) res.send(err);
+                    if (err)
+                        res
+                            .status(500)
+                            .json({ error: 'Could not save updates to the artist with id: ' + req.params.artist_id });
                     res.json({ message: 'Artist updated!' });
                 });
             });
@@ -171,9 +177,10 @@ if (cluster.isMaster) {
                     _id: req.params.artist_id
                 },
                 function(err, artist) {
-                    if (err) res.send(err);
+                    // if (err) res.send(err);
+                    if (err)
+                        res.status(500).json({ error: 'Could not delete artist with the id: ' + req.params.artist_id });
                     console.log('artist deleted:');
-                    // console.log(_id);
                     res.json({
                         _id: req.params.artist_id
                     });

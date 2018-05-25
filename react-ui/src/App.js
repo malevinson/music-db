@@ -25,31 +25,18 @@ class App extends Component {
     }
 
     componentDidMount() {
-        const url = '/api/artists';
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                let ids = {};
-                res.forEach((artist, index) => {
-                    ids[artist._id] = index;
-                });
-                this.setState({
-                    ids,
-                    artists: res
-                });
+        const url = '/artists';
+
+        this.buildRequest(url).then(data => {
+            let ids = {};
+            data.forEach((artist, index) => {
+                ids[artist._id] = index;
             });
-        // fetch('/users', {
-        //     method: 'GET'
-        // }).then(function(response) {
-        //     if (response.status >= 400) {
-        //         throw new Error("Bad response from server");
-        //     }
-        //     return response.json();
-        // }).then(function(data) {
-        //     self.setState({users: data});
-        // }).catch(err => {
-        // console.log('caught it!',err);
-        // })
+            this.setState({
+                ids,
+                artists: data
+            });
+        });
     }
 
     handleChangeArtist = e => {
@@ -89,11 +76,10 @@ class App extends Component {
         e.preventDefault();
 
         const { inputArtist, inputRating } = this.state;
-        const url = '/api/artists';
-
+        const url = '/artists';
         const requestBody = { name: inputArtist, rating: inputRating };
 
-        this.buildRequest(url, requestBody, 'POST', data => {
+        this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
                 return {
                     artists: prevState.artists.concat(data.artist),
@@ -104,29 +90,6 @@ class App extends Component {
                 };
             });
         });
-
-        // fetch(url, {
-        //     body: JSON.stringify({
-        //         name: inputArtist,
-        //         rating: inputRating
-        //     }),
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     method: 'POST'
-        // })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         this.setState(prevState => {
-        //             return {
-        //                 artists: prevState.artists.concat(res.artist),
-        //                 ids: {
-        //                     ...this.state.ids,
-        //                     [res.artist._id]: prevState.artists.length
-        //                 }
-        //             };
-        //         });
-        //     });
     };
 
     triggerReminder() {
@@ -198,104 +161,83 @@ class App extends Component {
     };
 
     handleRemoveArtist = id => {
-        const url = '/api/artist/';
+        const url = '/artist/' + id;
 
-        fetch(url + id, { method: 'delete' })
-            .then(res => {
-                return res.json();
-            })
-            .then(res => {
-                let prevState = this.state.artists;
-                // prevState.forEach((artist, i) => {
-                //     if (artist._id === res._id) {
-                //         index = i;
-                //     }
-                // });
-
-                let idList = this.state.ids;
-                let index = idList[id];
-                delete idList[id];
-                prevState.splice(index, 1);
-                this.setState({ artists: prevState, ids: idList });
-            });
+        this.buildRequest(url, 'DELETE').then(res => {
+            let prevState = this.state.artists;
+            let idList = this.state.ids;
+            let index = idList[id];
+            delete idList[id];
+            prevState.splice(index, 1);
+            this.setState({ artists: prevState, ids: idList });
+        });
     };
 
     handleUpdateArtist = (e, id) => {
         e.preventDefault();
 
         const { inputRatingEdit } = this.state;
-
-        const url = '/api/artist/';
         const stateIdArtist = this.state.ids[id];
         const currentArtistData = this.state.artists[this.state.ids[id]];
-        const newData = {
+        const requestBody = {
             ...currentArtistData,
             rating: inputRatingEdit
         };
-        fetch(url + id, {
-            body: JSON.stringify(newData),
-            headers: {
-                'content-type': 'application/json'
-            },
-            method: 'PUT'
-        })
-            .then(res => res.json())
-            .then(res => {
-                const newList = this.state.artists;
-                newList[stateIdArtist] = newData;
+        const url = '/artist/' + id;
 
-                this.setState(prevState => {
-                    return {
-                        artists: newList,
-                        currentEdit: ''
-                    };
-                });
+        this.buildRequest(url, 'PUT', requestBody).then(data => {
+            const newList = this.state.artists;
+            newList[stateIdArtist] = requestBody;
+
+            this.setState(prevState => {
+                return {
+                    artists: newList,
+                    currentEdit: ''
+                };
             });
-
-        // fetch('/users/new', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(data)
-        // })
-        //     .then(function(response) {
-        //         if (response.status >= 400) {
-        //             throw new Error('Bad response from server');
-        //         }
-        //         return response.json();
-        //     })
-        //     .then(function(data) {
-        //         console.log(data);
-        //         if (data == 'success') {
-        //             this.setState({ msg: 'Thanks for registering' });
-        //         }
-        //     })
-        //     .catch(function(err) {
-        //         console.log(err);
-        //     });
+        });
     };
 
-    buildRequest(url, requestBody, method, callback) {
-        let status;
-        fetch(url, {
-            body: JSON.stringify(requestBody),
-            headers: {
-                'content-type': 'application/json'
-            },
-            method
-        })
-            .then(res => {
-                status = res.status;
-                return res.json();
-            })
-            .then(data => {
-                if (status >= 400) {
-                    throw new Error(data.error);
-                }
-                callback(data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+    buildRequest(urlSuffix, method, requestBody) {
+        return new Promise((resolve, reject) => {
+            let fetchParams;
+
+            if (method === 'POST' || method === 'PUT') {
+                fetchParams = {
+                    body: JSON.stringify(requestBody),
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    method
+                };
+            } else if (method === 'DELETE' || method === null) {
+                fetchParams = {
+                    method
+                };
+            }
+
+            const url = '/api' + urlSuffix;
+            let status;
+            fetch(url, fetchParams)
+                .then(res => {
+                    status = res.status;
+                    return res.json();
+                })
+                .then(data => {
+                    if (status >= 400) {
+                        throw new Error(data.error);
+                    }
+                    resolve(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.handleError(err);
+                });
+        });
+    }
+
+    handleError(err) {
+        //
     }
 
     handleEditRating = e => {
