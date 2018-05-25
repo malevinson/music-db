@@ -1,6 +1,26 @@
-.container {
-    /* border: 0.1rem solid green   */
-    width: 200px;
+.artist {
+    /* border: 0.1rem solid green; */
     display: inline-block;
-    /* height: 150px    */
+    padding: 0.3rem;
+}
+
+.pinned-section {
+    /* border: 0.1rem solid green; */
+}
+
+section {
+    margin: 3vh auto;
+
+    text-align: center;
+}
+
+.controls {
+    margin: 3vh auto;
+}
+
+img {
+    width: 150px;
+    height: 150px;
+    /* margin-left: 50%;
+    transform: translateX(-50%); */
 }
