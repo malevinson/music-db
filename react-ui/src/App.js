@@ -238,6 +238,7 @@ class App extends Component {
 
     handleError(err) {
         //
+        // TODO, client facing error msg
     }
 
     handleEditRating = e => {
