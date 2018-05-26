@@ -21,7 +21,13 @@ class App extends Component {
             /*APP STATE */
             pinned: [],
             artists: [],
-            ids: {}
+            ids: {},
+            //
+            inputs: {
+                rating: '',
+                artist: '',
+                edit: ''
+            }
         };
     }
 
@@ -37,6 +43,31 @@ class App extends Component {
                 ids,
                 artists: data
             });
+        });
+    }
+
+    handleEvent = ({ action, ...rest }) => {
+        //
+        switch (action) {
+            case 'inputChange':
+                //
+                this.handleInputChange(...rest);
+                break;
+            case 'api':
+                //
+                break;
+            case 'pin':
+                //
+                break;
+            default:
+                break;
+        }
+    };
+
+    handleInputChange(model, value) {
+        //
+        this.setState({
+            input: { [model]: value }
         });
     }
 
