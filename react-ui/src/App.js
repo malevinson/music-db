@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+
+// import produce from 'immer';
+import update from 'immutability-helper';
 import View from './components/View';
 
 class App extends Component {
@@ -23,10 +26,13 @@ class App extends Component {
             artists: [],
             ids: {},
             //
-            inputs: {
-                rating: '',
-                artist: '',
-                edit: ''
+            uiState: {
+                input: {
+                    rating: '',
+                    artist: '',
+                    edit: ''
+                },
+                test2ndkey: {}
             }
         };
     }
@@ -46,12 +52,14 @@ class App extends Component {
         });
     }
 
-    handleEvent = ({ action, ...rest }) => {
+    handleEvent = ({ action, e }) => {
         //
         switch (action) {
             case 'inputChange':
                 //
-                this.handleInputChange(...rest);
+                console.log(e);
+                console.log(e.target.name);
+                this.handleInputChange(e);
                 break;
             case 'api':
                 //
@@ -64,11 +72,11 @@ class App extends Component {
         }
     };
 
-    handleInputChange(model, value) {
-        //
-        this.setState({
-            input: { [model]: value }
+    handleInputChange(e) {
+        const newState = update(this.state, {
+            uiState: { input: { [e.target.name]: { $set: e.target.value } } }
         });
+        this.setState(newState);
     }
 
     handleChangeArtist = e => {
@@ -233,12 +241,12 @@ class App extends Component {
     handleUpdateArtist = (e, id) => {
         e.preventDefault();
 
-        const { inputRatingEdit } = this.state;
+        // const { inputRatingEdit } = this.state;
         const stateIdArtist = this.state.ids[id];
         const currentArtistData = this.state.artists[this.state.ids[id]];
         const requestBody = {
             ...currentArtistData,
-            rating: inputRatingEdit
+            rating: this.state.uiState.input.edit
         };
         const url = '/artist/' + id;
 
@@ -309,6 +317,7 @@ class App extends Component {
             inputRating,
             inputReminder,
             checkboxPopup,
+            input,
             inputRatingEdit,
             checkboxSound,
             currentEdit,
@@ -317,6 +326,7 @@ class App extends Component {
             artists,
             pinned,
             sortArrowUp,
+            uiState,
             reminderText
         } = this.state;
 
@@ -336,7 +346,9 @@ class App extends Component {
                     checkboxSound,
                     sortArrowUp,
                     reminderText,
+                    uiState,
                     currentEdit,
+                    input,
                     /*APP STATE*/
                     artists,
                     pinned
@@ -357,6 +369,7 @@ class App extends Component {
                 handleSubmitReminder={this.handleSubmitReminder}
                 handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
                 handleChangeCheckboxSound={this.handleChangeCheckboxSound}
+                handleEvent={this.handleEvent}
                 handleUpdateArtist={this.handleUpdateArtist}
             >
                 {/*  */}

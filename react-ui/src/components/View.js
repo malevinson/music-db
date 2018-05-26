@@ -1,4 +1,5 @@
 import React from 'react';
+import Input from './Input';
 import './View.css';
 
 const View = props => {
@@ -13,9 +14,11 @@ const View = props => {
         checkboxSound,
         sortArrowUp,
         currentEdit,
+        input,
         reminderText,
         //FUNCTIONS
         handleClickNumber,
+        handleEvent,
         handleAddPin,
         handleRemoveArtist,
         handleRemovePin,
@@ -30,6 +33,7 @@ const View = props => {
         handleSubmitReminder,
         handleChangeCheckboxSound,
         handleChangeCheckboxPopup,
+        uiState,
         //APP STATE
         artists,
         pinned
@@ -75,11 +79,23 @@ const View = props => {
                 <form onSubmit={handleSubmitArtist}>
                     <label>
                         Rating
-                        <input type="text" value={inputRating} placeholder={'Rating'} onChange={handleChangeRating} />
+                        <Input
+                            name="rating"
+                            value={uiState.input}
+                            handleChange={e => {
+                                handleEvent({ action: 'inputChange', e });
+                            }}
+                        />
                     </label>
                     <label>
                         Artist
-                        <input type="text" value={inputArtist} placeholder={'Artist'} onChange={handleChangeArtist} />
+                        <Input
+                            name="artist"
+                            value={uiState.input}
+                            handleChange={e => {
+                                handleEvent({ action: 'inputChange', e });
+                            }}
+                        />
                     </label>
                     <button onClick={handleSubmitArtist}>Add Artist</button>
                 </form>
@@ -119,11 +135,13 @@ const View = props => {
                                 </div>
                                 {currentEdit === artist._id ? (
                                     <label>
-                                        edit rating<input
-                                            placeholder={artist.rating}
-                                            name="editrating"
-                                            value={inputRatingEdit}
-                                            onChange={handleEditRating}
+                                        edit rating
+                                        <Input
+                                            name="edit"
+                                            value={uiState.input}
+                                            handleChange={e => {
+                                                handleEvent({ action: 'inputChange', e });
+                                            }}
                                         />
                                         <button onClick={e => handleUpdateArtist(e, artist._id)}>Update Rating</button>
                                     </label>
