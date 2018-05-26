@@ -5,38 +5,22 @@ import './View.css';
 const View = props => {
     const {
         //UI VALUES
-        inputArtist,
-        inputRating,
         activeSortButton,
-        inputReminder,
-        checkboxPopup,
-        inputRatingEdit,
-        checkboxSound,
         sortArrowUp,
         currentEdit,
-        input,
-        reminderText,
         //FUNCTIONS
         handleClickNumber,
         handleEvent,
-        handleAddPin,
         handleRemoveArtist,
-        handleRemovePin,
         handleUpdateArtist,
         handleClickName,
         handleClickRating,
-        handleChangeArtist,
-        handleChangeReminder,
-        handleChangeRating,
-        handleEditRating,
         handleSubmitArtist,
-        handleSubmitReminder,
-        handleChangeCheckboxSound,
-        handleChangeCheckboxPopup,
         uiState,
         //APP STATE
         artists,
-        pinned
+        pinned,
+        ids
     } = props;
 
     return (
@@ -60,13 +44,16 @@ const View = props => {
             </form> */}
             <section className="pinned-section">
                 <div>Pinned Artists</div>
-                {pinned.map(artist => {
+                {pinned.map(id => {
+                    const artist = artists[ids[id]];
                     return (
                         <div key={artist._id}>
                             {artist.name}
                             <button
                                 onClick={() => {
-                                    handleRemovePin(artist._id);
+                                    // handleRemovePin(artist._id);
+
+                                    handleEvent({ action: 'togglePin', id: artist._id });
                                 }}
                             >
                                 Unpin
@@ -120,9 +107,10 @@ const View = props => {
                             }
                             return a.name - b.name;
                         }
+                        return null;
                     })
                     .map(artist => {
-                        console.log(artist);
+                        // console.log(artist);
                         // console.log(artist._id);
                         return (
                             <div className="artist" key={artist._id}>
@@ -152,13 +140,16 @@ const View = props => {
                                 )}
                                 <img src={artist.image} alt="album art" className="photo" />
                                 <div className="name">{artist.name}</div>
-                                <button
-                                    onClick={() => {
-                                        handleAddPin(artist);
-                                    }}
-                                >
-                                    Pin
-                                </button>
+                                {pinned.indexOf(artist._id) === -1 && (
+                                    <button
+                                        onClick={() => {
+                                            // handleAddPin(artist);
+                                            handleEvent({ action: 'togglePin', id: artist._id });
+                                        }}
+                                    >
+                                        Pin
+                                    </button>
+                                )}
                             </div>
                         );
                     })}

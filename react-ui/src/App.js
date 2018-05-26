@@ -10,10 +10,6 @@ class App extends Component {
 
         this.state = {
             /*UI VALUES */
-            inputArtist: '',
-            inputRating: '',
-            inputRatingEdit: '',
-            inputReminder: '',
             checkboxPopup: false,
             checkboxSound: true,
             sortArrowUp: false,
@@ -31,8 +27,7 @@ class App extends Component {
                     rating: '',
                     artist: '',
                     edit: ''
-                },
-                test2ndkey: {}
+                }
             }
         };
     }
@@ -52,7 +47,7 @@ class App extends Component {
         });
     }
 
-    handleEvent = ({ action, e }) => {
+    handleEvent = ({ action, e, id }) => {
         //
         switch (action) {
             case 'inputChange':
@@ -64,8 +59,9 @@ class App extends Component {
             case 'api':
                 //
                 break;
-            case 'pin':
+            case 'togglePin':
                 //
+                this.handleTogglePin(id);
                 break;
             default:
                 break;
@@ -79,17 +75,20 @@ class App extends Component {
         this.setState(newState);
     }
 
-    handleChangeArtist = e => {
-        this.setState({
-            inputArtist: e.target.value
-        });
-    };
-
-    handleChangeReminder = e => {
-        this.setState({
-            inputReminder: e.target.value
-        });
-    };
+    handleTogglePin(id) {
+        let currPins = this.state.pinned;
+        const pinIndex = currPins.indexOf(id);
+        if (pinIndex !== -1) {
+            currPins.splice(pinIndex, 1);
+            this.setState({
+                pinned: currPins
+            });
+        } else {
+            this.setState({
+                pinned: currPins.concat(id)
+            });
+        }
+    }
 
     handleClickRating = e => {
         e.preventDefault();
@@ -98,12 +97,6 @@ class App extends Component {
                 sortArrowUp: !prevState.sortArrowUp,
                 activeSortButton: 'Rating'
             };
-        });
-    };
-
-    handleChangeRating = e => {
-        this.setState({
-            inputRating: e.target.value
         });
     };
 
@@ -121,29 +114,14 @@ class App extends Component {
         });
     };
 
-    refactor() {
-        let model = {
-            home: {
-                //cant delte other keys
-                input: ''
-            }
-        };
-
-        let routeKey = Object.keys(model)[0];
-        let uiStateKey = Object.keys(model[routeKey])[0];
-
-        this.setState({
-            [routeKey]: { ...this.state[routeKey], [uiStateKey]: !this.state[routeKey][uiStateKey] }
-        });
-    }
-
     handleSubmitArtist = e => {
         e.preventDefault();
 
-        const { inputArtist, inputRating } = this.state;
+        // const { inputArtist, inputRating } = this.state;
         const url = '/artists';
-        const requestBody = { name: inputArtist, rating: inputRating };
+        const requestBody = { name: this.state.uiState.input.artist, rating: this.state.uiState.input.rating };
 
+        console.log(requestBody);
         this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
                 return {
@@ -189,39 +167,6 @@ class App extends Component {
                     reminderText: 'Start Timer'
                 });
             }
-        });
-    };
-
-    handleChangeCheckboxPopup = e => {
-        this.setState(prevState => {
-            return { checkboxPopup: !prevState.checkboxPopup };
-        });
-    };
-
-    handleChangeCheckboxSound = e => {
-        this.setState(prevState => {
-            return { checkboxSound: !prevState.checkboxSound };
-        });
-    };
-
-    handleRemovePin = id => {
-        const prevPins = this.state.pinned;
-        const index = prevPins.indexOf(id);
-        prevPins.splice(index, 1);
-
-        this.setState({
-            pinned: prevPins
-        });
-    };
-
-    handleAddPin = artist => {
-        const prevPins = this.state.pinned;
-        if (prevPins.includes(artist)) {
-            //check before handling click instead of here?
-            return;
-        }
-        this.setState({
-            pinned: prevPins.concat(artist)
         });
     };
 
@@ -313,12 +258,7 @@ class App extends Component {
     render() {
         const {
             //UI VALUES
-            inputArtist,
-            inputRating,
-            inputReminder,
             checkboxPopup,
-            input,
-            inputRatingEdit,
             checkboxSound,
             currentEdit,
             activeSortButton,
@@ -326,6 +266,7 @@ class App extends Component {
             artists,
             pinned,
             sortArrowUp,
+            ids,
             uiState,
             reminderText
         } = this.state;
@@ -337,32 +278,23 @@ class App extends Component {
             <View
                 {...{
                     /*UI VALUES*/
-                    inputArtist,
-                    inputRating,
                     activeSortButton,
-                    inputReminder,
-                    inputRatingEdit,
                     checkboxPopup,
                     checkboxSound,
                     sortArrowUp,
                     reminderText,
                     uiState,
                     currentEdit,
-                    input,
                     /*APP STATE*/
                     artists,
-                    pinned
+                    pinned,
+                    ids
                 }}
                 /*FUNCTIONS*/
                 handleClickNumber={this.handleClickNumber}
                 handleClickArtist={this.handleClickArtist}
-                handleChangeArtist={this.handleChangeArtist}
-                handleChangeReminder={this.handleChangeReminder}
-                handleAddPin={this.handleAddPin}
                 handleRemoveArtist={this.handleRemoveArtist}
                 handleEditRating={this.handleEditRating}
-                handleRemovePin={this.handleRemovePin}
-                handleChangeRating={this.handleChangeRating}
                 handleClickName={this.handleClickName}
                 handleClickRating={this.handleClickRating}
                 handleSubmitArtist={this.handleSubmitArtist}
