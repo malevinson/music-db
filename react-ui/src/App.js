@@ -12,8 +12,9 @@ class App extends Component {
             /*UI VALUES */
             checkboxPopup: false,
             checkboxSound: true,
-            sortArrowUp: false,
+            sortUp: false,
             activeSortButton: 'Rating',
+            activeSort: 'Rating',
             reminderText: 'Start Timer',
             timerStartTime: null,
             currentEdit: '',
@@ -47,7 +48,7 @@ class App extends Component {
         });
     }
 
-    handleEvent = ({ action, e, id }) => {
+    handleEvent = ({ action, e, id, type }) => {
         //
         switch (action) {
             case 'inputChange':
@@ -56,17 +57,39 @@ class App extends Component {
                 console.log(e.target.name);
                 this.handleInputChange(e);
                 break;
-            case 'api':
-                //
+            case 'create':
+                this.createArtist();
+                break;
+            case 'delete':
+                this.deleteArtist(id);
+                break;
+            case 'update':
+                this.updateArtist(id);
                 break;
             case 'togglePin':
                 //
                 this.handleTogglePin(id);
                 break;
+            case 'sort':
+                this.handleSort(type);
             default:
                 break;
         }
     };
+
+    handleSort(type) {
+        console.log(type);
+        if (this.state.activeSort === type) {
+            console.log('in if');
+            this.setState(prevState => {
+                return { sortUp: !prevState.sortUp };
+            });
+        } else {
+            this.setState({
+                activeSort: type
+            });
+        }
+    }
 
     handleInputChange(e) {
         const newState = update(this.state, {
@@ -114,26 +137,23 @@ class App extends Component {
         });
     };
 
-    handleSubmitArtist = e => {
-        e.preventDefault();
-
-        // const { inputArtist, inputRating } = this.state;
+    createArtist() {
+        const { input } = this.state.uiState;
         const url = '/artists';
-        const requestBody = { name: this.state.uiState.input.artist, rating: this.state.uiState.input.rating };
+        const requestBody = { name: input.artist, rating: input.rating };
 
-        console.log(requestBody);
         this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
                 return {
                     artists: prevState.artists.concat(data.artist),
                     ids: {
-                        ...this.state.ids,
+                        ...prevState.ids,
                         [data.artist._id]: prevState.artists.length
                     }
                 };
             });
         });
-    };
+    }
 
     triggerReminder() {
         console.log('BEEP!!');
@@ -170,34 +190,33 @@ class App extends Component {
         });
     };
 
-    handleRemoveArtist = id => {
+    deleteArtist(id) {
         const url = '/artist/' + id;
+        const { ids, artists } = this.state;
 
         this.buildRequest(url, 'DELETE').then(res => {
-            let prevState = this.state.artists;
-            let idList = this.state.ids;
-            let index = idList[id];
+            const idList = ids;
+            const index = idList[id];
+            let prevState = artists;
             delete idList[id];
             prevState.splice(index, 1);
             this.setState({ artists: prevState, ids: idList });
         });
-    };
+    }
 
-    handleUpdateArtist = (e, id) => {
-        e.preventDefault();
-
-        // const { inputRatingEdit } = this.state;
-        const stateIdArtist = this.state.ids[id];
-        const currentArtistData = this.state.artists[this.state.ids[id]];
+    updateArtist(id) {
+        const { ids, artists, uiState } = this.state;
+        const artistIndex = ids[id];
+        const currentArtistData = artists[artistIndex];
         const requestBody = {
             ...currentArtistData,
-            rating: this.state.uiState.input.edit
+            rating: uiState.input.edit
         };
         const url = '/artist/' + id;
 
         this.buildRequest(url, 'PUT', requestBody).then(data => {
-            const newList = this.state.artists;
-            newList[stateIdArtist] = requestBody;
+            let newList = artists;
+            newList[artistIndex] = requestBody;
 
             this.setState(prevState => {
                 return {
@@ -206,7 +225,7 @@ class App extends Component {
                 };
             });
         });
-    };
+    }
 
     buildRequest(urlSuffix, method, requestBody) {
         return new Promise((resolve, reject) => {
@@ -264,6 +283,8 @@ class App extends Component {
             activeSortButton,
             //APP STATE
             artists,
+            activeSort,
+            sortUp,
             pinned,
             sortArrowUp,
             ids,
@@ -284,6 +305,9 @@ class App extends Component {
                     sortArrowUp,
                     reminderText,
                     uiState,
+
+                    activeSort,
+                    sortUp,
                     currentEdit,
                     /*APP STATE*/
                     artists,
@@ -293,11 +317,8 @@ class App extends Component {
                 /*FUNCTIONS*/
                 handleClickNumber={this.handleClickNumber}
                 handleClickArtist={this.handleClickArtist}
-                handleRemoveArtist={this.handleRemoveArtist}
-                handleEditRating={this.handleEditRating}
                 handleClickName={this.handleClickName}
                 handleClickRating={this.handleClickRating}
-                handleSubmitArtist={this.handleSubmitArtist}
                 handleSubmitReminder={this.handleSubmitReminder}
                 handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
                 handleChangeCheckboxSound={this.handleChangeCheckboxSound}

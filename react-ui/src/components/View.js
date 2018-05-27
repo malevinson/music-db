@@ -11,15 +11,14 @@ const View = props => {
         //FUNCTIONS
         handleClickNumber,
         handleEvent,
-        handleRemoveArtist,
-        handleUpdateArtist,
         handleClickName,
         handleClickRating,
-        handleSubmitArtist,
         uiState,
         //APP STATE
         artists,
         pinned,
+        activeSort,
+        sortUp,
         ids
     } = props;
 
@@ -51,8 +50,6 @@ const View = props => {
                             {artist.name}
                             <button
                                 onClick={() => {
-                                    // handleRemovePin(artist._id);
-
                                     handleEvent({ action: 'togglePin', id: artist._id });
                                 }}
                             >
@@ -63,7 +60,11 @@ const View = props => {
                 })}
             </section>
             <section>
-                <form onSubmit={handleSubmitArtist}>
+                <form
+                    onSubmit={e => {
+                        handleEvent({ action: 'create' });
+                    }}
+                >
                     <label>
                         Rating
                         <Input
@@ -84,25 +85,31 @@ const View = props => {
                             }}
                         />
                     </label>
-                    <button onClick={handleSubmitArtist}>Add Artist</button>
+                    <button>Add Artist</button>
                 </form>
             </section>
             <section>
                 <div className="controls">
                     SORT
-                    <button onClick={handleClickRating}>Rating</button>
+                    <button
+                        onClick={() => {
+                            handleEvent({ action: 'sort', type: 'Rating' });
+                        }}
+                    >
+                        Rating
+                    </button>
                     <button onClick={handleClickName}>Name</button>
                 </div>
                 {[]
                     .concat(artists)
                     .sort((a, b) => {
-                        if (activeSortButton === 'Rating') {
-                            if (sortArrowUp) {
+                        if (activeSort === 'Rating') {
+                            if (sortUp) {
                                 return b.rating - a.rating;
                             }
                             return a.rating - b.rating;
-                        } else if (activeSortButton === 'Name') {
-                            if (sortArrowUp) {
+                        } else if (activeSort === 'Name') {
+                            if (sortUp) {
                                 return b.name - a.name;
                             }
                             return a.name - b.name;
@@ -116,7 +123,7 @@ const View = props => {
                             <div className="artist" key={artist._id}>
                                 <div
                                     onClick={() => {
-                                        handleRemoveArtist(artist._id);
+                                        handleEvent({ action: 'delete', id: artist._id });
                                     }}
                                 >
                                     Remove
@@ -131,7 +138,9 @@ const View = props => {
                                                 handleEvent({ action: 'inputChange', e });
                                             }}
                                         />
-                                        <button onClick={e => handleUpdateArtist(e, artist._id)}>Update Rating</button>
+                                        <button onClick={e => handleEvent({ action: 'update', id: artist._id })}>
+                                            Update Rating
+                                        </button>
                                     </label>
                                 ) : (
                                     <div onClick={() => handleClickNumber(artist._id)} className="rating">
