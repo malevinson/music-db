@@ -14,7 +14,7 @@ class App extends Component {
             checkboxSound: true,
             sortUp: false,
             activeSortButton: 'Rating',
-            activeSort: 'Rating',
+            activeSort: 'rating',
             reminderText: 'Start Timer',
             timerStartTime: null,
             currentEdit: '',
@@ -78,9 +78,7 @@ class App extends Component {
     };
 
     handleSort(type) {
-        console.log(type);
         if (this.state.activeSort === type) {
-            console.log('in if');
             this.setState(prevState => {
                 return { sortUp: !prevState.sortUp };
             });

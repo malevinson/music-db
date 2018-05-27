@@ -93,32 +93,29 @@ const View = props => {
                     SORT
                     <button
                         onClick={() => {
-                            handleEvent({ action: 'sort', type: 'Rating' });
+                            handleEvent({ action: 'sort', type: 'rating' });
                         }}
                     >
                         Rating
                     </button>
-                    <button onClick={handleClickName}>Name</button>
+                    <button
+                        onClick={() => {
+                            handleEvent({ action: 'sort', type: 'name' });
+                        }}
+                    >
+                        Name
+                    </button>
                 </div>
                 {[]
                     .concat(artists)
                     .sort((a, b) => {
-                        if (activeSort === 'Rating') {
-                            if (sortUp) {
-                                return b.rating - a.rating;
-                            }
-                            return a.rating - b.rating;
-                        } else if (activeSort === 'Name') {
-                            if (sortUp) {
-                                return b.name - a.name;
-                            }
-                            return a.name - b.name;
+                        if (sortUp) {
+                            return a[activeSort] < b[activeSort] ? 1 : -1;
                         }
-                        return null;
+                        return a[activeSort] > b[activeSort] ? 1 : -1;
                     })
                     .map(artist => {
-                        // console.log(artist);
-                        // console.log(artist._id);
+                        console.log(artist.name);
                         return (
                             <div className="artist" key={artist._id}>
                                 <div
