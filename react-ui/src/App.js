@@ -1,28 +1,11 @@
 import React, { Component } from 'react';
-
-// import produce from 'immer';
-import update from 'immutability-helper';
 import View from './components/View';
+import update from 'immutability-helper';
 
 class App extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            /*UI VALUES */
-            // checkboxPopup: false,
-            // checkboxSound: true,
-            // sortUp: false,
-            // activeSortButton: 'Rating',
-            // activeSort: 'rating',
-            // reminderText: 'Start Timer',
-            // timerStartTime: null,
-            // currentEdit: '',
-            /*APP STATE */
-            // pinned: [],
-            // artists: [],
-            // ids: {},
-            //
             uiState: {
                 input: {
                     rating: '',
@@ -49,8 +32,6 @@ class App extends Component {
                 ids[artist._id] = index;
             });
             this.setState({
-                // ids,
-                // artists: data
                 app: {
                     artists: data,
                     ids
@@ -60,7 +41,6 @@ class App extends Component {
     }
 
     handleEvent = ({ action, e, id, type }) => {
-        //
         switch (action) {
             case 'inputChange':
                 this.handleInputChange(e);
@@ -82,30 +62,23 @@ class App extends Component {
                 break;
             case 'sort':
                 this.handleSort(type);
+                break;
             default:
                 break;
         }
     };
 
     handleSort(type) {
-        if (this.state.uiState.sort.activeSort === type) {
-            // this.setState(prevState => {
-            //     return { sortUp: !prevState.sortUp };
-            // });
+        const { sort } = this.state.uiState;
+        if (sort.activeSort === type) {
             const newState = update(this.state, {
-                uiState: { sort: { sortUp: { $set: !this.state.uiState.sort.sortUp } } }
+                uiState: { sort: { sortUp: { $set: !sort.sortUp } } }
             });
             this.setState(newState);
         } else {
             const newState = update(this.state, {
                 uiState: { sort: { activeSort: { $set: type } } }
             });
-            // this.setState({
-            //     // uiState.sort.activeSort: type
-            //     uiState:{
-            //         sort:
-            //     }
-            // });
             this.setState(newState);
         }
     }
@@ -128,46 +101,21 @@ class App extends Component {
                     pinned: currPins
                 }
             });
-            // this.setState({
-            //     pinned: currPins
-            // });
         } else {
             this.setState({
                 uiState: {
                     ...this.state.uiState,
                     pinned: currPins.concat(id)
                 }
-
-                // pinned: currPins.concat(id)
             });
         }
     }
-
-    handleClickRating = e => {
-        e.preventDefault();
-        this.setState(prevState => {
-            return {
-                sortArrowUp: !prevState.sortArrowUp,
-                activeSortButton: 'Rating'
-            };
-        });
-    };
 
     handleEdit = id => {
         const newState = update(this.state, {
             uiState: { currentEdit: { $set: id } }
         });
         this.setState(newState);
-    };
-
-    handleClickName = e => {
-        e.preventDefault();
-        this.setState(prevState => {
-            return {
-                sortArrowUp: !prevState.sortArrowUp,
-                activeSortButton: 'Name'
-            };
-        });
     };
 
     createArtist() {
@@ -190,40 +138,40 @@ class App extends Component {
         });
     }
 
-    triggerReminder() {
-        console.log('BEEP!!');
-    }
+    // triggerReminder() {
+    //     console.log('BEEP!!');
+    // }
 
-    handleSubmitReminder = e => {
-        e.preventDefault();
-        this.setState({ timerStartTime: Date.now() }, () => {
-            const { inputReminder, reminderText } = this.state;
-            let timerId;
-            let stopwatchId;
-            let storedTimer;
-            if (reminderText === 'Start Timer' && inputReminder.length && !isNaN(inputReminder)) {
-                function renderTime() {
-                    // console.log((storedTimer * 1000 - (Date.now() - timerStartTime)) / 1000);
-                }
-                storedTimer = inputReminder;
-                timerId = setInterval(this.triggerReminder, 1000 * storedTimer);
-                renderTime();
-                stopwatchId = setInterval(renderTime, 100);
+    // handleSubmitReminder = e => {
+    //     e.preventDefault();
+    //     this.setState({ timerStartTime: Date.now() }, () => {
+    //         const { inputReminder, reminderText } = this.state;
+    //         let timerId;
+    //         let stopwatchId;
+    //         let storedTimer;
+    //         if (reminderText === 'Start Timer' && inputReminder.length && !isNaN(inputReminder)) {
+    //             function renderTime() {
+    //                 // console.log((storedTimer * 1000 - (Date.now() - timerStartTime)) / 1000);
+    //             }
+    //             storedTimer = inputReminder;
+    //             timerId = setInterval(this.triggerReminder, 1000 * storedTimer);
+    //             renderTime();
+    //             stopwatchId = setInterval(renderTime, 100);
 
-                this.setState({
-                    reminderText: 'Stop Timer',
-                    timerId,
-                    stopwatchId
-                });
-            } else if (reminderText === 'Stop Timer') {
-                clearInterval(this.state.timerId);
-                clearInterval(this.state.stopwatchId);
-                this.setState({
-                    reminderText: 'Start Timer'
-                });
-            }
-        });
-    };
+    //             this.setState({
+    //                 reminderText: 'Stop Timer',
+    //                 timerId,
+    //                 stopwatchId
+    //             });
+    //         } else if (reminderText === 'Stop Timer') {
+    //             clearInterval(this.state.timerId);
+    //             clearInterval(this.state.stopwatchId);
+    //             this.setState({
+    //                 reminderText: 'Start Timer'
+    //             });
+    //         }
+    //     });
+    // };
 
     deleteArtist(id) {
         const url = '/artist/' + id;
@@ -260,14 +208,8 @@ class App extends Component {
                     currentEdit: { $set: '' }
                 },
                 app: { artists: { $set: newList } }
-                // ,{artists: {$set: newList}}
             });
-            // this.setState(prevState => {
-            //     return {
-            //         artists: newList,
-            //         currentEdit: ''
-            //     };
-            // });
+
             this.setState(newState);
         });
     }
@@ -311,32 +253,11 @@ class App extends Component {
     }
 
     handleError(err) {
-        //
         // TODO, client facing error msg
     }
 
-    handleEditRating = e => {
-        this.setState({ inputRatingEdit: e.target.value });
-    };
-
     render() {
-        const {
-            //UI VALUES
-            // checkboxPopup,
-            // checkboxSound,
-            // currentEdit,
-            // activeSortButton,
-            //APP STATE
-            // artists,
-            // activeSort,
-            // sortUp,
-            // pinned,
-            app,
-            // sortArrowUp,
-            // ids,
-            uiState
-            // reminderText
-        } = this.state;
+        const { app, uiState } = this.state;
 
         console.log('State |||||||---------->');
         console.log(this.state);
@@ -344,36 +265,11 @@ class App extends Component {
         return (
             <View
                 {...{
-                    /*UI VALUES*/
-                    // activeSortButton,
-                    // checkboxPopup,
-                    // chekboxSound,
-                    // sortArrowUp,
-                    // reminderText,
                     uiState,
-
-                    // activeSort,
-                    // sortUp,
-                    // currentEdit,
-                    /*APP STATE*/
-                    // artists,
                     app
-                    // pinned,
-                    // ids
                 }}
-                /*FUNCTIONS*/
-                // handleClickNumber={this.handleClickNumber}
-                // handleClickArtist={this.handleClickArtist}
-                // handleClickName={this.handleClickName}
-                // handleClickRating={this.handleClickRating}
-                // handleSubmitReminder={this.handleSubmitReminder}
-                // handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
-                // handleChangeCheckboxSound={this.handleChangeCheckboxSound}
                 handleEvent={this.handleEvent}
-                // handleUpdateArtist={this.handleUpdateArtist}
-            >
-                {/*  */}
-            </View>
+            />
         );
     }
 }
