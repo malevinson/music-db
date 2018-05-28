@@ -10,26 +10,33 @@ class App extends Component {
 
         this.state = {
             /*UI VALUES */
-            checkboxPopup: false,
-            checkboxSound: true,
-            sortUp: false,
-            activeSortButton: 'Rating',
-            activeSort: 'rating',
-            reminderText: 'Start Timer',
-            timerStartTime: null,
-            currentEdit: '',
+            // checkboxPopup: false,
+            // checkboxSound: true,
+            // sortUp: false,
+            // activeSortButton: 'Rating',
+            // activeSort: 'rating',
+            // reminderText: 'Start Timer',
+            // timerStartTime: null,
+            // currentEdit: '',
             /*APP STATE */
-            pinned: [],
-            artists: [],
-            ids: {},
+            // pinned: [],
+            // artists: [],
+            // ids: {},
             //
             uiState: {
                 input: {
                     rating: '',
                     artist: '',
                     edit: ''
-                }
-            }
+                },
+                sort: {
+                    sortUp: false,
+                    activeSort: 'rating'
+                },
+                pinned: [],
+                currentEdit: ''
+            },
+            app: { artists: [], ids: {} }
         };
     }
 
@@ -42,8 +49,12 @@ class App extends Component {
                 ids[artist._id] = index;
             });
             this.setState({
-                ids,
-                artists: data
+                // ids,
+                // artists: data
+                app: {
+                    artists: data,
+                    ids
+                }
             });
         });
     }
@@ -52,10 +63,10 @@ class App extends Component {
         //
         switch (action) {
             case 'inputChange':
-                //
-                console.log(e);
-                console.log(e.target.name);
                 this.handleInputChange(e);
+                break;
+            case 'edit':
+                this.handleEdit(id);
                 break;
             case 'create':
                 this.createArtist();
@@ -67,7 +78,6 @@ class App extends Component {
                 this.updateArtist(id);
                 break;
             case 'togglePin':
-                //
                 this.handleTogglePin(id);
                 break;
             case 'sort':
@@ -78,14 +88,25 @@ class App extends Component {
     };
 
     handleSort(type) {
-        if (this.state.activeSort === type) {
-            this.setState(prevState => {
-                return { sortUp: !prevState.sortUp };
+        if (this.state.uiState.sort.activeSort === type) {
+            // this.setState(prevState => {
+            //     return { sortUp: !prevState.sortUp };
+            // });
+            const newState = update(this.state, {
+                uiState: { sort: { sortUp: { $set: !this.state.uiState.sort.sortUp } } }
             });
+            this.setState(newState);
         } else {
-            this.setState({
-                activeSort: type
+            const newState = update(this.state, {
+                uiState: { sort: { activeSort: { $set: type } } }
             });
+            // this.setState({
+            //     // uiState.sort.activeSort: type
+            //     uiState:{
+            //         sort:
+            //     }
+            // });
+            this.setState(newState);
         }
     }
 
@@ -97,16 +118,27 @@ class App extends Component {
     }
 
     handleTogglePin(id) {
-        let currPins = this.state.pinned;
+        let currPins = this.state.uiState.pinned;
         const pinIndex = currPins.indexOf(id);
         if (pinIndex !== -1) {
             currPins.splice(pinIndex, 1);
             this.setState({
-                pinned: currPins
+                uiState: {
+                    ...this.state.uiState,
+                    pinned: currPins
+                }
             });
+            // this.setState({
+            //     pinned: currPins
+            // });
         } else {
             this.setState({
-                pinned: currPins.concat(id)
+                uiState: {
+                    ...this.state.uiState,
+                    pinned: currPins.concat(id)
+                }
+
+                // pinned: currPins.concat(id)
             });
         }
     }
@@ -121,8 +153,11 @@ class App extends Component {
         });
     };
 
-    handleClickNumber = id => {
-        this.setState({ currentEdit: id });
+    handleEdit = id => {
+        const newState = update(this.state, {
+            uiState: { currentEdit: { $set: id } }
+        });
+        this.setState(newState);
     };
 
     handleClickName = e => {
@@ -143,10 +178,12 @@ class App extends Component {
         this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
                 return {
-                    artists: prevState.artists.concat(data.artist),
-                    ids: {
-                        ...prevState.ids,
-                        [data.artist._id]: prevState.artists.length
+                    app: {
+                        artists: prevState.app.artists.concat(data.artist),
+                        ids: {
+                            ...prevState.app.ids,
+                            [data.artist._id]: prevState.app.artists.length
+                        }
                     }
                 };
             });
@@ -190,7 +227,8 @@ class App extends Component {
 
     deleteArtist(id) {
         const url = '/artist/' + id;
-        const { ids, artists } = this.state;
+        const { app } = this.state;
+        const { ids, artists } = app;
 
         this.buildRequest(url, 'DELETE').then(res => {
             const idList = ids;
@@ -198,12 +236,13 @@ class App extends Component {
             let prevState = artists;
             delete idList[id];
             prevState.splice(index, 1);
-            this.setState({ artists: prevState, ids: idList });
+            this.setState({ app: { artists: prevState, ids: idList } });
         });
     }
 
     updateArtist(id) {
-        const { ids, artists, uiState } = this.state;
+        const { app, uiState } = this.state;
+        const { artists, ids } = app;
         const artistIndex = ids[id];
         const currentArtistData = artists[artistIndex];
         const requestBody = {
@@ -216,12 +255,20 @@ class App extends Component {
             let newList = artists;
             newList[artistIndex] = requestBody;
 
-            this.setState(prevState => {
-                return {
-                    artists: newList,
-                    currentEdit: ''
-                };
+            const newState = update(this.state, {
+                uiState: {
+                    currentEdit: { $set: '' }
+                },
+                app: { artists: { $set: newList } }
+                // ,{artists: {$set: newList}}
             });
+            // this.setState(prevState => {
+            //     return {
+            //         artists: newList,
+            //         currentEdit: ''
+            //     };
+            // });
+            this.setState(newState);
         });
     }
 
@@ -275,19 +322,20 @@ class App extends Component {
     render() {
         const {
             //UI VALUES
-            checkboxPopup,
-            checkboxSound,
-            currentEdit,
-            activeSortButton,
+            // checkboxPopup,
+            // checkboxSound,
+            // currentEdit,
+            // activeSortButton,
             //APP STATE
-            artists,
-            activeSort,
-            sortUp,
-            pinned,
-            sortArrowUp,
-            ids,
-            uiState,
-            reminderText
+            // artists,
+            // activeSort,
+            // sortUp,
+            // pinned,
+            app,
+            // sortArrowUp,
+            // ids,
+            uiState
+            // reminderText
         } = this.state;
 
         console.log('State |||||||---------->');
@@ -297,31 +345,32 @@ class App extends Component {
             <View
                 {...{
                     /*UI VALUES*/
-                    activeSortButton,
-                    checkboxPopup,
-                    checkboxSound,
-                    sortArrowUp,
-                    reminderText,
+                    // activeSortButton,
+                    // checkboxPopup,
+                    // chekboxSound,
+                    // sortArrowUp,
+                    // reminderText,
                     uiState,
 
-                    activeSort,
-                    sortUp,
-                    currentEdit,
+                    // activeSort,
+                    // sortUp,
+                    // currentEdit,
                     /*APP STATE*/
-                    artists,
-                    pinned,
-                    ids
+                    // artists,
+                    app
+                    // pinned,
+                    // ids
                 }}
                 /*FUNCTIONS*/
-                handleClickNumber={this.handleClickNumber}
-                handleClickArtist={this.handleClickArtist}
-                handleClickName={this.handleClickName}
-                handleClickRating={this.handleClickRating}
-                handleSubmitReminder={this.handleSubmitReminder}
-                handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
-                handleChangeCheckboxSound={this.handleChangeCheckboxSound}
+                // handleClickNumber={this.handleClickNumber}
+                // handleClickArtist={this.handleClickArtist}
+                // handleClickName={this.handleClickName}
+                // handleClickRating={this.handleClickRating}
+                // handleSubmitReminder={this.handleSubmitReminder}
+                // handleChangeCheckboxPopup={this.handleChangeCheckboxPopup}
+                // handleChangeCheckboxSound={this.handleChangeCheckboxSound}
                 handleEvent={this.handleEvent}
-                handleUpdateArtist={this.handleUpdateArtist}
+                // handleUpdateArtist={this.handleUpdateArtist}
             >
                 {/*  */}
             </View>

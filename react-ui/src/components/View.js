@@ -3,24 +3,10 @@ import Input from './Input';
 import './View.css';
 
 const View = props => {
-    const {
-        //UI VALUES
-        activeSortButton,
-        sortArrowUp,
-        currentEdit,
-        //FUNCTIONS
-        handleClickNumber,
-        handleEvent,
-        handleClickName,
-        handleClickRating,
-        uiState,
-        //APP STATE
-        artists,
-        pinned,
-        activeSort,
-        sortUp,
-        ids
-    } = props;
+    const { handleEvent, uiState, app } = props;
+    const { artists, ids } = app;
+    const { pinned, input, sort, currentEdit } = uiState;
+    const { activeSort, sortUp } = sort;
 
     return (
         <div>
@@ -69,7 +55,7 @@ const View = props => {
                         Rating
                         <Input
                             name="rating"
-                            value={uiState.input}
+                            value={input}
                             handleChange={e => {
                                 handleEvent({ action: 'inputChange', e });
                             }}
@@ -79,7 +65,7 @@ const View = props => {
                         Artist
                         <Input
                             name="artist"
-                            value={uiState.input}
+                            value={input}
                             handleChange={e => {
                                 handleEvent({ action: 'inputChange', e });
                             }}
@@ -115,7 +101,6 @@ const View = props => {
                         return a[activeSort] > b[activeSort] ? 1 : -1;
                     })
                     .map(artist => {
-                        console.log(artist.name);
                         return (
                             <div className="artist" key={artist._id}>
                                 <div
@@ -130,7 +115,7 @@ const View = props => {
                                         edit rating
                                         <Input
                                             name="edit"
-                                            value={uiState.input}
+                                            value={input}
                                             handleChange={e => {
                                                 handleEvent({ action: 'inputChange', e });
                                             }}
@@ -140,7 +125,10 @@ const View = props => {
                                         </button>
                                     </label>
                                 ) : (
-                                    <div onClick={() => handleClickNumber(artist._id)} className="rating">
+                                    <div
+                                        onClick={() => handleEvent({ action: 'edit', id: artist._id })}
+                                        className="rating"
+                                    >
                                         {artist.rating}
                                     </div>
                                 )}
@@ -149,7 +137,6 @@ const View = props => {
                                 {pinned.indexOf(artist._id) === -1 && (
                                     <button
                                         onClick={() => {
-                                            // handleAddPin(artist);
                                             handleEvent({ action: 'togglePin', id: artist._id });
                                         }}
                                     >
