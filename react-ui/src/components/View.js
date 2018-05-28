@@ -92,6 +92,13 @@ const View = props => {
                     >
                         Name
                     </button>
+                    <button
+                        onClick={() => {
+                            handleEvent({ action: 'sort', type: 'createdAt' });
+                        }}
+                    >
+                        Date Added
+                    </button>
                 </div>
                 {[]
                     .concat(artists)
