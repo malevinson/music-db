@@ -48,8 +48,9 @@ const View = props => {
             <section>
                 <form
                     onSubmit={e => {
-                        handleEvent({ action: 'create' });
+                        handleEvent({ action: 'create', e });
                     }}
+                    method="post"
                 >
                     <label>
                         Rating

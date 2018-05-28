@@ -49,7 +49,7 @@ class App extends Component {
                 this.handleEdit(id);
                 break;
             case 'create':
-                this.createArtist();
+                this.createArtist(e);
                 break;
             case 'delete':
                 this.deleteArtist(id);
@@ -118,7 +118,8 @@ class App extends Component {
         this.setState(newState);
     };
 
-    createArtist() {
+    createArtist(e) {
+        e.preventDefault();
         const { input } = this.state.uiState;
         const url = '/artists';
         const requestBody = { name: input.artist, rating: input.rating };
