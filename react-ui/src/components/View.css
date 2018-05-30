@@ -35,6 +35,7 @@ img {
 
 .relative-wrapper {
     position: relative;
+    display: inline-block;
 }
 
 .relative-wrapper:hover > div {
@@ -44,4 +45,18 @@ img {
 .input-edit {
     display: inline;
     width: 50px;
+}
+
+.pinned {
+    width: 60px;
+    height: 60px;
+}
+
+.pinned-artist {
+    display: inline-block;
+    padding: 0 0.15rem;
+}
+
+.pinned-name {
+    font-size: 10px;
 }

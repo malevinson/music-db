@@ -32,15 +32,36 @@ const View = props => {
                 {pinned.map(id => {
                     const artist = artists[ids[id]];
                     return (
-                        <div key={artist._id}>
-                            {artist.name}
-                            <button
-                                onClick={() => {
-                                    handleEvent({ action: 'togglePin', id: artist._id });
-                                }}
-                            >
-                                Unpin
-                            </button>
+                        <div className="pinned-artist" key={artist._id}>
+                            {/* <div className="relative-wrapper">
+                                <img src={artist.image} alt="album art" className="photo pinned" />
+                                {artist.name}
+
+                                <div
+                                    className="x"
+                                    onClick={() => {
+                                        handleEvent({ action: 'togglePin', id: artist._id });
+                                    }}
+                                >
+                                    X
+                                </div>
+                            </div> */}
+                            <div>
+                                <div className="relative-wrapper">
+                                    {/* <div className="relative-wrapper"> */}
+                                    <img src={artist.image} alt="album art" className="photo pinned" />
+                                    <div
+                                        className="x"
+                                        onClick={() => {
+                                            handleEvent({ action: 'togglePin', id: artist._id });
+                                        }}
+                                    >
+                                        X
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="pinned-name">{artist.name}</div>
+                            {/* </div> */}
                         </div>
                     );
                 })}
