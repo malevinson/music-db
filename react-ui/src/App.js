@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import View from './components/View';
 import update from 'immutability-helper';
+import { titleCaseString } from './helpers';
 
 class App extends Component {
     constructor(props) {
@@ -131,7 +132,7 @@ class App extends Component {
         e.preventDefault();
         const { input } = this.state.uiState;
         const url = '/artists';
-        const requestBody = { name: input.artist, rating: input.rating };
+        const requestBody = { name: titleCaseString(input.artist), rating: input.rating };
 
         this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
