@@ -111,13 +111,6 @@ const View = props => {
                     .map(artist => {
                         return (
                             <div className="artist" key={artist._id}>
-                                <div
-                                    onClick={() => {
-                                        handleEvent({ action: 'delete', id: artist._id });
-                                    }}
-                                >
-                                    Remove
-                                </div>
                                 {currentEdit === artist._id ? (
                                     <label>
                                         edit rating
@@ -140,7 +133,17 @@ const View = props => {
                                         {artist.rating}
                                     </div>
                                 )}
-                                <img src={artist.image} alt="album art" className="photo" />
+                                <div className="relative-wrapper">
+                                    <img src={artist.image} alt="album art" className="photo" />
+                                    <div
+                                        className="x"
+                                        onClick={() => {
+                                            handleEvent({ action: 'delete', id: artist._id });
+                                        }}
+                                    >
+                                        X
+                                    </div>
+                                </div>
                                 <div className="name">{artist.name}</div>
                                 {pinned.indexOf(artist._id) === -1 && (
                                     <button

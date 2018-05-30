@@ -24,3 +24,19 @@ img {
     /* margin-left: 50%;
     transform: translateX(-50%); */
 }
+
+.x {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    color: red;
+    display: none;
+}
+
+.relative-wrapper {
+    position: relative;
+}
+
+.relative-wrapper:hover > div {
+    display: block;
+}
