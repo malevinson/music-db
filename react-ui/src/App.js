@@ -112,9 +112,18 @@ class App extends Component {
     }
 
     handleEdit = id => {
+        const { artists, ids } = this.state.app;
+        const currentRating = artists[ids[id]].rating;
+
         const newState = update(this.state, {
-            uiState: { currentEdit: { $set: id } }
+            uiState: {
+                currentEdit: { $set: id },
+                input: {
+                    edit: { $set: currentRating }
+                }
+            }
         });
+
         this.setState(newState);
     };
 
