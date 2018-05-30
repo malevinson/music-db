@@ -113,16 +113,16 @@ const View = props => {
                             <div className="artist" key={artist._id}>
                                 {currentEdit === artist._id ? (
                                     <label>
-                                        edit rating
                                         <Input
                                             name="edit"
                                             value={input}
                                             handleChange={e => {
                                                 handleEvent({ action: 'inputChange', e });
                                             }}
+                                            className="input-edit"
                                         />
                                         <button onClick={e => handleEvent({ action: 'update', id: artist._id })}>
-                                            Update Rating
+                                            Update
                                         </button>
                                     </label>
                                 ) : (
