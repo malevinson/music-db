@@ -131,6 +131,13 @@ class App extends Component {
     createArtist(e) {
         e.preventDefault();
         const { input } = this.state.uiState;
+
+        if (input.artist.length < 2) {
+            let err = 'enter at least 2 characters';
+            console.log(err);
+            this.handleError(err);
+            return;
+        }
         const url = '/artists';
         const requestBody = { name: titleCaseString(input.artist), rating: input.rating };
 
