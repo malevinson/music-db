@@ -204,6 +204,13 @@ class App extends Component {
         const { artists, ids } = app;
         const artistIndex = ids[id];
         const currentArtistData = artists[artistIndex];
+
+        if (currentArtistData.rating === uiState.input.edit) {
+            const newState = update(this.state, { uiState: { currentEdit: { $set: '' } } });
+            this.setState(newState);
+            return;
+        }
+
         const requestBody = {
             ...currentArtistData,
             rating: uiState.input.edit

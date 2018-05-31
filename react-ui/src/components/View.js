@@ -133,19 +133,21 @@ const View = props => {
                         return (
                             <div className="artist" key={artist._id}>
                                 {currentEdit === artist._id ? (
-                                    <label>
-                                        <Input
-                                            name="edit"
-                                            value={input}
-                                            handleChange={e => {
-                                                handleEvent({ action: 'inputChange', e });
-                                            }}
-                                            className="input-edit"
-                                        />
-                                        <button onClick={e => handleEvent({ action: 'update', id: artist._id })}>
-                                            Update
-                                        </button>
-                                    </label>
+                                    <div>
+                                        <label>
+                                            <Input
+                                                name="edit"
+                                                value={input}
+                                                handleChange={e => {
+                                                    handleEvent({ action: 'inputChange', e });
+                                                }}
+                                                className="input-edit"
+                                            />
+                                            <button onClick={e => handleEvent({ action: 'update', id: artist._id })}>
+                                                Update
+                                            </button>
+                                        </label>
+                                    </div>
                                 ) : (
                                     <div
                                         onClick={() => handleEvent({ action: 'edit', id: artist._id })}
