@@ -168,6 +168,7 @@ if (cluster.isMaster) {
 
                 artist.name = req.body.name;
                 artist.rating = req.body.rating;
+                artist.pinned = req.body.pinned;
                 artist.save(function(err) {
                     // if (err) res.send(err);
                     if (err)

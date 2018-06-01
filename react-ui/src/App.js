@@ -31,13 +31,21 @@ class App extends Component {
 
         this.buildRequest(url).then(data => {
             let ids = {};
+            let pinned = [];
             data.forEach((artist, index) => {
                 ids[artist._id] = index;
+                if (artist.pinned) {
+                    pinned.push(artist._id);
+                }
             });
             this.setState({
                 app: {
                     artists: data,
                     ids
+                },
+                uiState: {
+                    ...this.state.uiState,
+                    pinned
                 }
             });
         });
@@ -114,6 +122,13 @@ class App extends Component {
     handleTogglePin(id) {
         let currPins = this.state.uiState.pinned;
         const pinIndex = currPins.indexOf(id);
+        let pinned;
+
+        const { app } = this.state;
+        const { artists, ids } = app;
+        const artistIndex = ids[id];
+        const currentArtistData = artists[artistIndex];
+
         if (pinIndex !== -1) {
             currPins.splice(pinIndex, 1);
             this.setState({
@@ -123,6 +138,7 @@ class App extends Component {
                 }
             });
         } else {
+            pinned = true;
             this.setState({
                 uiState: {
                     ...this.state.uiState,
@@ -130,6 +146,14 @@ class App extends Component {
                 }
             });
         }
+
+        const requestBody = {
+            ...currentArtistData,
+            pinned
+        };
+
+        const url = '/artist/' + id;
+        this.buildRequest(url, 'PUT', requestBody);
     }
 
     handleEdit = id => {
