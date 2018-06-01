@@ -153,9 +153,10 @@ class App extends Component {
         const formatedArtist = titleCaseString(input.artist).trim();
         const formatedRating = parseInt(input.rating.trim());
 
-        if (formatedArtist < 2) {
+        if (formatedArtist.length < 2) {
             let err = 'Enter at least 2 characters';
             console.log(err);
+            this.showFlashMsg(`Error: ${err}`);
             this.handleError(err);
             return;
         }
@@ -163,6 +164,7 @@ class App extends Component {
         if (formatedRating < 1 || formatedRating > 100) {
             let err = 'Invalid rating';
             console.log(err);
+            this.showFlashMsg(`Error: ${err}`);
             this.handleError(err);
             return;
         }
@@ -174,6 +176,7 @@ class App extends Component {
                 let err = 'Duplicate artist, try again';
                 isValidArtist = false;
                 console.log(err);
+                this.showFlashMsg(`Error: ${err}`);
                 this.handleError(err);
             }
         });
@@ -319,6 +322,7 @@ class App extends Component {
                 })
                 .catch(err => {
                     console.log(err);
+                    this.showFlashMsg(`Error: ${err}`);
                     this.handleError(err);
                 });
         });
