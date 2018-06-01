@@ -18,7 +18,9 @@ class App extends Component {
                     activeSort: 'rating'
                 },
                 pinned: [],
-                currentEdit: ''
+                currentEdit: '',
+                showFlashMsg: false,
+                flashMsg: null
             },
             app: { artists: [], ids: {} }
         };
@@ -39,6 +41,23 @@ class App extends Component {
                 }
             });
         });
+    }
+
+    showFlashMsg(msg) {
+        const newState = update(this.state, {
+            uiState: {
+                showFlashMsg: { $set: !this.state.uiState.showFlashMsg },
+                flashMsg: { $set: msg }
+            }
+        });
+        this.setState(newState);
+
+        setTimeout(() => {
+            const newState = update(this.state, {
+                uiState: { showFlashMsg: { $set: !this.state.uiState.showFlashMsg } }
+            });
+            this.setState(newState);
+        }, 2000);
     }
 
     handleEvent = ({ action, e, id, type }) => {
@@ -176,6 +195,7 @@ class App extends Component {
                     }
                 };
             });
+            this.showFlashMsg(`Artist "${data.artist.name}" added!`);
         });
     }
 
@@ -222,10 +242,13 @@ class App extends Component {
         this.buildRequest(url, 'DELETE').then(res => {
             const idList = ids;
             const index = idList[id];
+            const deletedArtistName = artists[index].name;
             let prevState = artists;
             delete idList[id];
             prevState.splice(index, 1);
             this.setState({ app: { artists: prevState, ids: idList } });
+
+            this.showFlashMsg(`Artist "${deletedArtistName}" deleted!`);
         });
     }
 
@@ -259,6 +282,7 @@ class App extends Component {
             });
 
             this.setState(newState);
+            this.showFlashMsg(`Artist "${currentArtistData.name}" updated!`);
         });
     }
 

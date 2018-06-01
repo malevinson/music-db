@@ -1,15 +1,19 @@
 import React from 'react';
 import Input from './Input';
 import './View.css';
+import classNames from 'classnames';
 
 const View = props => {
     const { handleEvent, uiState, app } = props;
     const { artists, ids } = app;
-    const { pinned, input, sort, currentEdit } = uiState;
+    const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg } = uiState;
     const { activeSort, sortUp } = sort;
 
     return (
         <div>
+            <div className={classNames('flash-msg', { show: showFlashMsg }, { hide: !showFlashMsg })}>
+                <div>{flashMsg}</div>
+            </div>
             {/* <form onSubmit={handleSubmitReminder}>
                 <label>
                     Popup (steals browser focus)

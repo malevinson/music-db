@@ -44,7 +44,7 @@ img {
 
 .input-edit {
     display: inline;
-    width: 50px;
+    width: 40px;
 }
 
 .pinned {
@@ -59,4 +59,32 @@ img {
 
 .pinned-name {
     font-size: 10px;
+}
+
+.flash-msg {
+    width: 300px;
+    margin: 0 auto;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: calc(50% - 150px);
+    background-color: lightblue;
+    height: 50px;
+    border: 4px solid #42c2f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+}
+
+.hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}
+
+.show {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s linear;
 }

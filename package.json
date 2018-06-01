@@ -10,9 +10,13 @@
         "dev": "NODE_ENV=development node server",
         "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
     },
-    "cacheDirectories": ["node_modules", "react-ui/node_modules"],
+    "cacheDirectories": [
+        "node_modules",
+        "react-ui/node_modules"
+    ],
     "dependencies": {
         "body-parser": "^1.18.3",
+        "classnames": "^2.2.5",
         "dotenv": "^5.0.1",
         "express": "^4.14.1",
         "immutability-helper": "^2.7.0",
@@ -24,7 +28,12 @@
         "type": "git",
         "url": ""
     },
-    "keywords": ["node", "heroku", "create-react-app", "react"],
+    "keywords": [
+        "node",
+        "heroku",
+        "create-react-app",
+        "react"
+    ],
     "license": "MIT",
     "devDependencies": {}
 }
