@@ -50,7 +50,8 @@ class App extends Component {
                 this.handleEdit(id);
                 break;
             case 'create':
-                this.createArtist(e);
+                e.preventDefault();
+                this.createArtist();
                 break;
             case 'delete':
                 this.deleteArtist(id);
@@ -128,18 +129,40 @@ class App extends Component {
         this.setState(newState);
     };
 
-    createArtist(e) {
-        e.preventDefault();
+    createArtist() {
         const { input } = this.state.uiState;
+        const formatedArtist = titleCaseString(input.artist).trim();
+        const formatedRating = parseInt(input.rating.trim());
 
-        if (input.artist.length < 2) {
-            let err = 'enter at least 2 characters';
+        if (formatedArtist < 2) {
+            let err = 'Enter at least 2 characters';
             console.log(err);
             this.handleError(err);
             return;
         }
+
+        if (formatedRating < 1 || formatedRating > 100) {
+            let err = 'Invalid rating';
+            console.log(err);
+            this.handleError(err);
+            return;
+        }
+
+        let isValidArtist = true;
+
+        this.state.app.artists.forEach(artist => {
+            if (artist.name === formatedArtist) {
+                let err = 'Duplicate artist, try again';
+                isValidArtist = false;
+                console.log(err);
+                this.handleError(err);
+            }
+        });
+
+        if (!isValidArtist) return;
+
+        const requestBody = { name: formatedArtist, rating: formatedRating };
         const url = '/artists';
-        const requestBody = { name: titleCaseString(input.artist), rating: input.rating };
 
         this.buildRequest(url, 'POST', requestBody).then(data => {
             this.setState(prevState => {
