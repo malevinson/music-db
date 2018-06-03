@@ -1,7 +1,10 @@
 import React from 'react';
 import Input from './Input';
 import './View.css';
+import Button from './Button';
 import classNames from 'classnames';
+import { uiMap, sortMap } from '../App.js';
+import pinRed from '../images/pin.png';
 
 const View = props => {
     const { handleEvent, uiState, app } = props;
@@ -9,51 +12,40 @@ const View = props => {
     const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg } = uiState;
     const { activeSort, sortUp } = sort;
 
+    const shuffle = array => {
+        const length = array.length;
+
+        for (let i = length - 1; i > 0; i--) {
+            // let j = Math.floor(Math.random() * (i + 1));
+            // let temp = array[i];
+            // array[i] = array[j];
+            // array[j] = temp;
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    };
+
     return (
         <div>
+            <header>Music Dashboard</header>
             <div className={classNames('flash-msg', { show: showFlashMsg }, { hide: !showFlashMsg })}>
                 <div>{flashMsg}</div>
             </div>
-            {/* <form onSubmit={handleSubmitReminder}>
-                <label>
-                    Popup (steals browser focus)
-                    <input type="checkbox" name="popup" checked={checkboxPopup} onChange={handleChangeCheckboxPopup} />
-                </label>
-                <br />
-                <label>
-                    Play Sound
-                    <input type="checkbox" name="sound" checked={checkboxSound} onChange={handleChangeCheckboxSound} />
-                </label>
-                <br />
-                <label>
-                    Reminder
-                    <input type="text" value={inputReminder} placeholder={'Reminder'} onChange={handleChangeReminder} />
-                </label>
-                <button onClick={handleSubmitReminder}>{reminderText}</button>
-            </form> */}
-            <section className="pinned-section">
-                <div>Pinned Artists</div>
-                {pinned.map(id => {
-                    const artist = artists[ids[id]];
-                    return (
-                        <div className="pinned-artist" key={artist._id}>
-                            {/* <div className="relative-wrapper">
-                                <img src={artist.image} alt="album art" className="photo pinned" />
-                                {artist.name}
 
-                                <div
-                                    className="x"
-                                    onClick={() => {
-                                        handleEvent({ action: 'togglePin', id: artist._id });
-                                    }}
-                                >
-                                    X
-                                </div>
-                            </div> */}
-                            <div>
-                                <div className="relative-wrapper">
-                                    {/* <div className="relative-wrapper"> */}
-                                    <img src={artist.image} alt="album art" className="photo pinned" />
+            <section className="pinned-section">
+                <div className="header">
+                    <img className="header-img" src={pinRed} />
+                    <img className="header-img" src={pinRed} />
+                    <img className="header-img" src={pinRed} />
+                </div>
+                <div className="artist-well">
+                    <div className="flex">
+                        {pinned.map(id => {
+                            console.log(pinned);
+                            const artist = artists[ids[id]];
+                            return (
+                                <div className="relative-wrapper" key={artist._id}>
+                                    <img src={artist.image} alt="album art" className="pinned" />
                                     <div
                                         className="x"
                                         onClick={() => {
@@ -63,13 +55,12 @@ const View = props => {
                                         X
                                     </div>
                                 </div>
-                            </div>
-                            <div className="pinned-name">{artist.name}</div>
-                            {/* </div> */}
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                    </div>
+                </div>
             </section>
+
             <section>
                 <form
                     onSubmit={e => {
@@ -77,68 +68,93 @@ const View = props => {
                     }}
                     method="post"
                 >
-                    <label>
-                        Rating
-                        <Input
-                            name="rating"
-                            value={input}
-                            handleChange={e => {
-                                handleEvent({ action: 'inputChange', e });
-                            }}
-                        />
-                    </label>
-                    <label>
-                        Artist
+                    <div className="main">
+                        <label>Artist</label>
                         <Input
                             name="artist"
+                            placeholder="The Beatles"
                             value={input}
                             handleChange={e => {
                                 handleEvent({ action: 'inputChange', e });
                             }}
                         />
-                    </label>
-                    <button>Add Artist</button>
+                        <label>Rating</label>
+                        <Input
+                            name="rating"
+                            className="rating-form"
+                            value={input}
+                            placeholder="35"
+                            // className="input"
+                            handleChange={e => {
+                                handleEvent({ action: 'inputChange', e });
+                            }}
+                        />
+                        <button className="primary">Add Artist</button>
+                    </div>
                 </form>
             </section>
             <section>
+                <div className="line" />
                 <div className="controls">
-                    SORT
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'rating' });
+                    <div className="button-wrapper">
+                        {Object.keys(uiMap).map(key => {
+                            const buttonName = uiMap[key];
+                            const isActive = activeSort === buttonName;
+
+                            return (
+                                <Button
+                                    className={classNames({ active: isActive })}
+                                    onClick={() => {
+                                        handleEvent({ action: 'sort', type: buttonName });
+                                    }}
+                                >
+                                    <i
+                                        className={classNames(
+                                            { show: isActive && sortUp && buttonName !== 'Shuffle' },
+                                            'fas fa-arrow-up'
+                                        )}
+                                    />
+                                    {buttonName}
+                                    <i
+                                        className={classNames(
+                                            { show: isActive && !sortUp && buttonName !== 'Shuffle' },
+                                            'fas fa-arrow-down'
+                                        )}
+                                    />
+                                </Button>
+                            );
+                        })}
+                    </div>
+                    <Input
+                        name="filter"
+                        // className="rating-form"
+                        value={input}
+                        handleChange={e => {
+                            handleEvent({ action: 'inputChange', e });
                         }}
-                    >
-                        Rating
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'name' });
-                        }}
-                    >
-                        Name
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'createdAt' });
-                        }}
-                    >
-                        Date Added
-                    </button>
+                    />
                 </div>
                 {[]
                     .concat(artists)
                     .sort((a, b) => {
+                        if (activeSort === 'Shuffle') return shuffle(artists);
                         if (sortUp) {
-                            return a[activeSort] < b[activeSort] ? 1 : -1;
+                            return a[sortMap[activeSort]] < b[sortMap[activeSort]] ? 1 : -1;
                         }
-                        return a[activeSort] > b[activeSort] ? 1 : -1;
+                        return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
+                    })
+                    .filter(artist => {
+                        console.log(artist.name);
+                        console.log(input.filter);
+
+                        return false || artist.name.toLowerCase().indexOf(input.filter.toLowerCase()) > -1;
                     })
                     .map(artist => {
                         return (
                             <div className="artist" key={artist._id}>
-                                {currentEdit === artist._id ? (
-                                    <div>
-                                        <label>
+                                <div className="artist-header">
+                                    {currentEdit === artist._id ? (
+                                        <React.Fragment>
                                             <Input
                                                 name="edit"
                                                 value={input}
@@ -147,19 +163,19 @@ const View = props => {
                                                 }}
                                                 className="input-edit"
                                             />
-                                            <button onClick={e => handleEvent({ action: 'update', id: artist._id })}>
+                                            <button
+                                                onClick={e => handleEvent({ action: 'update', id: artist._id })}
+                                                className="button-edit"
+                                            >
                                                 Update
                                             </button>
-                                        </label>
-                                    </div>
-                                ) : (
-                                    <div
-                                        onClick={() => handleEvent({ action: 'edit', id: artist._id })}
-                                        className="rating"
-                                    >
-                                        {artist.rating}
-                                    </div>
-                                )}
+                                        </React.Fragment>
+                                    ) : (
+                                        <div onClick={() => handleEvent({ action: 'edit', id: artist._id })}>
+                                            {artist.rating}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="relative-wrapper">
                                     <img src={artist.image} alt="album art" className="photo" />
                                     <div
