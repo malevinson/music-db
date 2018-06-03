@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import View from './components/View';
 import update from 'immutability-helper';
 import { titleCaseString } from './helpers';
-import './App.css';
+import './styles/css/App.css';
 
 export const uiMap = {
     rating: 'Rating',
     name: 'Name',
-    date: 'Date'
+    date: 'Date',
+    shuffle: 'Shuffle'
 };
 
 export const sortMap = {
     Rating: 'rating',
     Name: 'name',
     Date: 'createdAt'
+    // Shuffle: 'shuffle'
 };
 
 class App extends Component {
@@ -24,7 +26,8 @@ class App extends Component {
                 input: {
                     rating: '',
                     artist: '',
-                    edit: ''
+                    edit: '',
+                    filter: ''
                 },
                 sort: {
                     sortUp: false,
@@ -232,6 +235,15 @@ class App extends Component {
                             ...prevState.app.ids,
                             [data.artist._id]: prevState.app.artists.length
                         }
+                    },
+                    uiState: {
+                        ...prevState.uiState,
+                        input: {
+                            ...prevState.uiState.input,
+
+                            rating: '',
+                            artist: ''
+                        }
                     }
                 };
             });
@@ -276,8 +288,9 @@ class App extends Component {
 
     deleteArtist(id) {
         const url = '/artist/' + id;
-        const { app } = this.state;
+        const { app, uiState } = this.state;
         const { ids, artists } = app;
+        const { pinned } = uiState;
 
         this.buildRequest(url, 'DELETE').then(res => {
             const idList = ids;
@@ -286,7 +299,15 @@ class App extends Component {
             let prevState = artists;
             delete idList[id];
             prevState.splice(index, 1);
-            this.setState({ app: { artists: prevState, ids: idList } });
+
+            let pinIndex = pinned.indexOf(id);
+            let pins = this.state.uiState.pinned;
+            pins.splice(pinIndex, 1);
+
+            this.setState({
+                app: { artists: prevState, ids: idList },
+                uiState: { ...this.state.uiState, pinned: pins }
+            });
 
             this.showFlashMsg(`Artist "${deletedArtistName}" deleted!`);
         });

@@ -1,0 +1,24 @@
+.pinned-section {
+    .header {
+        margin: 1rem 0;
+    }
+    .header-img {
+        width: 20px;
+        height: 26px;
+    }
+    .artist-well {
+        display: inline-block;
+        padding: 8px 5px 3px 6px;
+        border-radius: 7px;
+        box-shadow: 1px 1px 2px $shadow, inset 2px 2px 4px $shadow;
+        .flex {
+            @include flexbox-center;
+            height: $pinned-artist-height;
+            min-width: $pinned-artist-height;
+            .pinned {
+                width: $pinned-artist-height;
+                height: $pinned-artist-height;
+            }
+        }
+    }
+}

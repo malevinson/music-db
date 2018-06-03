@@ -1,0 +1,41 @@
+//these are all relative to artist
+.x {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    color: red;
+    display: none;
+}
+.relative-wrapper {
+    position: relative;
+    padding: 0 2px;
+    /* display: inline-block; */
+    /* width: 120px;
+    height: 120px; */
+}
+
+.relative-wrapper:hover > div {
+    display: block;
+}
+
+.artist {
+    display: inline-block;
+    padding: 0.3rem;
+}
+
+.line {
+    border-bottom: 1px solid grey;
+    width: 60%;
+    margin: 0 auto;
+    opacity: 0.3;
+    // padding: 0.5rem 0;
+}
+
+.controls {
+    padding: 1rem 0;
+}
+
+.photo {
+    width: 100px;
+    height: 100px;
+}

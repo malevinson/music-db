@@ -29,7 +29,6 @@
     "keywords": ["node", "heroku", "create-react-app", "react"],
     "license": "MIT",
     "devDependencies": {
-        "node-sass": "^4.9.0",
-        "nodemon": "^1.17.5"
+        "node-sass": "^4.9.0"
     }
 }

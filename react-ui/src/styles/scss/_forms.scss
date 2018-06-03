@@ -1,0 +1,124 @@
+input {
+    border: 1px solid grey;
+    display: inline-block;
+    margin: 0.2rem auto;
+    width: 120px;
+    padding: 0 1rem;
+    text-align: center;
+    margin: 1rem 0;
+    &[type='text'] {
+        height: 28px;
+        // width: 100%;
+        &::placeholder {
+            color: $secondary;
+            opacity: 0.6;
+        }
+    }
+}
+
+input[type='text'] {
+    /* width: 100%; */
+    // padding: 0.5rem 1rem;
+
+    display: inline-block;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.4rem;
+    /* plajoceholder:  */
+}
+.rating-form {
+    width: 45px;
+    padding: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+label {
+    padding: 0rem 0.5rem 0rem 1.25rem;
+}
+
+.main {
+    @include flexbox-center;
+    // justify-content:
+    // padding: 1rem;
+    // width: 400px;
+    margin: 0 auto;
+}
+
+button {
+    display: flex;
+    flex-direction: column;
+    // padding: 0.1rem 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2%;
+    width: 5rem;
+    color: #426bf4;
+    cursor: pointer;
+    border: 1px solid #426bf4;
+    box-shadow: 0rem 0rem 1rem grey;
+    // padding: 0px 0.6rem;
+    margin: 0 2px;
+}
+
+button:active {
+    box-shadow: 0 3px 0 $primary;
+}
+
+.primary {
+    color: $primary;
+    border: 1px solid $primary;
+    //move
+    width: 5rem;
+    margin-left: 1rem;
+    // width: 8rem;
+    // padding: 1rem;
+    padding: 0.5rem;
+}
+
+button:focus {
+    outline: none;
+}
+
+.input-edit {
+    display: inline;
+    width: 30px;
+    padding: 0;
+    margin: 0;
+    // padding: 0 0 1rem 0;
+    margin-bottom: 4px;
+}
+
+.button-edit {
+    width: 42px;
+    display: inline-block;
+}
+
+.active {
+    border: 3px solid #426bf4;
+    color: #f44162;
+}
+i {
+    visibility: hidden;
+}
+
+.show {
+    visibility: visible;
+}
+
+/* --------------------------CONTROLS---------------- */
+.button-wrapper {
+    /* width: 200px; */
+    display: flex;
+    justify-content: center;
+    /* text-align: center; */
+
+    /* width: 100vw; */
+    margin: 0 auto;
+    /* border: 0.1rem solid red; */
+}
+
+.artist-header {
+    height: 20px;
+}
