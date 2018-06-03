@@ -7,13 +7,11 @@
     },
     "scripts": {
         "start": "NODE_ENV=production node server",
+        "watch-css": "node-sass -w react-ui/src/styles/scss -o react-ui/src/styles/css",
         "dev": "NODE_ENV=development node server",
         "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
     },
-    "cacheDirectories": [
-        "node_modules",
-        "react-ui/node_modules"
-    ],
+    "cacheDirectories": ["node_modules", "react-ui/node_modules"],
     "dependencies": {
         "body-parser": "^1.18.3",
         "classnames": "^2.2.5",
@@ -28,12 +26,10 @@
         "type": "git",
         "url": ""
     },
-    "keywords": [
-        "node",
-        "heroku",
-        "create-react-app",
-        "react"
-    ],
+    "keywords": ["node", "heroku", "create-react-app", "react"],
     "license": "MIT",
-    "devDependencies": {}
+    "devDependencies": {
+        "node-sass": "^4.9.0",
+        "nodemon": "^1.17.5"
+    }
 }

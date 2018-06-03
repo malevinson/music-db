@@ -16,13 +16,22 @@ section {
 
 .controls {
     margin: 3vh auto;
+    /* border: 0.1rem solid green; */
+    /* width: 100%; */
 }
 
 img {
     width: 120px;
     height: 120px;
+
     /* margin-left: 50%;
     transform: translateX(-50%); */
+}
+
+img:hover {
+    width: 119px;
+    height: 119px;
+    border: 1px solid white;
 }
 
 .x {
@@ -36,12 +45,28 @@ img {
 .relative-wrapper {
     position: relative;
     display: inline-block;
+    /* border: 1px solid green; */
+    width: 120px;
+    height: 120px;
 }
 
 .relative-wrapper:hover > div {
     display: block;
+    /* border: none; */
 }
 
+.relative-wrapper:hover {
+    /* border: none; */
+}
+
+.photo {
+    /* border: 0.1rem solid white; */
+}
+.photo:hover {
+    /* border: none; */
+    /*  */
+    /* border: 0.1rem solid white; */
+}
 .input-edit {
     display: inline;
     width: 40px;

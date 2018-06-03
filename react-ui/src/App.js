@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import View from './components/View';
 import update from 'immutability-helper';
 import { titleCaseString } from './helpers';
+import './App.css';
+
+export const uiMap = {
+    rating: 'Rating',
+    name: 'Name',
+    date: 'Date'
+};
+
+export const sortMap = {
+    Rating: 'rating',
+    Name: 'name',
+    Date: 'createdAt'
+};
 
 class App extends Component {
     constructor(props) {
@@ -15,7 +28,7 @@ class App extends Component {
                 },
                 sort: {
                     sortUp: false,
-                    activeSort: 'rating'
+                    activeSort: uiMap.rating
                 },
                 pinned: [],
                 currentEdit: '',

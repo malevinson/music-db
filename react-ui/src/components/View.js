@@ -1,7 +1,9 @@
 import React from 'react';
 import Input from './Input';
 import './View.css';
+import Button from './Button';
 import classNames from 'classnames';
+import { uiMap, sortMap } from '../App.js';
 
 const View = props => {
     const { handleEvent, uiState, app } = props;
@@ -11,6 +13,7 @@ const View = props => {
 
     return (
         <div>
+            <header>Music Dashboard</header>
             <div className={classNames('flash-msg', { show: showFlashMsg }, { hide: !showFlashMsg })}>
                 <div>{flashMsg}</div>
             </div>
@@ -33,11 +36,12 @@ const View = props => {
             </form> */}
             <section className="pinned-section">
                 <div>Pinned Artists</div>
-                {pinned.map(id => {
-                    const artist = artists[ids[id]];
-                    return (
-                        <div className="pinned-artist" key={artist._id}>
-                            {/* <div className="relative-wrapper">
+                <div className="pinned-artist-wrapper">
+                    {pinned.map(id => {
+                        const artist = artists[ids[id]];
+                        return (
+                            <div className="pinned-artist" key={artist._id}>
+                                {/* <div className="relative-wrapper">
                                 <img src={artist.image} alt="album art" className="photo pinned" />
                                 {artist.name}
 
@@ -50,25 +54,26 @@ const View = props => {
                                     X
                                 </div>
                             </div> */}
-                            <div>
-                                <div className="relative-wrapper">
-                                    {/* <div className="relative-wrapper"> */}
-                                    <img src={artist.image} alt="album art" className="photo pinned" />
-                                    <div
-                                        className="x"
-                                        onClick={() => {
-                                            handleEvent({ action: 'togglePin', id: artist._id });
-                                        }}
-                                    >
-                                        X
+                                <div>
+                                    <div className="relative-wrapper">
+                                        {/* <div className="relative-wrapper"> */}
+                                        <img src={artist.image} alt="album art" className="photo pinned" />
+                                        <div
+                                            className="x"
+                                            onClick={() => {
+                                                handleEvent({ action: 'togglePin', id: artist._id });
+                                            }}
+                                        >
+                                            X
+                                        </div>
                                     </div>
                                 </div>
+                                <div className="pinned-name">{artist.name}</div>
+                                {/* </div> */}
                             </div>
-                            <div className="pinned-name">{artist.name}</div>
-                            {/* </div> */}
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </section>
             <section>
                 <form
@@ -97,41 +102,69 @@ const View = props => {
                             }}
                         />
                     </label>
-                    <button>Add Artist</button>
+                    <button className="secondary-color">Add Artist</button>
                 </form>
             </section>
             <section>
                 <div className="controls">
                     SORT
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'rating' });
-                        }}
-                    >
-                        Rating
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'name' });
-                        }}
-                    >
-                        Name
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleEvent({ action: 'sort', type: 'createdAt' });
-                        }}
-                    >
-                        Date Added
-                    </button>
+                    <br />
+                    <div className="button-wrapper">
+                        {Object.keys(uiMap).map(key => {
+                            const buttonName = uiMap[key];
+                            const isActive = activeSort === buttonName;
+                            // let stylesIcon = isActive && sortUp ? 'show' : 'hide';
+                            // const stylesIcon = sortUp => {
+                            //     isActive && sortUp ? 'show' : 'hide';
+                            // };
+
+                            return (
+                                <Button
+                                    className={classNames({ active: isActive })}
+                                    onClick={() => {
+                                        handleEvent({ action: 'sort', type: buttonName });
+                                    }}
+                                >
+                                    <i className={classNames({ show: isActive && sortUp }, 'fas fa-arrow-up')} />
+                                    {buttonName}
+                                    <i className={classNames({ show: isActive && !sortUp }, 'fas fa-arrow-down')} />
+                                </Button>
+                            );
+                        })}
+                        {/* <button
+                            onClick={() => {
+                                handleEvent({ action: 'sort', type: 'rating' });
+                            }}
+                            className="active"
+                        >
+                            <i className="fas fa-arrow-up" />
+                            Rating
+                            <i className="fas fa-arrow-down" />
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                handleEvent({ action: 'sort', type: 'name' });
+                            }}
+                        >
+                            Name
+                        </button>
+                        <button
+                            onClick={() => {
+                                handleEvent({ action: 'sort', type: 'createdAt' });
+                            }}
+                        >
+                            Date Added
+                        </button> */}
+                    </div>
                 </div>
                 {[]
                     .concat(artists)
                     .sort((a, b) => {
                         if (sortUp) {
-                            return a[activeSort] < b[activeSort] ? 1 : -1;
+                            return a[sortMap[activeSort]] < b[sortMap[activeSort]] ? 1 : -1;
                         }
-                        return a[activeSort] > b[activeSort] ? 1 : -1;
+                        return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
                     })
                     .map(artist => {
                         return (
