@@ -103,6 +103,7 @@ const View = props => {
 
                             return (
                                 <Button
+                                    key={buttonName}
                                     className={classNames({ active: isActive })}
                                     onClick={() => {
                                         handleEvent({ action: 'sort', type: buttonName });
