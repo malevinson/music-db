@@ -13,16 +13,14 @@ const View = props => {
     const { activeSort, sortUp } = sort;
 
     const shuffle = array => {
+        if (activeSort !== 'Shuffle') return array;
         const length = array.length;
 
         for (let i = length - 1; i > 0; i--) {
-            // let j = Math.floor(Math.random() * (i + 1));
-            // let temp = array[i];
-            // array[i] = array[j];
-            // array[j] = temp;
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
     };
 
     return (
@@ -41,7 +39,6 @@ const View = props => {
                 <div className="artist-well">
                     <div className="flex">
                         {pinned.map(id => {
-                            console.log(pinned);
                             const artist = artists[ids[id]];
                             return (
                                 <div className="relative-wrapper" key={artist._id}>
@@ -135,19 +132,15 @@ const View = props => {
                         }}
                     />
                 </div>
-                {[]
-                    .concat(artists)
+                {shuffle([].concat(artists))
                     .sort((a, b) => {
-                        if (activeSort === 'Shuffle') return shuffle(artists);
+                        if (activeSort === 'Shuffle') return 0;
                         if (sortUp) {
                             return a[sortMap[activeSort]] < b[sortMap[activeSort]] ? 1 : -1;
                         }
                         return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
                     })
                     .filter(artist => {
-                        console.log(artist.name);
-                        console.log(input.filter);
-
                         return false || artist.name.toLowerCase().indexOf(input.filter.toLowerCase()) > -1;
                     })
                     .map(artist => {
