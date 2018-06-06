@@ -240,8 +240,6 @@ class App extends Component {
                         ...prevState.uiState,
                         input: {
                             ...prevState.uiState.input,
-
-                            rating: '',
                             artist: ''
                         }
                     }
