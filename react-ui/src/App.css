@@ -67,12 +67,6 @@ input[type='text'] {
     /* plajoceholder:  */
 }
 
-::placeholder {
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #426bf4;
-    opacity: 0.3; /* Firefox */
-}
-
 button:focus {
     outline: none;
 }

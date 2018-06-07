@@ -10,7 +10,7 @@ input {
     height: 28px; }
     input[type='text']::placeholder {
       color: #426bf4;
-      opacity: 0.6; }
+      opacity: 0.2; }
 
 input[type='text'] {
   /* width: 100%; */
