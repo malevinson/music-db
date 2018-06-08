@@ -51,7 +51,12 @@ class App extends Component {
             data.forEach((artist, index) => {
                 ids[artist._id] = index;
                 if (artist.pinned) {
-                    pinned.push(artist._id);
+                    pinned.push({
+                        id: artist._id,
+                        pinnedMeta: {
+                            ...artist.pinnedMeta
+                        }
+                    });
                 }
             });
             this.setState({
@@ -137,9 +142,10 @@ class App extends Component {
 
     handleTogglePin(id) {
         let currPins = this.state.uiState.pinned;
-        const pinIndex = currPins.indexOf(id);
+        const pinIndex = currPins.findIndex(pinned => pinned.id === id);
         let pinned;
 
+        console.log(pinIndex);
         const { app } = this.state;
         const { artists, ids } = app;
         const artistIndex = ids[id];
@@ -158,7 +164,7 @@ class App extends Component {
             this.setState({
                 uiState: {
                     ...this.state.uiState,
-                    pinned: currPins.concat(id)
+                    pinned: currPins.concat({ id: id, pinnedMeta: { ...currentArtistData.pinnedMeta } })
                 }
             });
         }
@@ -298,7 +304,7 @@ class App extends Component {
             delete idList[id];
             prevState.splice(index, 1);
 
-            let pinIndex = pinned.indexOf(id);
+            let pinIndex = pinned.findIndex(pinned => pinned.id === id);
             let pins = this.state.uiState.pinned;
             pins.splice(pinIndex, 1);
 

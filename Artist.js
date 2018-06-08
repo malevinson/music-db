@@ -6,7 +6,16 @@ const artistSchema = new Schema({
     rating: { type: Number, default: 100 },
     image: String,
     createdAt: { type: Date, default: Date.now },
-    pinned: false
+    pinned: false,
+    pinnedMeta: {
+        artist: { type: Boolean, default: true },
+        radio: { type: Boolean, default: false },
+        album: { type: Boolean, default: false },
+        pandora: { type: Boolean, default: false },
+        spotify: { type: Boolean, default: false },
+        googleMusic: { type: Boolean, default: false },
+        input: { type: String, default: '' }
+    }
 });
 
 const Artist = mongoose.model('Artist', artistSchema);

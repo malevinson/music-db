@@ -38,7 +38,8 @@ const View = props => {
                 </div>
                 <div className="artist-well">
                     <div className="flex">
-                        {pinned.map(id => {
+                        {pinned.map(pin => {
+                            const id = pin.id;
                             const artist = artists[ids[id]];
                             return (
                                 <div className="relative-wrapper" key={artist._id}>
@@ -182,7 +183,7 @@ const View = props => {
                                     </div>
                                 </div>
                                 <div className="name">{artist.name}</div>
-                                {pinned.indexOf(artist._id) === -1 && (
+                                {pinned.findIndex(pinned => pinned.id === artist._id) === -1 && (
                                     <button
                                         onClick={() => {
                                             handleEvent({ action: 'togglePin', id: artist._id });
