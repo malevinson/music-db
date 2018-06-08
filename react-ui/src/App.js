@@ -36,13 +36,17 @@ class App extends Component {
                 pinned: [],
                 currentEdit: '',
                 showFlashMsg: false,
-                flashMsg: null
+                flashMsg: null,
+                timer: {
+                    isStopped: true
+                }
             },
             app: { artists: [], ids: {} }
         };
     }
 
     componentDidMount() {
+        this.handleToggleTimer();
         const url = '/artists';
 
         this.buildRequest(url).then(data => {
@@ -89,10 +93,63 @@ class App extends Component {
         }, 2000);
     }
 
+    renderTimer(time) {
+        let displayedTime = time - (Date.now() - this.state.uiState.timer.startTime) / 1000;
+
+        const tenths = Math.floor((displayedTime * 10) % 10);
+        let seconds = Math.floor(displayedTime % 60);
+        if (seconds.toString().length < 2) {
+            seconds = '0' + seconds;
+        }
+        let minutes = Math.floor((displayedTime / 60) % 60);
+        if (minutes.toString().length < 2) {
+            minutes = '0' + minutes;
+        }
+        const hours = Math.floor(displayedTime / (60 * 60));
+
+        console.log('time:');
+        console.log(`${hours}:${minutes}:${seconds}.${tenths}`);
+
+        if (displayedTime < 0) {
+            let startTime = Date.now();
+
+            this.setState({
+                uiState: {
+                    ...this.state.uiState,
+                    timer: {
+                        ...this.state.uiState.timer,
+                        startTime
+                    }
+                }
+            });
+        }
+    }
+
+    handleToggleTimer() {
+        let runningTimer;
+        let startTime;
+        if (this.state.uiState.timer.isStopped) {
+            runningTimer = setInterval(() => this.renderTimer(20.1 * 60), 100);
+            startTime = Date.now();
+        } else {
+            clearInterval(this.state.uiState.timer.runningTimer);
+        }
+
+        this.setState({
+            uiState: {
+                ...this.state.uiState,
+                timer: { isStopped: !this.state.uiState.timer.isStopped, startTime, runningTimer }
+            }
+        });
+    }
+
     handleEvent = ({ action, e, id, type }) => {
         switch (action) {
             case 'inputChange':
                 this.handleInputChange(e);
+                break;
+            case 'toggleTimer':
+                this.handleToggleTimer();
                 break;
             case 'edit':
                 this.handleEdit(id);

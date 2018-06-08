@@ -9,7 +9,7 @@ import pinRed from '../images/pin.png';
 const View = props => {
     const { handleEvent, uiState, app } = props;
     const { artists, ids } = app;
-    const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg } = uiState;
+    const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
     const { activeSort, sortUp } = sort;
 
     const shuffle = array => {
@@ -90,6 +90,13 @@ const View = props => {
                         <button className="primary">Add Artist</button>
                     </div>
                 </form>
+                <button
+                    onClick={() => {
+                        handleEvent({ action: 'toggleTimer' });
+                    }}
+                >
+                    {timer.isStopped ? <span>Start</span> : <span>Stop</span>}timer
+                </button>
             </section>
             <section>
                 <div className="line" />
