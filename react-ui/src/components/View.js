@@ -96,10 +96,29 @@ const View = props => {
                 <audio id="beep">
                     <source src={audioSource} />
                 </audio>
-                <div>{time.hours}</div>
-                <div>{time.minutes}</div>
-                <div>{time.seconds}</div>
-                <div>{time.tenths}</div>
+
+                {!timer.isStopped && (
+                    <React.Fragment>
+                        <div id="bars">
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                            <div class="bar movement" />
+                        </div>
+                        <div className="stopwatch">
+                            <span>{time.hours}:</span>
+                            <span>{time.minutes}:</span>
+                            <span>{time.seconds}.</span>
+                            <span>{time.tenths}</span>
+                        </div>
+                    </React.Fragment>
+                )}
                 <Input
                     name="timer"
                     className="timer-form"
