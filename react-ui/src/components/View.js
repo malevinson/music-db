@@ -5,12 +5,15 @@ import Button from './Button';
 import classNames from 'classnames';
 import { uiMap, sortMap } from '../App.js';
 import pinRed from '../images/pin.png';
+import audioSource from '../beep.mp3';
 
 const View = props => {
-    const { handleEvent, uiState, app } = props;
+    const { handleEvent, uiState, app, time } = props;
     const { artists, ids } = app;
     const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
     const { activeSort, sortUp } = sort;
+
+    console.log(time);
 
     const shuffle = array => {
         if (activeSort !== 'Shuffle') return array;
@@ -90,6 +93,23 @@ const View = props => {
                         <button className="primary">Add Artist</button>
                     </div>
                 </form>
+                <audio id="beep">
+                    <source src={audioSource} />
+                </audio>
+                <div>{time.hours}</div>
+                <div>{time.minutes}</div>
+                <div>{time.seconds}</div>
+                <div>{time.tenths}</div>
+                <Input
+                    name="timer"
+                    className="timer-form"
+                    value={input}
+                    placeholder="25"
+                    // className="input"
+                    handleChange={e => {
+                        handleEvent({ action: 'inputChange', e });
+                    }}
+                />
                 <button
                     onClick={() => {
                         handleEvent({ action: 'toggleTimer' });

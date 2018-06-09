@@ -27,7 +27,8 @@ class App extends Component {
                     rating: '',
                     artist: '',
                     edit: '',
-                    filter: ''
+                    filter: '',
+                    timer: ''
                 },
                 sort: {
                     sortUp: false,
@@ -38,7 +39,8 @@ class App extends Component {
                 showFlashMsg: false,
                 flashMsg: null,
                 timer: {
-                    isStopped: true
+                    isStopped: true,
+                    time: { hours: '', minutes: '', seconds: '', tenths: '' }
                 }
             },
             app: { artists: [], ids: {} }
@@ -46,7 +48,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.handleToggleTimer();
         const url = '/artists';
 
         this.buildRequest(url).then(data => {
@@ -107,11 +108,15 @@ class App extends Component {
         }
         const hours = Math.floor(displayedTime / (60 * 60));
 
-        console.log('time:');
-        console.log(`${hours}:${minutes}:${seconds}.${tenths}`);
+        const audioElement = document.getElementById('beep');
+        audioElement.setAttribute('preload', 'auto');
+        audioElement.autobuffer = true;
+        audioElement.load();
 
         if (displayedTime < 0) {
             let startTime = Date.now();
+
+            audioElement.play();
 
             this.setState({
                 uiState: {
@@ -123,13 +128,31 @@ class App extends Component {
                 }
             });
         }
+        this.setState({
+            uiState: {
+                ...this.state.uiState,
+                timer: {
+                    ...this.state.uiState.timer,
+                    time: {
+                        hours,
+                        minutes,
+                        seconds,
+                        tenths
+                    }
+                }
+            }
+        });
     }
 
     handleToggleTimer() {
+        if (this.state.uiState.input.timer.length < 1) {
+            this.showFlashMsg(`Error: enter a number`);
+            return;
+        }
         let runningTimer;
         let startTime;
         if (this.state.uiState.timer.isStopped) {
-            runningTimer = setInterval(() => this.renderTimer(20.1 * 60), 100);
+            runningTimer = setInterval(() => this.renderTimer(this.state.uiState.input.timer * 60), 100);
             startTime = Date.now();
         } else {
             clearInterval(this.state.uiState.timer.runningTimer);
@@ -138,7 +161,12 @@ class App extends Component {
         this.setState({
             uiState: {
                 ...this.state.uiState,
-                timer: { isStopped: !this.state.uiState.timer.isStopped, startTime, runningTimer }
+                timer: {
+                    time: { ...this.state.uiState.timer.time },
+                    isStopped: !this.state.uiState.timer.isStopped,
+                    startTime,
+                    runningTimer
+                }
             }
         });
     }
@@ -202,7 +230,6 @@ class App extends Component {
         const pinIndex = currPins.findIndex(pinned => pinned.id === id);
         let pinned;
 
-        console.log(pinIndex);
         const { app } = this.state;
         const { artists, ids } = app;
         const artistIndex = ids[id];
@@ -312,41 +339,6 @@ class App extends Component {
         });
     }
 
-    // triggerReminder() {
-    //     console.log('BEEP!!');
-    // }
-
-    // handleSubmitReminder = e => {
-    //     e.preventDefault();
-    //     this.setState({ timerStartTime: Date.now() }, () => {
-    //         const { inputReminder, reminderText } = this.state;
-    //         let timerId;
-    //         let stopwatchId;
-    //         let storedTimer;
-    //         if (reminderText === 'Start Timer' && inputReminder.length && !isNaN(inputReminder)) {
-    //             function renderTime() {
-    //                 // console.log((storedTimer * 1000 - (Date.now() - timerStartTime)) / 1000);
-    //             }
-    //             storedTimer = inputReminder;
-    //             timerId = setInterval(this.triggerReminder, 1000 * storedTimer);
-    //             renderTime();
-    //             stopwatchId = setInterval(renderTime, 100);
-
-    //             this.setState({
-    //                 reminderText: 'Stop Timer',
-    //                 timerId,
-    //                 stopwatchId
-    //             });
-    //         } else if (reminderText === 'Stop Timer') {
-    //             clearInterval(this.state.timerId);
-    //             clearInterval(this.state.stopwatchId);
-    //             this.setState({
-    //                 reminderText: 'Start Timer'
-    //             });
-    //         }
-    //     });
-    // };
-
     deleteArtist(id) {
         const url = '/artist/' + id;
         const { app, uiState } = this.state;
@@ -453,6 +445,7 @@ class App extends Component {
 
     render() {
         const { app, uiState } = this.state;
+        const { time } = this.state.uiState.timer;
 
         console.log('State |||||||---------->');
         console.log(this.state);
@@ -461,7 +454,8 @@ class App extends Component {
             <View
                 {...{
                     uiState,
-                    app
+                    app,
+                    time
                 }}
                 handleEvent={this.handleEvent}
             />
