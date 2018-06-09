@@ -156,14 +156,14 @@ const View = props => {
                                     <i
                                         className={classNames(
                                             { show: isActive && sortUp && buttonName !== 'Shuffle' },
-                                            'fas fa-arrow-up'
+                                            'fas fa-arrow-up',
                                         )}
                                     />
                                     {buttonName}
                                     <i
                                         className={classNames(
                                             { show: isActive && !sortUp && buttonName !== 'Shuffle' },
-                                            'fas fa-arrow-down'
+                                            'fas fa-arrow-down',
                                         )}
                                     />
                                 </Button>

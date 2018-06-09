@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 var spotifyApi = new SpotifyWebApi({
     clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET
+    clientSecret: process.env.CLIENT_SECRET,
     //   redirectUri : 'http://www.example.com/callback'
 });
 
@@ -24,7 +24,7 @@ spotifyApi.clientCredentialsGrant().then(
     },
     function(err) {
         console.log('Something went wrong when retrieving an access token', err);
-    }
+    },
 );
 
 function getArtistImage(artistQuery) {
@@ -37,7 +37,7 @@ function getArtistImage(artistQuery) {
             },
             function(err) {
                 console.log('Could not refresh access token', err);
-            }
+            },
         );
         spotifyApi.searchArtists(artistQuery).then(
             function(data) {
@@ -57,7 +57,7 @@ function getArtistImage(artistQuery) {
             function(err) {
                 console.error(err);
                 reject(err);
-            }
+            },
         );
     });
 }
@@ -172,9 +172,9 @@ if (cluster.isMaster) {
                 artist.save(function(err) {
                     // if (err) res.send(err);
                     if (err)
-                        res
-                            .status(500)
-                            .json({ error: 'Could not save updates to the artist with id: ' + req.params.artist_id });
+                        res.status(500).json({
+                            error: 'Could not save updates to the artist with id: ' + req.params.artist_id,
+                        });
                     res.json({ message: 'Artist updated!' });
                 });
             });
@@ -185,7 +185,7 @@ if (cluster.isMaster) {
             console.log('in delete');
             Artist.remove(
                 {
-                    _id: req.params.artist_id
+                    _id: req.params.artist_id,
                 },
                 function(err, artist) {
                     // if (err) res.send(err);
@@ -193,9 +193,9 @@ if (cluster.isMaster) {
                         res.status(500).json({ error: 'Could not delete artist with the id: ' + req.params.artist_id });
                     console.log('artist deleted:');
                     res.json({
-                        _id: req.params.artist_id
+                        _id: req.params.artist_id,
                     });
-                }
+                },
             );
         });
 

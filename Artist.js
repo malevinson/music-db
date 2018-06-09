@@ -14,8 +14,8 @@ const artistSchema = new Schema({
         pandora: { type: Boolean, default: false },
         spotify: { type: Boolean, default: false },
         googleMusic: { type: Boolean, default: false },
-        input: { type: String, default: '' }
-    }
+        input: { type: String, default: '' },
+    },
 });
 
 const Artist = mongoose.model('Artist', artistSchema);

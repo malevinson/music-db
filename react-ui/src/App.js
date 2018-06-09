@@ -8,13 +8,13 @@ export const uiMap = {
     rating: 'Rating',
     name: 'Name',
     date: 'Date',
-    shuffle: 'Shuffle'
+    shuffle: 'Shuffle',
 };
 
 export const sortMap = {
     Rating: 'rating',
     Name: 'name',
-    Date: 'createdAt'
+    Date: 'createdAt',
     // Shuffle: 'shuffle'
 };
 
@@ -28,11 +28,11 @@ class App extends Component {
                     artist: '',
                     edit: '',
                     filter: '',
-                    timer: ''
+                    timer: '',
                 },
                 sort: {
                     sortUp: false,
-                    activeSort: uiMap.rating
+                    activeSort: uiMap.rating,
                 },
                 pinned: [],
                 currentEdit: '',
@@ -40,10 +40,10 @@ class App extends Component {
                 flashMsg: null,
                 timer: {
                     isStopped: true,
-                    time: { hours: '', minutes: '', seconds: '', tenths: '' }
-                }
+                    time: { hours: '', minutes: '', seconds: '', tenths: '' },
+                },
             },
-            app: { artists: [], ids: {} }
+            app: { artists: [], ids: {} },
         };
     }
 
@@ -59,20 +59,20 @@ class App extends Component {
                     pinned.push({
                         id: artist._id,
                         pinnedMeta: {
-                            ...artist.pinnedMeta
-                        }
+                            ...artist.pinnedMeta,
+                        },
                     });
                 }
             });
             this.setState({
                 app: {
                     artists: data,
-                    ids
+                    ids,
                 },
                 uiState: {
                     ...this.state.uiState,
-                    pinned
-                }
+                    pinned,
+                },
             });
         });
     }
@@ -81,14 +81,14 @@ class App extends Component {
         const newState = update(this.state, {
             uiState: {
                 showFlashMsg: { $set: !this.state.uiState.showFlashMsg },
-                flashMsg: { $set: msg }
-            }
+                flashMsg: { $set: msg },
+            },
         });
         this.setState(newState);
 
         setTimeout(() => {
             const newState = update(this.state, {
-                uiState: { showFlashMsg: { $set: !this.state.uiState.showFlashMsg } }
+                uiState: { showFlashMsg: { $set: !this.state.uiState.showFlashMsg } },
             });
             this.setState(newState);
         }, 2000);
@@ -123,9 +123,9 @@ class App extends Component {
                     ...this.state.uiState,
                     timer: {
                         ...this.state.uiState.timer,
-                        startTime
-                    }
-                }
+                        startTime,
+                    },
+                },
             });
         }
         this.setState({
@@ -137,10 +137,10 @@ class App extends Component {
                         hours,
                         minutes,
                         seconds,
-                        tenths
-                    }
-                }
-            }
+                        tenths,
+                    },
+                },
+            },
         });
     }
 
@@ -165,9 +165,9 @@ class App extends Component {
                     time: { ...this.state.uiState.timer.time },
                     isStopped: !this.state.uiState.timer.isStopped,
                     startTime,
-                    runningTimer
-                }
-            }
+                    runningTimer,
+                },
+            },
         });
     }
 
@@ -207,12 +207,12 @@ class App extends Component {
         const { sort } = this.state.uiState;
         if (sort.activeSort === type) {
             const newState = update(this.state, {
-                uiState: { sort: { sortUp: { $set: !sort.sortUp } } }
+                uiState: { sort: { sortUp: { $set: !sort.sortUp } } },
             });
             this.setState(newState);
         } else {
             const newState = update(this.state, {
-                uiState: { sort: { activeSort: { $set: type } } }
+                uiState: { sort: { activeSort: { $set: type } } },
             });
             this.setState(newState);
         }
@@ -220,7 +220,7 @@ class App extends Component {
 
     handleInputChange(e) {
         const newState = update(this.state, {
-            uiState: { input: { [e.target.name]: { $set: e.target.value } } }
+            uiState: { input: { [e.target.name]: { $set: e.target.value } } },
         });
         this.setState(newState);
     }
@@ -240,22 +240,22 @@ class App extends Component {
             this.setState({
                 uiState: {
                     ...this.state.uiState,
-                    pinned: currPins
-                }
+                    pinned: currPins,
+                },
             });
         } else {
             pinned = true;
             this.setState({
                 uiState: {
                     ...this.state.uiState,
-                    pinned: currPins.concat({ id: id, pinnedMeta: { ...currentArtistData.pinnedMeta } })
-                }
+                    pinned: currPins.concat({ id: id, pinnedMeta: { ...currentArtistData.pinnedMeta } }),
+                },
             });
         }
 
         const requestBody = {
             ...currentArtistData,
-            pinned
+            pinned,
         };
 
         const url = '/artist/' + id;
@@ -270,9 +270,9 @@ class App extends Component {
             uiState: {
                 currentEdit: { $set: id },
                 input: {
-                    edit: { $set: currentRating }
-                }
-            }
+                    edit: { $set: currentRating },
+                },
+            },
         });
 
         this.setState(newState);
@@ -323,16 +323,16 @@ class App extends Component {
                         artists: prevState.app.artists.concat(data.artist),
                         ids: {
                             ...prevState.app.ids,
-                            [data.artist._id]: prevState.app.artists.length
-                        }
+                            [data.artist._id]: prevState.app.artists.length,
+                        },
                     },
                     uiState: {
                         ...prevState.uiState,
                         input: {
                             ...prevState.uiState.input,
-                            artist: ''
-                        }
-                    }
+                            artist: '',
+                        },
+                    },
                 };
             });
             this.showFlashMsg(`Artist "${data.artist.name}" added!`);
@@ -359,7 +359,7 @@ class App extends Component {
 
             this.setState({
                 app: { artists: prevState, ids: idList },
-                uiState: { ...this.state.uiState, pinned: pins }
+                uiState: { ...this.state.uiState, pinned: pins },
             });
 
             this.showFlashMsg(`Artist "${deletedArtistName}" deleted!`);
@@ -380,7 +380,7 @@ class App extends Component {
 
         const requestBody = {
             ...currentArtistData,
-            rating: uiState.input.edit
+            rating: uiState.input.edit,
         };
         const url = '/artist/' + id;
 
@@ -390,9 +390,9 @@ class App extends Component {
 
             const newState = update(this.state, {
                 uiState: {
-                    currentEdit: { $set: '' }
+                    currentEdit: { $set: '' },
                 },
-                app: { artists: { $set: newList } }
+                app: { artists: { $set: newList } },
             });
 
             this.setState(newState);
@@ -408,13 +408,13 @@ class App extends Component {
                 fetchParams = {
                     body: JSON.stringify(requestBody),
                     headers: {
-                        'content-type': 'application/json'
+                        'content-type': 'application/json',
                     },
-                    method
+                    method,
                 };
             } else if (method === 'DELETE' || method === null) {
                 fetchParams = {
-                    method
+                    method,
                 };
             }
 
@@ -455,7 +455,7 @@ class App extends Component {
                 {...{
                     uiState,
                     app,
-                    time
+                    time,
                 }}
                 handleEvent={this.handleEvent}
             />
