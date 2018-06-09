@@ -9,9 +9,6 @@
 .relative-wrapper {
     position: relative;
     padding: 0 2px;
-    /* display: inline-block; */
-    /* width: 120px;
-    height: 120px; */
 }
 
 .relative-wrapper:hover > div {
@@ -21,6 +18,11 @@
 .artist {
     display: inline-block;
     padding: 0.3rem;
+    transition: transform 0.1s;
+}
+
+.artist:hover {
+    transform: scale(1.05);
 }
 
 .line {
@@ -28,7 +30,6 @@
     width: 60%;
     margin: 0 auto;
     opacity: 0.3;
-    // padding: 0.5rem 0;
 }
 
 .controls {

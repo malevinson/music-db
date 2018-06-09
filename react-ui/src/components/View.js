@@ -96,7 +96,7 @@ const View = props => {
                 <audio id="beep">
                     <source src={audioSource} />
                 </audio>
-
+                Alert Methods:
                 {!timer.isStopped && (
                     <React.Fragment>
                         <div id="bars">

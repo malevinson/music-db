@@ -160,17 +160,18 @@ header {
 
 .relative-wrapper {
   position: relative;
-  padding: 0 2px;
-  /* display: inline-block; */
-  /* width: 120px;
-    height: 120px; */ }
+  padding: 0 2px; }
 
 .relative-wrapper:hover > div {
   display: block; }
 
 .artist {
   display: inline-block;
-  padding: 0.3rem; }
+  padding: 0.3rem;
+  transition: transform 0.1s; }
+
+.artist:hover {
+  transform: scale(1.05); }
 
 .line {
   border-bottom: 1px solid grey;
