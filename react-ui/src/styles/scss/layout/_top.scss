@@ -1,6 +1,6 @@
 .pinned-section {
     .header {
-        margin: 1rem 0;
+        margin: 1rem 0 0 0;
     }
     .header-img {
         width: 20px;
@@ -21,4 +21,14 @@
             }
         }
     }
+}
+
+.timer-wrapper {
+    // display: inline-block;
+    @include flexbox-center;
+    // width: 1000px;
+}
+
+.artist-input-wrapper {
+    display: inline-block;
 }

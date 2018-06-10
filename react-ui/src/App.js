@@ -106,27 +106,29 @@ class App extends Component {
         if (minutes.toString().length < 2) {
             minutes = '0' + minutes;
         }
-        const hours = Math.floor(displayedTime / (60 * 60));
 
+        const hours = Math.floor(displayedTime / (60 * 60));
         const audioElement = document.getElementById('beep');
         audioElement.setAttribute('preload', 'auto');
         audioElement.autobuffer = true;
         audioElement.load();
 
         if (displayedTime < 0) {
+            audioElement.play();
             let startTime = Date.now();
 
-            audioElement.play();
-
-            this.setState({
-                uiState: {
-                    ...this.state.uiState,
-                    timer: {
-                        ...this.state.uiState.timer,
-                        startTime,
+            //hack to get shorter beep length since couldn't find beep that was shorter and not annoying
+            setTimeout(() => {
+                this.setState({
+                    uiState: {
+                        ...this.state.uiState,
+                        timer: {
+                            ...this.state.uiState.timer,
+                            startTime,
+                        },
                     },
-                },
-            });
+                });
+            }, 100);
         }
         this.setState({
             uiState: {
@@ -281,7 +283,7 @@ class App extends Component {
     createArtist() {
         const { input } = this.state.uiState;
         const formatedArtist = titleCaseString(input.artist).trim();
-        const formatedRating = parseInt(input.rating.trim());
+        const formatedRating = parseInt(input.rating.trim(), 10);
 
         if (formatedArtist.length < 2) {
             let err = 'Enter at least 2 characters';

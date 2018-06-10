@@ -13,8 +13,6 @@ const View = props => {
     const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
     const { activeSort, sortUp } = sort;
 
-    console.log(time);
-
     const shuffle = array => {
         if (activeSort !== 'Shuffle') return array;
         const length = array.length;
@@ -63,79 +61,85 @@ const View = props => {
             </section>
 
             <section>
-                <form
-                    onSubmit={e => {
-                        handleEvent({ action: 'create', e });
-                    }}
-                    method="post"
-                >
-                    <div className="main">
-                        <label>Artist</label>
-                        <Input
-                            name="artist"
-                            placeholder="The Beatles"
-                            value={input}
-                            handleChange={e => {
-                                handleEvent({ action: 'inputChange', e });
-                            }}
-                        />
-                        <label>Rating</label>
-                        <Input
-                            name="rating"
-                            className="rating-form"
-                            value={input}
-                            placeholder="35"
-                            // className="input"
-                            handleChange={e => {
-                                handleEvent({ action: 'inputChange', e });
-                            }}
-                        />
-                        <button className="primary">Add Artist</button>
-                    </div>
-                </form>
                 <audio id="beep">
                     <source src={audioSource} />
                 </audio>
-                Alert Methods:
-                {!timer.isStopped && (
-                    <React.Fragment>
-                        <div id="bars">
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
-                            <div class="bar movement" />
+                <div className="inline-block2">
+                    <div className="timer-wrapper">
+                        <div className="timer-active">
+                            <div
+                                className={classNames({ showTimer: !timer.isStopped }, { hideTimer: timer.isStopped })}
+                            >
+                                <div id="bars">
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                    <div className="bar movement" />
+                                </div>
+                                <div className="stopwatch">
+                                    <span>{time.hours}:</span>
+                                    <span>{time.minutes}:</span>
+                                    <span>{time.seconds}.</span>
+                                    <span>{time.tenths}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="stopwatch">
-                            <span>{time.hours}:</span>
-                            <span>{time.minutes}:</span>
-                            <span>{time.seconds}.</span>
-                            <span>{time.tenths}</span>
+                        Mins
+                        <Input
+                            name="timer"
+                            className="timer-form"
+                            value={input}
+                            placeholder="25"
+                            handleChange={e => {
+                                handleEvent({ action: 'inputChange', e });
+                            }}
+                        />
+                        <Button
+                            onClick={() => {
+                                handleEvent({ action: 'toggleTimer' });
+                            }}
+                        >
+                            {timer.isStopped ? <span>Start</span> : <span>Stop</span>}timer
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="artist-input-wrapper">
+                    <form
+                        onSubmit={e => {
+                            handleEvent({ action: 'create', e });
+                        }}
+                        method="post"
+                    >
+                        <div className="main">
+                            <label>Artist</label>
+                            <Input
+                                name="artist"
+                                placeholder="The Beatles"
+                                value={input}
+                                handleChange={e => {
+                                    handleEvent({ action: 'inputChange', e });
+                                }}
+                            />
+                            <label>Rating</label>
+                            <Input
+                                name="rating"
+                                className="rating-form"
+                                value={input}
+                                placeholder="35"
+                                handleChange={e => {
+                                    handleEvent({ action: 'inputChange', e });
+                                }}
+                            />
+                            <button className="primary">Add Artist</button>
                         </div>
-                    </React.Fragment>
-                )}
-                <Input
-                    name="timer"
-                    className="timer-form"
-                    value={input}
-                    placeholder="25"
-                    // className="input"
-                    handleChange={e => {
-                        handleEvent({ action: 'inputChange', e });
-                    }}
-                />
-                <button
-                    onClick={() => {
-                        handleEvent({ action: 'toggleTimer' });
-                    }}
-                >
-                    {timer.isStopped ? <span>Start</span> : <span>Stop</span>}timer
-                </button>
+                    </form>
+                </div>
             </section>
             <section>
                 <div className="line" />
@@ -169,15 +173,16 @@ const View = props => {
                                 </Button>
                             );
                         })}
+                        <div className="filter">
+                            <Input
+                                name="filter"
+                                value={input}
+                                handleChange={e => {
+                                    handleEvent({ action: 'inputChange', e });
+                                }}
+                            />
+                        </div>
                     </div>
-                    <Input
-                        name="filter"
-                        // className="rating-form"
-                        value={input}
-                        handleChange={e => {
-                            handleEvent({ action: 'inputChange', e });
-                        }}
-                    />
                 </div>
                 {shuffle([].concat(artists))
                     .sort((a, b) => {
