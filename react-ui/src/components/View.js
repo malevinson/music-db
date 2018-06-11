@@ -5,6 +5,7 @@ import Button from './Button';
 import classNames from 'classnames';
 import { uiMap, sortMap } from '../App.js';
 import pinRed from '../images/pin.png';
+import pinBlack from '../images/pin2.png';
 import audioSource from '../beep.mp3';
 
 const View = props => {
@@ -233,17 +234,18 @@ const View = props => {
                                     >
                                         X
                                     </div>
+                                    {pinned.findIndex(pinned => pinned.id === artist._id) === -1 && (
+                                        <div
+                                            className="pin"
+                                            onClick={() => {
+                                                handleEvent({ action: 'togglePin', id: artist._id });
+                                            }}
+                                        >
+                                            <img className="header-img" src={pinBlack} />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="name">{artist.name}</div>
-                                {pinned.findIndex(pinned => pinned.id === artist._id) === -1 && (
-                                    <Button
-                                        onClick={() => {
-                                            handleEvent({ action: 'togglePin', id: artist._id });
-                                        }}
-                                    >
-                                        Pin
-                                    </Button>
-                                )}
                             </div>
                         );
                     })}
