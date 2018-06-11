@@ -47,15 +47,22 @@ button {
   margin: 0 2px;
   height: 2.5rem; }
 
-button:active {
-  box-shadow: 0 3px 0 #f44162; }
+.button.timer:active {
+  box-shadow: 0 3px 0 #426bf4; }
 
 .primary {
   color: #f44162;
   border: 1px solid #f44162;
   width: 5rem;
   margin-left: 1rem;
-  padding: 0.5rem; }
+  padding: 0.5rem;
+  height: 25px; }
+
+.primary:active {
+  box-shadow: 0 3px 0 #f44162; }
+
+.button.timer {
+  height: 30px; }
 
 button:focus {
   outline: none; }
@@ -67,13 +74,15 @@ button:focus {
   margin: 0;
   margin-bottom: 4px; }
 
+.artist-rating {
+  cursor: pointer; }
+
 .button-edit {
   width: 42px;
   display: inline-block; }
 
 .active {
-  border: 3px solid #426bf4;
-  color: #f44162; }
+  border: 3px solid #426bf4; }
 
 .active:active {
   box-shadow: 0 3px 0 #426bf4; }
@@ -88,7 +97,8 @@ i {
 .button-wrapper {
   display: flex;
   justify-content: center;
-  margin: 0 auto; }
+  margin: 0 auto;
+  align-items: center; }
 
 .artist-header {
   height: 20px; }
@@ -142,15 +152,22 @@ button {
   margin: 0 2px;
   height: 2.5rem; }
 
-button:active {
-  box-shadow: 0 3px 0 #f44162; }
+.button.timer:active {
+  box-shadow: 0 3px 0 #426bf4; }
 
 .primary {
   color: #f44162;
   border: 1px solid #f44162;
   width: 5rem;
   margin-left: 1rem;
-  padding: 0.5rem; }
+  padding: 0.5rem;
+  height: 25px; }
+
+.primary:active {
+  box-shadow: 0 3px 0 #f44162; }
+
+.button.timer {
+  height: 30px; }
 
 button:focus {
   outline: none; }
@@ -162,13 +179,15 @@ button:focus {
   margin: 0;
   margin-bottom: 4px; }
 
+.artist-rating {
+  cursor: pointer; }
+
 .button-edit {
   width: 42px;
   display: inline-block; }
 
 .active {
-  border: 3px solid #426bf4;
-  color: #f44162; }
+  border: 3px solid #426bf4; }
 
 .active:active {
   box-shadow: 0 3px 0 #426bf4; }
@@ -183,7 +202,8 @@ i {
 .button-wrapper {
   display: flex;
   justify-content: center;
-  margin: 0 auto; }
+  margin: 0 auto;
+  align-items: center; }
 
 .artist-header {
   height: 20px; }
@@ -295,7 +315,8 @@ header {
   display: none; }
 
 .pinned-section .pin:hover {
-  display: block; }
+  display: block;
+  cursor: pointer; }
 
 .timer-wrapper {
   justify-content: center;
@@ -313,7 +334,8 @@ header {
   display: none; }
 
 .artist .pin:hover {
-  display: block; }
+  display: block;
+  cursor: pointer; }
 
 .x {
   position: absolute;
@@ -323,7 +345,8 @@ header {
   display: none; }
 
 .x:hover {
-  color: red; }
+  color: red;
+  cursor: pointer; }
 
 .relative-wrapper {
   position: relative;
@@ -398,7 +421,8 @@ section {
   border: 0.1rem solid black;
   display: inline-block;
   border-radius: 0.3rem;
-  padding: 0.1rem 0.2rem; }
+  padding: 0.1rem 0.2rem;
+  width: 80px; }
 
 .inline-block2 {
   display: inline-block; }

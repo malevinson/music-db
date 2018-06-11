@@ -107,6 +107,7 @@ const View = props => {
                             onClick={() => {
                                 handleEvent({ action: 'toggleTimer' });
                             }}
+                            className="button timer"
                         >
                             {timer.isStopped ? <span>Start</span> : <span>Stop</span>}timer
                         </Button>
@@ -221,7 +222,10 @@ const View = props => {
                                             </button>
                                         </React.Fragment>
                                     ) : (
-                                        <div onClick={() => handleEvent({ action: 'edit', id: artist._id })}>
+                                        <div
+                                            className="artist-rating"
+                                            onClick={() => handleEvent({ action: 'edit', id: artist._id })}
+                                        >
                                             {artist.rating}
                                         </div>
                                     )}
