@@ -1,6 +1,5 @@
 import React from 'react';
 import Input from './Input';
-import './View.css';
 import Button from './Button';
 import classNames from 'classnames';
 import { uiMap, sortMap } from '../App.js';

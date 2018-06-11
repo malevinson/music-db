@@ -17,6 +17,7 @@
 body,
 html {
     margin: 0;
+    font-family: sans-serif;
 }
 
 main {
@@ -43,12 +44,6 @@ section {
     border-radius: 0.3rem;
     padding: 0.1rem 0.2rem;
     width: 80px;
-    // margin-top: 1rem;
-}
-
-.timer-active {
-    // border: 0.1rem solid green;
-    // display: inline-block;
 }
 
 .inline-block2 {
