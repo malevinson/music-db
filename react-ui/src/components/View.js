@@ -44,6 +44,7 @@ const View = props => {
                             const artist = artists[ids[id]];
                             return (
                                 <div className="relative-wrapper" key={artist._id}>
+                                    <div className="name">{artist.name}</div>
                                     <img src={artist.image} alt="album art" className="pinned" />
                                     <div
                                         className="x"
@@ -235,13 +236,13 @@ const View = props => {
                                 </div>
                                 <div className="name">{artist.name}</div>
                                 {pinned.findIndex(pinned => pinned.id === artist._id) === -1 && (
-                                    <button
+                                    <Button
                                         onClick={() => {
                                             handleEvent({ action: 'togglePin', id: artist._id });
                                         }}
                                     >
                                         Pin
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         );

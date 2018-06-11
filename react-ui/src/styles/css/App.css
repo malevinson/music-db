@@ -278,8 +278,10 @@ header {
     justify-content: center;
     align-items: center;
     display: flex;
-    height: 60px;
-    min-width: 60px; }
+    height: 69px;
+    min-width: 69px; }
+    .pinned-section .artist-well .flex .name {
+      font-size: 7.5px; }
     .pinned-section .artist-well .flex .pinned {
       width: 60px;
       height: 60px; }
