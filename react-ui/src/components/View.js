@@ -48,13 +48,14 @@ const View = props => {
                                 <div className="relative-wrapper" key={artist._id}>
                                     <div className="name">{artist.name}</div>
                                     <img src={artist.image} alt="album art" className="pinned" />
-                                    <div
-                                        className="x"
-                                        onClick={() => {
-                                            handleEvent({ action: 'togglePin', id: artist._id });
-                                        }}
-                                    >
-                                        X
+                                    <div className="pin">
+                                        <HoverImage
+                                            src={pinRed}
+                                            hoverSrc={pinBlack}
+                                            onClick={() => {
+                                                handleEvent({ action: 'togglePin', id: artist._id });
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             );

@@ -25,6 +25,18 @@
             }
         }
     }
+
+    .pin {
+        position: absolute;
+        top: 11%;
+        width: 17px;
+        left: 7%;
+        color: $secondary;
+        display: none;
+    }
+    .pin:hover {
+        display: block;
+    }
 }
 
 .timer-wrapper {

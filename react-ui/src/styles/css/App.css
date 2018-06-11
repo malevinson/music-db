@@ -286,6 +286,17 @@ header {
       width: 60px;
       height: 60px; }
 
+.pinned-section .pin {
+  position: absolute;
+  top: 11%;
+  width: 17px;
+  left: 7%;
+  color: #426bf4;
+  display: none; }
+
+.pinned-section .pin:hover {
+  display: block; }
+
 .timer-wrapper {
   justify-content: center;
   align-items: center;
