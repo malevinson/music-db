@@ -3,9 +3,13 @@
     position: absolute;
     top: 5%;
     right: 5%;
-    color: red;
+    color: $secondary;
     display: none;
 }
+.x:hover {
+    color: red;
+}
+
 .relative-wrapper {
     position: relative;
     padding: 0 2px;
