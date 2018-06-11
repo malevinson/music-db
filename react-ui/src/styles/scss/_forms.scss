@@ -53,6 +53,10 @@ button {
     height: 2.5rem;
 }
 
+button .active {
+    // color: red;
+}
+
 button:active {
     // box-shadow: 0 3px 0 $primary;
 }
@@ -99,7 +103,7 @@ button:focus {
 
 .active {
     border: 3px solid #426bf4;
-    // color: #f44162;
+    color: #f44162;
 }
 
 .active:active {

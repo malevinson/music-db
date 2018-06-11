@@ -82,7 +82,8 @@ button:focus {
   display: inline-block; }
 
 .active {
-  border: 3px solid #426bf4; }
+  border: 3px solid #426bf4;
+  color: #f44162; }
 
 .active:active {
   box-shadow: 0 3px 0 #426bf4; }
@@ -187,7 +188,8 @@ button:focus {
   display: inline-block; }
 
 .active {
-  border: 3px solid #426bf4; }
+  border: 3px solid #426bf4;
+  color: #f44162; }
 
 .active:active {
   box-shadow: 0 3px 0 #426bf4; }
