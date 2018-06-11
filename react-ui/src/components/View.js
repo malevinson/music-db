@@ -7,6 +7,7 @@ import { uiMap, sortMap } from '../App.js';
 import pinRed from '../images/pin.png';
 import pinBlack from '../images/pin2.png';
 import audioSource from '../beep.mp3';
+import HoverImage from 'react-hover-image';
 
 const View = props => {
     const { handleEvent, uiState, app, time } = props;
@@ -241,7 +242,7 @@ const View = props => {
                                                 handleEvent({ action: 'togglePin', id: artist._id });
                                             }}
                                         >
-                                            <img className="header-img" src={pinBlack} />
+                                            <HoverImage src={pinBlack} hoverSrc={pinRed} />
                                         </div>
                                     )}
                                 </div>
