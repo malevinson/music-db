@@ -60,4 +60,9 @@
         display: block;
         cursor: pointer;
     }
+    .name {
+        width: 95px;
+        white-space: nowrap;
+        line-height: 1rem;
+    }
 }

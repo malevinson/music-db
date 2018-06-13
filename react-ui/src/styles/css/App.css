@@ -339,6 +339,11 @@ header {
   display: block;
   cursor: pointer; }
 
+.artist .name {
+  width: 95px;
+  white-space: nowrap;
+  line-height: 1rem; }
+
 .x {
   position: absolute;
   top: 5%;

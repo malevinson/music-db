@@ -25,6 +25,15 @@ const View = props => {
         return array;
     };
 
+    const getArtistNameFontSize = name => {
+        const length = name.length;
+        if (length < 13) {
+            return '14px';
+        } else {
+            return Math.round((9 / length) * 20) + 'px';
+        }
+    };
+
     return (
         <div>
             <header>Music Dashboard</header>
@@ -250,7 +259,9 @@ const View = props => {
                                         </div>
                                     )}
                                 </div>
-                                <div className="name">{artist.name}</div>
+                                <div className="name" style={{ fontSize: getArtistNameFontSize(artist.name) }}>
+                                    {artist.name}
+                                </div>
                             </div>
                         );
                     })}
