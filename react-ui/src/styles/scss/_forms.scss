@@ -20,6 +20,7 @@ input[type='text'] {
     border: 0.1rem solid #ccc;
     border-radius: 0.4rem;
 }
+
 .rating-form {
     width: 45px;
     padding: 0;
@@ -53,13 +54,6 @@ button {
     height: 2.5rem;
 }
 
-button .active {
-    // color: red;
-}
-
-button:active {
-    // box-shadow: 0 3px 0 $primary;
-}
 .button.timer:active {
     box-shadow: 0 3px 0 $secondary;
 }
@@ -118,7 +112,6 @@ i {
     visibility: visible;
 }
 
-/* --------------------------CONTROLS---------------- */
 .button-wrapper {
     display: flex;
     justify-content: center;

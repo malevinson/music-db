@@ -37,32 +37,3 @@ section {
     margin: 1vh auto;
     text-align: center;
 }
-
-.stopwatch {
-    border: 0.1rem solid black;
-    display: inline-block;
-    border-radius: 0.3rem;
-    padding: 0.1rem 0.2rem;
-    width: 80px;
-}
-
-.inline-block2 {
-    display: inline-block;
-}
-
-.timer-form {
-    display: inline-block;
-    width: 65px;
-}
-
-.hideTimer {
-    visibility: hidden;
-    display: inline-block;
-}
-
-.showTimer {
-    display: inline-block;
-    visibility: visible;
-}
-
-// -----------NOTHING BELOW HERE --------------------
