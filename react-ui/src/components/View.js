@@ -43,9 +43,9 @@ const View = props => {
 
             <section className="pinned-section">
                 <div className="header">
-                    <img className="header-img" src={pinRed} />
-                    <img className="header-img" src={pinRed} />
-                    <img className="header-img" src={pinRed} />
+                    <img className="header-img" alt="pin" src={pinRed} />
+                    <img className="header-img" alt="pin" src={pinRed} />
+                    <img className="header-img" alt="pin" src={pinRed} />
                 </div>
                 <div className="artist-well">
                     <div className="flex">
