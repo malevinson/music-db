@@ -28,7 +28,7 @@ class App extends Component {
                     artist: '',
                     edit: '',
                     filter: '',
-                    timer: '',
+                    timer: '25',
                 },
                 sort: {
                     sortUp: false,
