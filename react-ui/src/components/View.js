@@ -5,11 +5,10 @@ import classNames from 'classnames';
 import { uiMap, sortMap } from '../App.js';
 import pinRed from '../images/pin.png';
 import pinBlack from '../images/pin2.png';
-import audioSource from '../beep.mp3';
 import HoverImage from 'react-hover-image';
 
 const View = props => {
-    const { handleEvent, uiState, app, time, handleNotification } = props;
+    const { handleEvent, uiState, app, time } = props;
     const { artists, ids } = app;
     const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
     const { activeSort, sortUp } = sort;
@@ -40,7 +39,6 @@ const View = props => {
             <div className={classNames('flash-msg', { show: showFlashMsg }, { hide: !showFlashMsg })}>
                 <div>{flashMsg}</div>
             </div>
-            <button onClick={handleNotification}>Notify me!</button>
 
             <section className="pinned-section">
                 <div className="header">
@@ -74,9 +72,6 @@ const View = props => {
             </section>
 
             <section>
-                <audio id="beep">
-                    <source src={audioSource} />
-                </audio>
                 <div className="inline-block2">
                     <div className="timer-wrapper">
                         <div className="timer-active">

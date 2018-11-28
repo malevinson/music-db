@@ -22,6 +22,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isShowingNofication: false,
             uiState: {
                 input: {
                     rating: '',
@@ -104,6 +105,8 @@ class App extends Component {
     }
 
     renderTimer(time) {
+        console.log('in renderTimers');
+
         let displayedTime = time - (Date.now() - this.state.uiState.timer.startTime) / 1000;
 
         const tenths = Math.floor((displayedTime * 10) % 10);
@@ -117,27 +120,27 @@ class App extends Component {
         }
 
         const hours = Math.floor(displayedTime / (60 * 60));
-        const audioElement = document.getElementById('beep');
-        audioElement.setAttribute('preload', 'auto');
-        audioElement.autobuffer = true;
-        audioElement.load();
-
+        // let isAlreadyShowingNotification = false;
         if (displayedTime < 0) {
-            audioElement.play();
-            let startTime = Date.now();
+            // !showNotif;
+            // if (!this.state.isAlreadyShowingNotification) {
+            this.handleNotification();
+            // }
+            // let startTime = Date.now();
+            // isAlreadyShowingNotification = true;
 
-            //hack to get shorter beep length since couldn't find beep that was shorter and not annoying
-            setTimeout(() => {
-                this.setState({
-                    uiState: {
-                        ...this.state.uiState,
-                        timer: {
-                            ...this.state.uiState.timer,
-                            startTime,
-                        },
-                    },
-                });
-            }, 100);
+            // //hack to get shorter beep length since couldn't find beep that was shorter and not annoying
+            // setTimeout(() => {
+            //     this.setState({
+            //         uiState: {
+            //             ...this.state.uiState,
+            //             timer: {
+            //                 ...this.state.uiState.timer,
+            //                 startTime,
+            //             },
+            //         },
+            //     });
+            // }, 100);
         }
         this.setState({
             uiState: {
@@ -162,14 +165,25 @@ class App extends Component {
         }
         let runningTimer;
         let startTime;
+        let shouldShowNotif = true;
         if (this.state.uiState.timer.isStopped) {
+            shouldShowNotif = false;
             runningTimer = setInterval(() => this.renderTimer(this.state.uiState.input.timer * 60), 100);
             startTime = Date.now();
         } else {
             clearInterval(this.state.uiState.timer.runningTimer);
         }
+        // const isShowingNofication = this.state.isShowingNofication;
+        // let temp;
+        // if (isShowingNofication) {
+        //     temp = false;
+        // } else if (this.state.uiState.timer.isStopped) {
+        //     temp = true;
+        // }
+        // console.log({ temp });
 
         this.setState({
+            isShowingNofication: shouldShowNotif,
             uiState: {
                 ...this.state.uiState,
                 timer: {
@@ -450,22 +464,20 @@ class App extends Component {
                 });
         });
     }
-    handleNotification = () => {
-        console.log('notification');
-        notifyMe();
 
-        function notifyMe() {
+    handleNotification = () => {
+        const { isShowingNofication } = this.state;
+        // console.log({  });
+        if (!isShowingNofication) {
             if (Notification.permission !== 'granted') Notification.requestPermission();
             else {
-                var notification = new Notification('Notification title', {
-                    icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
-                    body: "Hey there! You've been notified!",
+                var notification = new Notification('', {
+                    icon: './Music-icon.png',
+                    body: ' ',
+                    requireInteraction: true,
                 });
-
-                notification.onclick = function() {
-                    window.open('http://stackoverflow.com/a/13328397/1269037');
-                };
             }
+            this.setState({ ...this.state, isShowingNofication: true });
         }
     };
 
@@ -488,7 +500,6 @@ class App extends Component {
                     time,
                 }}
                 handleEvent={this.handleEvent}
-                handleNotification={this.handleNotification}
             />
         );
     }
