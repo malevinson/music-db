@@ -223,10 +223,48 @@ class App extends Component {
             case 'sort':
                 this.handleSort(type);
                 break;
+            case 'toggleCheckbox':
+                this.handleCheckbox(e,id);
+                break;
             default:
                 break;
         }
     };
+
+    handleCheckbox(e,id){
+        const { app } = this.state;
+        const { artists, ids } = app;
+        const pins = this.state.uiState.pinned
+        const artistIndex2 = ids[id];
+        const mainArtistData = artists[artistIndex2]
+        const artistIndex = pins.findIndex(pin=>
+            pin.id ===id
+         )
+        const currentArtistData = pins[artistIndex];
+        const isChecked = e.target.checked ? true : false;
+        const name = e.target.name      
+
+        let key = 'artist'
+        if (name === 'radio' )key = 'radio'
+        if (name === 'album' )key = 'album'
+
+         const requestBody = {
+            ...currentArtistData,
+            ...mainArtistData,
+            pinnedMeta: {
+                ...currentArtistData.pinnedMeta,
+                [key]: isChecked
+            }
+        };
+
+        this.setState(prevState=> {
+            pins[artistIndex].pinnedMeta[key] = isChecked
+               return { ...prevState, uiState: {...prevState.uiState,    pinned: pins}} 
+            })
+
+        const url = '/artist/' + id;
+        this.buildRequest(url, 'PUT', requestBody); 
+    }
 
     handleSort(type) {
         const { sort } = this.state.uiState;
@@ -463,6 +501,7 @@ class App extends Component {
                     this.handleError(err);
                 });
         });
+       
     }
 
     handleNotification = () => {

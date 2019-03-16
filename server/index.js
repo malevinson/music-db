@@ -163,14 +163,35 @@ if (cluster.isMaster) {
         // update the artist with this id
         .put(function(req, res) {
             Artist.findById(req.params.artist_id, function(err, artist) {
-                // if (err) res.send(err);
                 if (err) res.status(500).json({ error: err });
+                
+                // try:
+                // {
+                //     ...artist,
+                //     ...req.body
+                // }.save
+                // try without thsi first:
+                // might need to deconstruct 
+                // {name,rating,pinned, pinnedMeta} = req.body
+                // {artist,radio,album} = pinnedMeta
+                // {
+                //     name,
+                //     rating,
+                //     pinned,
+                //     artist,
+                //     radio,
+                //     album
+                // }
 
+                // improve this with es6 shorthand? see above comments
                 artist.name = req.body.name;
                 artist.rating = req.body.rating;
                 artist.pinned = req.body.pinned;
+                artist.pinnedMeta.artist = req.body.pinnedMeta.artist
+                artist.pinnedMeta.radio = req.body.pinnedMeta.radio
+                artist.pinnedMeta.album = req.body.pinnedMeta.album
+
                 artist.save(function(err) {
-                    // if (err) res.send(err);
                     if (err)
                         res.status(500).json({
                             error: 'Could not save updates to the artist with id: ' + req.params.artist_id,

@@ -403,6 +403,25 @@ header {
   width: 100px;
   height: 100px; }
 
+.checkbox-check {
+  width: 25px;
+  margin: 0;
+  padding: 0; }
+
+.checkbox-name {
+  display: inline-block; }
+
+.checkbox-wrap:hover {
+  display: block; }
+
+.checkbox-wrap {
+  font-size: 10px;
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  background-color: white;
+  display: none; }
+
 .flash-msg {
   position: absolute;
   z-index: 2;
