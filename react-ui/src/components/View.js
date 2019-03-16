@@ -7,7 +7,8 @@ import pinRed from '../images/pin.png';
 import pinBlack from '../images/pin2.png';
 import HoverImage from 'react-hover-image';
 
-const View = props => {
+const View =(props)=>{
+
     const { handleEvent, uiState, app, time } = props;
     const { artists, ids } = app;
     const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
@@ -33,6 +34,73 @@ const View = props => {
         }
     };
 
+    const renderPins =()=>{
+        return pinned.map(pin => {
+
+            const id = pin.id;
+            const artist = artists[ids[id]];
+            const { pinnedMeta: {artist: checkboxArtist, radio, album } } = pin
+
+            if (!artist) return null
+
+            return (
+                <div className="relative-wrapper" key={artist._id}>
+                <div className="relative-for-checkboxes"></div>
+                    <div className="name">{artist.name}</div>
+                    <img src={artist.image} alt="album art" className="pinned" />
+                    <div className="pin">
+                        <HoverImage
+                            src={pinRed}
+                            hoverSrc={pinBlack}
+                            onClick={() => {
+                                handleEvent({ action: 'togglePin', id: artist._id });
+                            }}
+                        />
+                    </div>
+                    
+                <div className="checkbox-wrap">
+                <div className="checkbox-row">
+                    <div className="checkbox-name">Songs</div>  
+                    <input
+                    name="artist"
+                    type="checkbox"
+                    className="checkbox-check"
+                    checked={checkboxArtist}
+                    onChange={(e) => {
+                        handleEvent({ action: 'toggleCheckbox', e ,id});
+                        }}
+                        />
+                </div>
+                <div className="checkbox-row">
+                    <div className="checkbox-name">Radio</div>  
+                    <input
+                    name="radio"
+                    type="checkbox"
+                    checked={radio}
+                    className="checkbox-check"
+                    onChange={(e) => {
+                        handleEvent({ action: 'toggleCheckbox', e ,id});
+                        }}
+                        />
+                </div>
+                <div className="checkbox-row">
+                    <div className="checkbox-name">Albums</div>  
+                    <input
+                    name="album"
+                    type="checkbox"
+                    checked={album}
+                    className="checkbox-check"
+                    onChange={(e) => {
+                        handleEvent({ action: 'toggleCheckbox', e ,id});
+                        }}
+                        />
+                        </div>
+                </div>
+                </div>
+            );
+        })
+    }
+
     return (
         <div>
             <header>Music Dashboard</header>
@@ -48,25 +116,7 @@ const View = props => {
                 </div>
                 <div className="artist-well">
                     <div className="flex">
-                        {pinned.map(pin => {
-                            const id = pin.id;
-                            const artist = artists[ids[id]];
-                            return (
-                                <div className="relative-wrapper" key={artist._id}>
-                                    <div className="name">{artist.name}</div>
-                                    <img src={artist.image} alt="album art" className="pinned" />
-                                    <div className="pin">
-                                        <HoverImage
-                                            src={pinRed}
-                                            hoverSrc={pinBlack}
-                                            onClick={() => {
-                                                handleEvent({ action: 'togglePin', id: artist._id });
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            );
-                        })}
+                       {renderPins()} 
                     </div>
                 </div>
             </section>
@@ -202,7 +252,7 @@ const View = props => {
                         return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
                     })
                     .filter(artist => {
-                        return false || artist.name.toLowerCase().indexOf(input.filter.toLowerCase()) > -1;
+                        return false ||artist && artist.name&& artist.name.toLowerCase().indexOf(input.filter.toLowerCase()) > -1;
                     })
                     .map(artist => {
                         return (
@@ -264,6 +314,6 @@ const View = props => {
             </section>
         </div>
     );
-};
+}
 
 export default View;
