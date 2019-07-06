@@ -422,6 +422,15 @@ header {
   background-color: white;
   display: none; }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  color: #426bf4;
+  text-align: right; }
+  .column input {
+    padding: 0;
+    margin: 0; }
+
 .flash-msg {
   position: absolute;
   z-index: 2;

@@ -7,11 +7,18 @@ import pinRed from '../images/pin.png';
 import pinBlack from '../images/pin2.png';
 import HoverImage from 'react-hover-image';
 
-const View =(props)=>{
-
+const View = props => {
     const { handleEvent, uiState, app, time } = props;
     const { artists, ids } = app;
-    const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
+    const {
+        pinned,
+        input,
+        sort,
+        currentEdit,
+        showFlashMsg,
+        flashMsg,
+        timer,
+    } = uiState;
     const { activeSort, sortUp } = sort;
 
     const shuffle = array => {
@@ -34,77 +41,103 @@ const View =(props)=>{
         }
     };
 
-    const renderPins =()=>{
+    const renderPins = () => {
         return pinned.map(pin => {
-
             const id = pin.id;
             const artist = artists[ids[id]];
-            const { pinnedMeta: {artist: checkboxArtist, radio, album } } = pin
+            const {
+                pinnedMeta: { artist: checkboxArtist, radio, album },
+            } = pin;
 
-            if (!artist) return null
+            if (!artist) return null;
 
             return (
                 <div className="relative-wrapper" key={artist._id}>
-                <div className="relative-for-checkboxes"></div>
+                    <div className="relative-for-checkboxes" />
                     <div className="name">{artist.name}</div>
-                    <img src={artist.image} alt="album art" className="pinned" />
+                    <img
+                        src={artist.image}
+                        alt="album art"
+                        className="pinned"
+                    />
                     <div className="pin">
                         <HoverImage
                             src={pinRed}
                             hoverSrc={pinBlack}
                             onClick={() => {
-                                handleEvent({ action: 'togglePin', id: artist._id });
+                                handleEvent({
+                                    action: 'togglePin',
+                                    id: artist._id,
+                                });
                             }}
                         />
                     </div>
-                    
-                <div className="checkbox-wrap">
-                <div className="checkbox-row">
-                    <div className="checkbox-name">Songs</div>  
-                    <input
-                    name="artist"
-                    type="checkbox"
-                    className="checkbox-check"
-                    checked={checkboxArtist}
-                    onChange={(e) => {
-                        handleEvent({ action: 'toggleCheckbox', e ,id});
-                        }}
-                        />
-                </div>
-                <div className="checkbox-row">
-                    <div className="checkbox-name">Radio</div>  
-                    <input
-                    name="radio"
-                    type="checkbox"
-                    checked={radio}
-                    className="checkbox-check"
-                    onChange={(e) => {
-                        handleEvent({ action: 'toggleCheckbox', e ,id});
-                        }}
-                        />
-                </div>
-                <div className="checkbox-row">
-                    <div className="checkbox-name">Albums</div>  
-                    <input
-                    name="album"
-                    type="checkbox"
-                    checked={album}
-                    className="checkbox-check"
-                    onChange={(e) => {
-                        handleEvent({ action: 'toggleCheckbox', e ,id});
-                        }}
-                        />
+
+                    <div className="checkbox-wrap">
+                        <div className="checkbox-row">
+                            <div className="checkbox-name">Songs</div>
+                            <input
+                                name="artist"
+                                type="checkbox"
+                                className="checkbox-check"
+                                checked={checkboxArtist}
+                                onChange={e => {
+                                    handleEvent({
+                                        action: 'toggleCheckbox',
+                                        e,
+                                        id,
+                                    });
+                                }}
+                            />
                         </div>
-                </div>
+                        <div className="checkbox-row">
+                            <div className="checkbox-name">Radio</div>
+                            <input
+                                name="radio"
+                                type="checkbox"
+                                checked={radio}
+                                className="checkbox-check"
+                                onChange={e => {
+                                    handleEvent({
+                                        action: 'toggleCheckbox',
+                                        e,
+                                        id,
+                                    });
+                                }}
+                            />
+                        </div>
+                        <div className="checkbox-row">
+                            <div className="checkbox-name">Albums</div>
+                            <input
+                                name="album"
+                                type="checkbox"
+                                checked={album}
+                                className="checkbox-check"
+                                onChange={e => {
+                                    handleEvent({
+                                        action: 'toggleCheckbox',
+                                        e,
+                                        id,
+                                    });
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
             );
-        })
-    }
+        });
+    };
 
     return (
         <div>
             <header>Music Dashboard</header>
-            <div className={classNames('flash-msg', { show: showFlashMsg }, { hide: !showFlashMsg })}>
+            <div
+                className={classNames(
+                    'flash-msg',
+                    { show: showFlashMsg },
+                    { hide: !showFlashMsg },
+                )}
+            >
                 <div>{flashMsg}</div>
             </div>
 
@@ -115,9 +148,7 @@ const View =(props)=>{
                     <img className="header-img" alt="pin" src={pinRed} />
                 </div>
                 <div className="artist-well">
-                    <div className="flex">
-                       {renderPins()} 
-                    </div>
+                    <div className="flex">{renderPins()}</div>
                 </div>
             </section>
 
@@ -126,7 +157,10 @@ const View =(props)=>{
                     <div className="timer-wrapper">
                         <div className="timer-active">
                             <div
-                                className={classNames({ showTimer: !timer.isStopped }, { hideTimer: timer.isStopped })}
+                                className={classNames(
+                                    { showTimer: !timer.isStopped },
+                                    { hideTimer: timer.isStopped },
+                                )}
                             >
                                 <div id="bars">
                                     <div className="bar movement" />
@@ -163,7 +197,12 @@ const View =(props)=>{
                             }}
                             className="button timer"
                         >
-                            {timer.isStopped ? <span>Start</span> : <span>Stop</span>}timer
+                            {timer.isStopped ? (
+                                <span>Start</span>
+                            ) : (
+                                <span>Stop</span>
+                            )}
+                            timer
                         </Button>
                     </div>
                 </div>
@@ -204,6 +243,20 @@ const View =(props)=>{
                 <div className="line" />
                 <div className="controls">
                     <div className="button-wrapper">
+                        <div className="column">
+                            <label>
+                                Google Music
+                                <input name="googleMusic" type="checkbox" />
+                            </label>
+                            <label>
+                                Spotify
+                                <input name="spotify" type="checkbox" />
+                            </label>
+                            <label>
+                                Pandora
+                                <input name="pandora" type="checkbox" />
+                            </label>
+                        </div>
                         {Object.keys(uiMap).map(key => {
                             const buttonName = uiMap[key];
                             const isActive = activeSort === buttonName;
@@ -213,19 +266,32 @@ const View =(props)=>{
                                     key={buttonName}
                                     className={classNames({ active: isActive })}
                                     onClick={() => {
-                                        handleEvent({ action: 'sort', type: buttonName });
+                                        handleEvent({
+                                            action: 'sort',
+                                            type: buttonName,
+                                        });
                                     }}
                                 >
                                     <i
                                         className={classNames(
-                                            { show: isActive && sortUp && buttonName !== 'Shuffle' },
+                                            {
+                                                show:
+                                                    isActive &&
+                                                    sortUp &&
+                                                    buttonName !== 'Shuffle',
+                                            },
                                             'fas fa-arrow-up',
                                         )}
                                     />
                                     {buttonName}
                                     <i
                                         className={classNames(
-                                            { show: isActive && !sortUp && buttonName !== 'Shuffle' },
+                                            {
+                                                show:
+                                                    isActive &&
+                                                    !sortUp &&
+                                                    buttonName !== 'Shuffle',
+                                            },
                                             'fas fa-arrow-down',
                                         )}
                                     />
@@ -247,12 +313,24 @@ const View =(props)=>{
                     .sort((a, b) => {
                         if (activeSort === 'Shuffle') return 0;
                         if (sortUp) {
-                            return a[sortMap[activeSort]] < b[sortMap[activeSort]] ? 1 : -1;
+                            return a[sortMap[activeSort]] <
+                                b[sortMap[activeSort]]
+                                ? 1
+                                : -1;
                         }
-                        return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
+                        return a[sortMap[activeSort]] > b[sortMap[activeSort]]
+                            ? 1
+                            : -1;
                     })
                     .filter(artist => {
-                        return false ||artist && artist.name&& artist.name.toLowerCase().indexOf(input.filter.toLowerCase()) > -1;
+                        return (
+                            false ||
+                            (artist &&
+                                artist.name &&
+                                artist.name
+                                    .toLowerCase()
+                                    .indexOf(input.filter.toLowerCase()) > -1)
+                        );
                     })
                     .map(artist => {
                         return (
@@ -264,12 +342,20 @@ const View =(props)=>{
                                                 name="edit"
                                                 value={input}
                                                 handleChange={e => {
-                                                    handleEvent({ action: 'inputChange', e });
+                                                    handleEvent({
+                                                        action: 'inputChange',
+                                                        e,
+                                                    });
                                                 }}
                                                 className="input-edit"
                                             />
                                             <button
-                                                onClick={e => handleEvent({ action: 'update', id: artist._id })}
+                                                onClick={e =>
+                                                    handleEvent({
+                                                        action: 'update',
+                                                        id: artist._id,
+                                                    })
+                                                }
                                                 className="button-edit"
                                             >
                                                 Update
@@ -278,34 +364,61 @@ const View =(props)=>{
                                     ) : (
                                         <div
                                             className="artist-rating"
-                                            onClick={() => handleEvent({ action: 'edit', id: artist._id })}
+                                            onClick={() =>
+                                                handleEvent({
+                                                    action: 'edit',
+                                                    id: artist._id,
+                                                })
+                                            }
                                         >
                                             {artist.rating}
                                         </div>
                                     )}
                                 </div>
                                 <div className="relative-wrapper">
-                                    <img src={artist.image} alt="album art" className="photo" />
+                                    <img
+                                        src={artist.image}
+                                        alt="album art"
+                                        className="photo"
+                                    />
                                     <div
                                         className="x"
                                         onClick={() => {
-                                            handleEvent({ action: 'delete', id: artist._id });
+                                            handleEvent({
+                                                action: 'delete',
+                                                id: artist._id,
+                                            });
                                         }}
                                     >
                                         X
                                     </div>
-                                    {pinned.findIndex(pinned => pinned.id === artist._id) === -1 && (
+                                    {pinned.findIndex(
+                                        pinned => pinned.id === artist._id,
+                                    ) === -1 && (
                                         <div
                                             className="pin"
                                             onClick={() => {
-                                                handleEvent({ action: 'togglePin', id: artist._id });
+                                                handleEvent({
+                                                    action: 'togglePin',
+                                                    id: artist._id,
+                                                });
                                             }}
                                         >
-                                            <HoverImage src={pinBlack} hoverSrc={pinRed} />
+                                            <HoverImage
+                                                src={pinBlack}
+                                                hoverSrc={pinRed}
+                                            />
                                         </div>
                                     )}
                                 </div>
-                                <div className="name" style={{ fontSize: getArtistNameFontSize(artist.name) }}>
+                                <div
+                                    className="name"
+                                    style={{
+                                        fontSize: getArtistNameFontSize(
+                                            artist.name,
+                                        ),
+                                    }}
+                                >
                                     {artist.name}
                                 </div>
                             </div>
@@ -314,6 +427,6 @@ const View =(props)=>{
             </section>
         </div>
     );
-}
+};
 
 export default View;
