@@ -15,4 +15,5 @@ Search for mongod COMMAND and its PID and type,
 
 ## new api keys
 ### spotify developer dashboard (https://developer.spotify.com/dashboard/applications)
+bash command line completion will fill this in if start typing in all caps:
 ### CLIENT_ID='id' CLIENT_SECRET='secret' NODE_ENV=development node server
