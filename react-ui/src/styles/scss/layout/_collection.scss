@@ -45,18 +45,18 @@
     height: 100px;
 }
 
-.checkbox-check{
+.checkbox-check {
     width: 25px;
     margin: 0;
     padding: 0;
 }
-.checkbox-name{
+.checkbox-name {
     display: inline-block;
 }
-.checkbox-wrap:hover{
+.checkbox-wrap:hover {
     display: block;
 }
-.checkbox-wrap{
+.checkbox-wrap {
     font-size: 10px;
     position: absolute;
     top: 30px;
@@ -64,6 +64,15 @@
     background-color: white;
     display: none;
 }
+.column {
+    display: flex;
+    flex-direction: column;
+    color: #426bf4;
+    // color: black;
+    text-align: right;
 
-
-
+    input {
+        padding: 0;
+        margin: 0;
+    }
+}
