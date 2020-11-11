@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "queue up your music for your day of coding, or whaterver",
     "engines": {
-        "node": "8.9.x"
+        "node": "10.15.3",
+        "npm": "6.4.1"
     },
     "scripts": {
         "start": "NODE_ENV=production node server",
@@ -21,7 +22,7 @@
         "dotenv": "^5.0.1",
         "express": "^4.14.1",
         "immutability-helper": "^2.7.0",
-        "mongoose": "^5.1.1",
+        "mongoose": "5.10.13",
         "morgan": "^1.9.0",
         "react-hover-image": "^1.0.0",
         "spotify-web-api-node": "^3.1.1"

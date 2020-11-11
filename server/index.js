@@ -84,7 +84,10 @@ if (cluster.isMaster) {
     // ------DB CONNECTION --------
     const url = app.get('env') === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost:27017/musicDb';
 
-    mongoose.connect(url);
+    mongoose.connect(url, {
+        useNewUrlParser: true, 
+        useUnifiedTopology: true 
+    });
 
     const db = mongoose.connection;
 
