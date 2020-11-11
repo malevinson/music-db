@@ -82,7 +82,14 @@ if (cluster.isMaster) {
     app.use(bodyParser.json());
 
     // ------DB CONNECTION --------
-    const url = app.get('env') === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost:27017/musicDb';
+    const url = app.get('env') === 'production' ? process.env.DATABASE_URL : 'mongodb://localhost:27017/musicDb';
+
+
+    console.log(url)
+    console.log(process)
+    console.log(process.env)
+    console.log(process.env.DATABASE_URL)
+    console.log(app.get('env'))
 
     mongoose.connect(url, {
         useNewUrlParser: true, 
