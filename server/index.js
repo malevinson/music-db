@@ -4,9 +4,10 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 require('dotenv').config();
 const SpotifyWebApi = require('spotify-web-api-node');
+const MongoClient = require("mongodb").MongoClient; 
 
 const PORT = process.env.PORT || 5000;
 
@@ -81,28 +82,50 @@ if (cluster.isMaster) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
+    app.get("/", function(req, res) {  
+        res.send("Hello World!");  
+    }); 
+
+
     // ------DB CONNECTION --------
     const url = app.get('env') === 'production' ? process.env.DATABASE_URL : 'mongodb://localhost:27017/musicDb';
 
+    app.get("/users", function() {  
+        MongoClient.connect(url, function(err, db) {  
+            if (err) next  
+            db  
+            .collection("artists")  
+            .find()  
+            .toArray(function(err, result) {  
+                if (err) throw err;  
 
-    console.log(url)
-    console.log(process)
-    console.log(process.env)
-    console.log(process.env.DATABASE_URL)
-    console.log(app.get('env'))
-
-    mongoose.connect(url, {
-        useNewUrlParser: true, 
-        useUnifiedTopology: true 
+                res.json(result)  
+            });  
+        });  
     });
 
-    const db = mongoose.connection;
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', function() {
-        console.log('DB connection alive');
+    app.listen(3000,function(){  
+        console.log('Express app start on port 3000')  
     });
+
+    // console.log(url)
+    // console.log(process)
+    // console.log(process.env)
+    // console.log(process.env.DATABASE_URL)
+    // console.log(app.get('env'))
+
+    // mongoose.connect(url, {
+    //     useNewUrlParser: true, 
+    //     useUnifiedTopology: true 
+    // });
+
+    // const db = mongoose.connection;
+
+    // db.on('error', console.error.bind(console, 'connection error:'));
+
+    // db.once('open', function() {
+    //     console.log('DB connection alive');
+    // });
 
     const Artist = require('../Artist.js');
 

@@ -22,6 +22,7 @@
         "dotenv": "^5.0.1",
         "express": "^4.14.1",
         "immutability-helper": "^2.7.0",
+        "mongodb": "^3.6.3",
         "mongoose": "5.10.13",
         "morgan": "^1.9.0",
         "react-hover-image": "^1.0.0",
