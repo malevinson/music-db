@@ -1,0 +1,54 @@
+[build]
+  # Build command - install dependencies and build React app
+  command = "npm install && cd react-ui && npm install && npm run build"
+  # Publish directory - where Netlify should serve static files from
+  publish = "react-ui/build"
+
+[build.environment]
+  # Node version for Netlify Functions
+  NODE_VERSION = "18.20.5"
+  # Set REACT_APP_API_URL to empty for relative URLs (recommended for Netlify)
+  # Or set to your Netlify domain: https://your-site.netlify.app
+  REACT_APP_API_URL = ""
+
+# Development server configuration
+[dev]
+  # Explicitly disable framework auto-detection
+  framework = "#custom"
+  # Long-running no-op command (React dev server runs separately on port 3000)
+  command = "tail -f /dev/null"
+  # Netlify dev port
+  port = 8888
+  # Proxy to React dev server when it's running on port 3000
+  targetPort = 3000
+  # Fallback to build directory if React dev server not running
+  publish = "react-ui/build"
+
+# Netlify Functions configuration
+[functions]
+  # Directory where Netlify Functions are located
+  directory = "netlify/functions"
+  # Node.js version for functions
+  node_bundler = "esbuild"
+
+# Redirect all API requests to the Netlify function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true
+
+# Redirect all non-API requests to index.html for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for CORS and security
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+

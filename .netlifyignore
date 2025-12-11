@@ -1,0 +1,5 @@
+# Ignore files that might confuse Netlify's framework detection
+app.json
+ecosystem.config.js
+Procfile
+

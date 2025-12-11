@@ -1,45 +1,55 @@
 {
-    "name": "music-db",
-    "version": "1.0.0",
-    "description": "queue up your music for your day of coding, or whaterver",
-    "engines": {
-        "node": "10.15.3",
-        "npm": "6.4.1"
-    },
-    "scripts": {
-        "start": "NODE_ENV=production node server",
-        "watch-css": "node-sass -w react-ui/src/styles/scss -o react-ui/src/styles/css",
-        "dev": "NODE_ENV=development node server",
-        "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
-    },
-    "cacheDirectories": [
-        "node_modules",
-        "react-ui/node_modules"
-    ],
-    "dependencies": {
-        "body-parser": "^1.18.3",
-        "classnames": "^2.2.5",
-        "dotenv": "^5.0.1",
-        "express": "^4.14.1",
-        "immutability-helper": "^2.7.0",
-        "mongodb": "^3.6.3",
-        "mongoose": "5.10.13",
-        "morgan": "^1.9.0",
-        "react-hover-image": "^1.0.0",
-        "spotify-web-api-node": "^3.1.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": ""
-    },
-    "keywords": [
-        "node",
-        "heroku",
-        "create-react-app",
-        "react"
-    ],
-    "license": "MIT",
-    "devDependencies": {
-        "node-sass": "^4.9.0"
-    }
+  "name": "playlist-q",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "server/index.js",
+  "description": "queue up your music for your day of coding",
+  "engines": {
+    "node": "18.20.5"
+  },
+  "scripts": {
+    "watch-css": "node-sass -w react-ui/src/styles/scss -o react-ui/src/styles/css",
+    "start-prod": "NODE_ENV=production node server/index.js",
+    "start": "NODE_ENV=production pm2 start server/index.js --name music-db",
+    "dev-local": "NODE_ENV=development node server/server-local.js",
+    "dev": "NODE_ENV=development pm2 start server/index.js --name music-db",
+    "dev-netlify": "netlify dev --dir react-ui/build --offline",
+    "dev-netlify-proxy-with-frontend": "netlify dev --offline",
+    "dev-netlify-with-react": "concurrently -n \"react,netlify\" -c \"blue,green\" \"cd react-ui && BROWSER=none PORT=3000 npm start\" \"wait-on http://localhost:3000 -t 30000 && netlify dev --offline\"",
+    "dev-frontend": "cd react-ui && NODE_OPTIONS=--openssl-legacy-provider npm start",
+    "migrate-users": "node DB/migrate-to-users.js",
+    "stop": "pm2 stop music-db"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "1.20.2",
+    "chalk": "^5.1.2",
+    "classnames": "^2.2.5",
+    "cors": "^2.8.5",
+    "dotenv": "^5.0.1",
+    "express": "^4.14.1",
+    "immutability-helper": "^2.7.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^6.8.0",
+    "morgan": "^1.9.0",
+    "react-hover-image": "^1.0.0",
+    "serverless-http": "^3.2.0",
+    "spotify-web-api-node": "^3.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "node-sass": "^8.0.0",
+    "wait-on": "^7.2.0"
+  }
 }
