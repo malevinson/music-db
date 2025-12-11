@@ -5,6 +5,19 @@ import pinBlack from '../images/pin2.png';
 
 const PinnedArtists = ({ pinned, artists, ids, onTogglePin, onToggleCheckbox }) => {
   const renderPins = () => {
+    if (!pinned || pinned.length === 0) {
+      return (
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '.5rem', 
+          color: '#666',
+          fontStyle: 'italic'
+        }}>
+          Pin an artist to start your queue
+        </div>
+      );
+    }
+    
     return pinned.map((pin) => {
       const id = pin.id;
       const artist = artists[ids[id]];
