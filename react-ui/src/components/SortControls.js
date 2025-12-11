@@ -8,20 +8,7 @@ const SortControls = ({ activeSort, sortUp, input, onSort, onInputChange }) => {
   return (
     <div className="controls">
       <div className="button-wrapper">
-        <div className="column" style={{ fontSize: '11px' }}>
-          <label>
-            YouTube Music
-            <input name="googleMusic" type="checkbox" />
-          </label>
-          <label>
-            Spotify
-            <input name="spotify" type="checkbox" />
-          </label>
-          <label>
-            Pandora
-            <input name="pandora" type="checkbox" />
-          </label>
-        </div>
+     
         {Object.keys(uiMap).map((key) => {
           const buttonName = uiMap[key];
           const isActive = activeSort === buttonName;

@@ -6,6 +6,20 @@ const ArtistForm = ({ input, onInputChange, onSubmit }) => {
     <div className="artist-input-wrapper">
       <form onSubmit={onSubmit} method="post">
         <div className="main">
+        <div className="column" style={{ fontSize: '11px' }}>
+          <label>
+            YouTube Music
+            <input name="googleMusic" type="checkbox" />
+          </label>
+          <label>
+            Spotify
+            <input name="spotify" type="checkbox" />
+          </label>
+          <label>
+            Pandora
+            <input name="pandora" type="checkbox" />
+          </label>
+        </div>
           <label>Artist</label>
           <Input
             name="artist"
