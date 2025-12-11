@@ -78,16 +78,16 @@ class App extends Component {
       .then((data) => {
         const ids = {};
         const pinned = [];
-        data.forEach((artist, index) => {
-          ids[artist._id] = index;
-          if (artist.pinned) {
-            pinned.push({
-              id: artist._id,
+      data.forEach((artist, index) => {
+        ids[artist._id] = index;
+        if (artist.pinned) {
+          pinned.push({
+            id: artist._id,
               pinnedMeta: { ...artist.pinnedMeta },
-            });
-          }
-        });
-        this.setState({
+          });
+        }
+      });
+      this.setState({
           app: { artists: data, ids },
           uiState: { ...this.state.uiState, pinned },
         });
@@ -99,7 +99,7 @@ class App extends Component {
       isAuthenticated: true,
       token,
       user,
-    });
+      });
     this.loadArtists(token);
   }
 
@@ -371,11 +371,20 @@ class App extends Component {
             input: { ...prevState.uiState.input, artist: '' },
           },
         }));
-        this.showFlashMsg(`Artist "${data.artist.name}" added!`);
-      });
+      this.showFlashMsg(`Artist "${data.artist.name}" added!`);
+    });
   }
 
   deleteArtist = (id) => {
+    const { artists } = this.state.app;
+    const { user } = this.state;
+    
+    // Prevent deletion if demo account has 4 or fewer artists
+    if (user && user.email === 'demo@test.com' && artists.length <= 4) {
+      this.showFlashMsg('Demo account cannot have less than 4 artists');
+      return;
+    }
+
     buildRequest(`/artist/${id}`, 'DELETE', null, this.state.token, this.logout, this.showFlashMsg)
       .then(() => {
         const { ids, artists } = this.state.app;
@@ -383,23 +392,23 @@ class App extends Component {
         const index = ids[id];
         const deletedArtistName = artists[index].name;
         const prevState = artists;
-        const idList = ids;
-        delete idList[id];
-        prevState.splice(index, 1);
+      const idList = ids;
+      delete idList[id];
+      prevState.splice(index, 1);
 
         const pinIndex = pinned.findIndex((pinned) => pinned.id === id);
         const pins = this.state.uiState.pinned;
         if (pinIndex !== -1) {
-          pins.splice(pinIndex, 1);
+      pins.splice(pinIndex, 1);
         }
 
-        this.setState({
-          app: { artists: prevState, ids: idList },
-          uiState: { ...this.state.uiState, pinned: pins },
-        });
-
-        this.showFlashMsg(`Artist "${deletedArtistName}" deleted!`);
+      this.setState({
+        app: { artists: prevState, ids: idList },
+        uiState: { ...this.state.uiState, pinned: pins },
       });
+
+      this.showFlashMsg(`Artist "${deletedArtistName}" deleted!`);
+    });
   }
 
   updateArtist = (id) => {
@@ -423,16 +432,16 @@ class App extends Component {
     buildRequest(`/artist/${id}`, 'PUT', requestBody, this.state.token, this.logout, this.showFlashMsg)
       .then(() => {
         const newList = artists;
-        newList[artistIndex] = requestBody;
+      newList[artistIndex] = requestBody;
 
-        const newState = update(this.state, {
+      const newState = update(this.state, {
           uiState: { currentEdit: { $set: '' } },
-          app: { artists: { $set: newList } },
-        });
-
-        this.setState(newState);
-        this.showFlashMsg(`Artist "${currentArtistData.name}" updated!`);
+        app: { artists: { $set: newList } },
       });
+
+      this.setState(newState);
+      this.showFlashMsg(`Artist "${currentArtistData.name}" updated!`);
+    });
   }
 
   handleNotification = () => {
