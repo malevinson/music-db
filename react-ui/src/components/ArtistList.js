@@ -32,7 +32,8 @@ const ArtistList = ({ artists, pinned, input, sort, currentEdit, onEdit, onUpdat
       return a[sortMap[activeSort]] > b[sortMap[activeSort]] ? 1 : -1;
     })
     .filter((artist) => {
-      return artist?.name?.toLowerCase().indexOf(input.filter?.toLowerCase() || '') > -1;
+      const filterText = input && input.filter ? input.filter.toLowerCase() : '';
+      return artist && artist.name && artist.name.toLowerCase().indexOf(filterText) > -1;
     });
 
   return (

@@ -16,9 +16,7 @@
     "dev-netlify": "netlify dev --dir react-ui/build --offline",
     "dev-netlify-proxy-with-frontend": "netlify dev --offline",
     "dev-netlify-with-react": "concurrently -n \"react,netlify\" -c \"blue,green\" \"cd react-ui && BROWSER=none PORT=3000 npm start\" \"wait-on http://localhost:3000 -t 30000 && netlify dev --offline\"",
-    "dev-frontend": "cd react-ui && NODE_OPTIONS=--openssl-legacy-provider npm start",
-    "migrate-users": "node DB/migrate-to-users.js",
-    "stop": "pm2 stop music-db"
+    "dev-frontend": "cd react-ui && NODE_OPTIONS=--openssl-legacy-provider npm start"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
