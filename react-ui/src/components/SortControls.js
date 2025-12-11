@@ -8,7 +8,7 @@ const SortControls = ({ activeSort, sortUp, input, onSort, onInputChange }) => {
   return (
     <div className="controls">
       <div className="button-wrapper">
-        <div className="column">
+        <div className="column" style={{ fontSize: '11px' }}>
           <label>
             YouTube Music
             <input name="googleMusic" type="checkbox" />
