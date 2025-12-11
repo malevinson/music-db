@@ -1,18 +1,10 @@
-# Music Dashboard
+# PlaylistQ
 
 A music playlist management app built with React and Express, deployed on Netlify with MongoDB Atlas.
 
 ## Quick Start - Local Development
 
-### Option 1: Single Command (Recommended)
-
-```bash
-npm run dev-netlify-with-react
-```
-
-This starts both the React dev server and Netlify dev server. Access your app at: **http://localhost:8888**
-
-### Option 2: Two Terminals (For Better Debugging)
+### Option 1: Two Terminals (For Best Debugging and Hot Reloading)
 
 **Terminal 1** - React dev server:
 ```bash
@@ -29,6 +21,15 @@ netlify dev --offline
 ```
 
 Access your app at: **http://localhost:8888**
+
+
+### Optlon 2: Single Command (Hard to Debug and No Hot Reloading)
+
+```bash
+npm run dev-netlify-with-react
+```
+
+This starts both the React dev server and Netlify dev server. Access your app at: **http://localhost:8888**
 
 ### Option 3: Traditional Local Server (Without Netlify Functions)
 
@@ -62,8 +63,8 @@ Set these in the Netlify Dashboard under Site Settings > Environment Variables:
 
 ## Available Scripts
 
-- `npm run dev-netlify-with-react` - Start both React and Netlify dev servers (recommended)
-- `npm run dev-react` - Start React dev server only
+- `npm run dev-netlify-with-frontend` - Start both React and Netlify dev servers (recommended)
+- `npm run dev-frontend` - Start React dev server only
 - `npm run dev-netlify-proxy` - Start Netlify dev server (proxies to React on port 3000)
 - `npm run dev-local` - Start Express server locally (port 8340)
 - `npm run watch-css` - Watch and compile SCSS files
