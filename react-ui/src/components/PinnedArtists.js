@@ -36,7 +36,7 @@ const PinnedArtists = ({ pinned, artists, ids, onTogglePin, onToggleCheckbox }) 
               />
             </div>
             <div className="checkbox-row">
-              <div className="checkbox-name">Radio</div>
+              <div className="checkbox-name">Mix</div>
               <input
                 name="radio"
                 type="checkbox"
@@ -64,8 +64,6 @@ const PinnedArtists = ({ pinned, artists, ids, onTogglePin, onToggleCheckbox }) 
   return (
     <section className="pinned-section">
       <div className="header">
-        <img className="header-img" alt="pin" src={pinRed} />
-        <img className="header-img" alt="pin" src={pinRed} />
         <img className="header-img" alt="pin" src={pinRed} />
       </div>
       <div className="artist-well">

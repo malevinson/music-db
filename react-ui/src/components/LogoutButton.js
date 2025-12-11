@@ -10,7 +10,7 @@ const LogoutButton = ({ onLogout, user }) => {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
-        padding: '10px 20px',
+        padding: '10px 100px',
         backgroundColor: '#c62828',
         color: 'white',
         border: 'none',
@@ -28,7 +28,7 @@ const LogoutButton = ({ onLogout, user }) => {
         e.target.style.backgroundColor = '#c62828';
       }}
     >
-      Logout{user && user.email ? ` (${user.email})` : ''}
+      Logout {user && user.email ? ` (${user.email})` : ''}
     </button>
   );
 };
