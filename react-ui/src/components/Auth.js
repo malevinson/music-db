@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from './Button';
+import blurredBg from '../images/blurredLoginPage.png';
 
 class Auth extends Component {
   constructor(props) {
@@ -82,6 +83,7 @@ class Auth extends Component {
 
     return (
       <div style={styles.container}>
+        <div style={styles.containerBlur}></div>
         <div style={styles.card}>
           <h2 style={styles.title}>{isLogin ? 'Login' : 'Register'}</h2>
           
@@ -154,8 +156,21 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
     padding: '20px',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  containerBlur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `url(${blurredBg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    filter: 'blur(3px)',
+    zIndex: 0,
   },
   card: {
     backgroundColor: 'white',
@@ -164,6 +179,8 @@ const styles = {
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
     width: '100%',
     maxWidth: '400px',
+    position: 'relative',
+    zIndex: 1,
   },
   title: {
     marginBottom: '30px',
