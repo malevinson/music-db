@@ -67,11 +67,11 @@ const ArtistList = ({ artists, pinned, input, sort, currentEdit, onEdit, onUpdat
           </div>
           <div className="relative-wrapper">
             <img src={artist.image} alt="album art" className="photo" />
-            <div className="x" onClick={() => onDelete(artist._id)}>
+            <div className="x" onClick={() => onDelete(artist._id)} title="Remove artist">
               X
             </div>
             {pinned.findIndex((pinned) => pinned.id === artist._id) === -1 && (
-              <div className="pin" onClick={() => onTogglePin(artist._id)}>
+              <div className="pin" onClick={() => onTogglePin(artist._id)} title="Add to queue">
                 <HoverImage src={pinBlack} hoverSrc={pinRed} />
               </div>
             )}
