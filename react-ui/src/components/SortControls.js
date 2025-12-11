@@ -10,7 +10,7 @@ const SortControls = ({ activeSort, sortUp, input, onSort, onInputChange }) => {
       <div className="button-wrapper">
         <div className="column">
           <label>
-            Google Music
+            YouTube Music
             <input name="googleMusic" type="checkbox" />
           </label>
           <label>
