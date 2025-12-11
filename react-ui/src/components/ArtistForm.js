@@ -27,8 +27,8 @@ const ArtistForm = ({ input, onInputChange, onSubmit }) => {
             name="notifMsg"
             className="rating-form"
             value={input}
-            placeholder="Timer is up!"
-            style={{ width: '100%' }}
+            placeholder="Time to change artists?"
+            style={{ width: '150px' }}
             handleChange={onInputChange}
           />
         </div>
