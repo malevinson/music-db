@@ -28,7 +28,7 @@ const LogoutButton = ({ onLogout, user }) => {
         e.target.style.backgroundColor = '#c62828';
       }}
     >
-      Logout{user?.email ? ` (${user.email})` : ''}
+      Logout{user && user.email ? ` (${user.email})` : ''}
     </button>
   );
 };
