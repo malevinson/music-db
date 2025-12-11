@@ -30,6 +30,40 @@ class Auth extends Component {
     });
   };
 
+  handleDemoLogin = async () => {
+    const { onAuthSuccess } = this.props;
+    this.setState({ loading: true, error: '' });
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'demo@test.com', password: 'demo@test.com' }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Demo login failed');
+      }
+
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        this.setState({ loading: false });
+        onAuthSuccess(data.token, data.user);
+      } else {
+        throw new Error('No token received from server');
+      }
+    } catch (error) {
+      console.error('Demo login error:', error);
+      this.setState({
+        error: error.message || 'Failed to load demo account. Please try again.',
+        loading: false,
+      });
+    }
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password, isLogin } = this.state;
@@ -130,6 +164,21 @@ class Auth extends Component {
               {loading ? 'Loading...' : isLogin ? 'Login' : 'Register'}
             </Button>
           </form>
+
+          {!isLogin && (
+            <div style={styles.demoSection}>
+              <div style={styles.dividerText}>or</div>
+              <Button
+                type="button"
+                onClick={this.handleDemoLogin}
+                disabled={loading}
+                style={styles.demoButton}
+              >
+                Try Demo Account
+              </Button>
+              <p style={styles.demoText}>Explore the app without signing up</p>
+            </div>
+          )}
 
           <div style={styles.toggle}>
             <span>
@@ -246,6 +295,34 @@ const styles = {
     padding: '0',
     marginLeft: '5px',
     marginTop: '15px',
+  },
+  demoSection: {
+    marginTop: '20px',
+    textAlign: 'center',
+  },
+  dividerText: {
+    color: '#999',
+    fontSize: '14px',
+    margin: '20px 0',
+    textAlign: 'center',
+  },
+  demoButton: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#667eea',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '10px',
+  },
+  demoText: {
+    marginTop: '8px',
+    fontSize: '12px',
+    color: '#666',
+    fontStyle: 'italic',
   },
 };
 
