@@ -228,6 +228,7 @@ const styles = {
     fontSize: '14px',
     padding: '0',
     marginLeft: '5px',
+    marginTop: '15px',
   },
 };
 
