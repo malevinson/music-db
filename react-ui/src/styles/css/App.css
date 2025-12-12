@@ -485,3 +485,16 @@ section {
   margin: 1vh .5vh auto;
   text-align: center;
  }
+
+
+.controls-row {
+    @media (max-width: 1199px) {
+        justify-content: center !important;
+    }
+}
+
+.controls-row-item {
+  @media (max-width: 1199px) {
+      margin-left: 70px;
+  }
+}

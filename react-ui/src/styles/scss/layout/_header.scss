@@ -1,9 +1,0 @@
-header {
-    @include flexbox-center;
-    background-color: $background;
-    font-size: 1.1rem;
-    color: $primary;
-    box-shadow: 0rem 0rem 1rem $shadow;
-    height: 4vh;
-    min-height: 25px;
-}
