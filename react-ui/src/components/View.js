@@ -6,6 +6,7 @@ import ArtistForm from './ArtistForm';
 import SortControls from './SortControls';
 import ArtistList from './ArtistList';
 import LogoutButton from './LogoutButton';
+import Input from './Input';
 
 const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
   const { artists, ids } = app;
@@ -27,21 +28,47 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
           />
 
           <section>
-            <Timer
-              timer={timer}
-              time={time}
-              input={input}
-              onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
-              onToggleTimer={() => handleEvent({ action: 'toggleTimer' })}
-            />
-          </section>
-
-          <section>
-            <ArtistForm
-              input={input}
-              onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
-              onSubmit={(e) => handleEvent({ action: 'create', e })}
-            />
+            <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', gap: '2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <Timer
+                  timer={timer}
+                  time={time}
+                  input={input}
+                  onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
+                  onToggleTimer={() => handleEvent({ action: 'toggleTimer' })}
+                />
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem' }}>Notification Message</label>
+                  <Input
+                    name="notifMsg"
+                    value={input}
+                    placeholder="Time to change artists?"
+                    handleChange={(e) => handleEvent({ action: 'inputChange', e })}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="column" style={{ fontSize: '11px' }}>
+                  <label>
+                    YouTube Music
+                    <input name="googleMusic" type="checkbox" />
+                  </label>
+                  <label>
+                    Spotify
+                    <input name="spotify" type="checkbox" />
+                  </label>
+                  <label>
+                    Pandora
+                    <input name="pandora" type="checkbox" />
+                  </label>
+                </div>
+                <ArtistForm
+                  input={input}
+                  onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
+                  onSubmit={(e) => handleEvent({ action: 'create', e })}
+                />
+              </div>
+            </div>
             <div className="line" />
             <SortControls
               activeSort={sort.activeSort}
