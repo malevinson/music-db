@@ -131,11 +131,11 @@ class App extends Component {
     }, 2000);
   }
 
-  renderTimer = (time) => {
-    const displayedTime = time - (Date.now() - this.state.uiState.timer.startTime) / 1000;
-    const intervalTime = this.state.uiState.timer.startTime;
-    const intervalTimeRemainder = Math.abs(displayedTime % intervalTime);
-    const isNewInterval = intervalTimeRemainder < 1000;
+  renderTimer = (totalSeconds, startTime) => {
+    const elapsed = (Date.now() - startTime) / 1000;
+    const displayedTime = totalSeconds - elapsed;
+
+    console.log('renderTimer', { totalSeconds, startTime, elapsed, displayedTime });
 
     const tenths = Math.floor((displayedTime * 10) % 10);
     let seconds = Math.floor(displayedTime % 60);
@@ -148,7 +148,12 @@ class App extends Component {
     }
     const hours = Math.floor(displayedTime / (60 * 60));
 
-    if (displayedTime < 0 || isNewInterval) {
+    if (displayedTime <= 0 && !this.state.isShowingNofication) {
+      console.log('Timer reached zero, calling handleNotification', {
+        displayedTime,
+        isShowingNofication: this.state.isShowingNofication,
+        notificationPermission: Notification.permission
+      });
       this.handleNotification();
     }
 
@@ -175,27 +180,60 @@ class App extends Component {
 
     if (this.state.uiState.timer.isStopped) {
       shouldShowNotif = false;
-      runningTimer = setInterval(
-        () => this.renderTimer(this.state.uiState.input.timer * 60),
-        100
-      );
       startTime = Date.now();
+      const timerInput = this.state.uiState.input.timer;
+      const timerMinutes = parseInt(timerInput, 10);
+      
+      console.log('Starting timer', { timerInput, timerMinutes, startTime });
+      
+      if (isNaN(timerMinutes) || timerMinutes <= 0) {
+        this.showFlashMsg('Error: enter a valid number');
+        return;
+      }
+      
+      const totalSeconds = timerMinutes * 60;
+      
+      this.setState({ 
+        isShowingNofication: false,
+        uiState: {
+          ...this.state.uiState,
+          timer: {
+            time: { ...this.state.uiState.timer.time },
+            isStopped: false,
+            startTime,
+            runningTimer: null,
+          },
+        },
+      }, () => {
+        runningTimer = setInterval(
+          () => this.renderTimer(totalSeconds, startTime),
+          100
+        );
+        this.setState({
+          uiState: {
+            ...this.state.uiState,
+            timer: {
+              ...this.state.uiState.timer,
+              runningTimer,
+            },
+          },
+        });
+      });
     } else {
       clearInterval(this.state.uiState.timer.runningTimer);
-    }
-
-    this.setState({
-      isShowingNofication: shouldShowNotif,
-      uiState: {
-        ...this.state.uiState,
-        timer: {
-          time: { ...this.state.uiState.timer.time },
-          isStopped: !this.state.uiState.timer.isStopped,
-          startTime,
-          runningTimer,
+      this.setState({
+        isShowingNofication: shouldShowNotif,
+        uiState: {
+          ...this.state.uiState,
+          timer: {
+            time: { ...this.state.uiState.timer.time },
+            isStopped: true,
+            startTime: null,
+            runningTimer: null,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   handleEvent = ({ action, e, id, type }) => {
@@ -445,20 +483,53 @@ class App extends Component {
   }
 
   handleNotification = () => {
-    const { isShowingNofication } = this.state;
+    console.log('handleNotification called', {
+      permission: Notification.permission,
+      isShowingNofication: this.state.isShowingNofication,
+      notifMsg: this.state.uiState.input.notifMsg
+    });
 
-    if (!isShowingNofication) {
-      if (Notification.permission !== 'granted') {
-        Notification.requestPermission();
-      } else {
+    if (!('Notification' in window)) {
+      console.error('This browser does not support notifications');
+      return;
+    }
+
+    if (Notification.permission === 'granted') {
+      try {
         const inputMessage = this.state.uiState.input.notifMsg;
-        new Notification('', {
-          icon: './Music-icon.png',
+        const notification = new Notification('Timer Complete', {
           body: inputMessage || 'Timer is up!!!!',
           requireInteraction: true,
         });
+        console.log('Notification created successfully', notification);
+        this.setState({ isShowingNofication: true });
+      } catch (error) {
+        console.error('Error creating notification:', error);
       }
-      this.setState({ isShowingNofication: true });
+    } else if (Notification.permission === 'default') {
+      console.log('Requesting notification permission...');
+      Notification.requestPermission().then((permission) => {
+        console.log('Permission result:', permission);
+        if (permission === 'granted') {
+          try {
+            const inputMessage = this.state.uiState.input.notifMsg;
+            const notification = new Notification('Timer Complete', {
+              body: inputMessage || 'Timer is up!!!!',
+              requireInteraction: true,
+            });
+            console.log('Notification created after permission granted', notification);
+            this.setState({ isShowingNofication: true });
+          } catch (error) {
+            console.error('Error creating notification after permission:', error);
+          }
+        } else {
+          console.warn('Notification permission denied:', permission);
+        }
+      }).catch((error) => {
+        console.error('Error requesting notification permission:', error);
+      });
+    } else {
+      console.warn('Notification permission is denied');
     }
   }
 
