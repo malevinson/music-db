@@ -81,6 +81,16 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
                       onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
                     />
                   </label>
+                  <label>
+                    Apple Music
+                    <input 
+                      name="musicService" 
+                      type="radio" 
+                      value="appleMusic"
+                      checked={musicService === 'appleMusic'}
+                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
+                    />
+                  </label>
                 </div>
                 <ArtistForm
                   input={input}

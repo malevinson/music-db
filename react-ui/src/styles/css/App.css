@@ -454,15 +454,21 @@ header {
   padding: 3px;
   display: flex;
   flex-direction: column;
+  gap: 2px;
   color: #426bf4;
   text-align: right; }
   .column input {
     padding: 0;
     width: 20px;
-    margin: 0; }
+    margin: 0;
+    vertical-align: middle; }
   .column label {
     padding: 0;
-    margin: 0; }
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem; }
 
 .flash-msg {
   position: absolute;

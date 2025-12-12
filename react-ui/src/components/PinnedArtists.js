@@ -34,6 +34,8 @@ const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onTogg
         musicUrl = `https://open.spotify.com/search/${encodedArtistName}`;
       } else if (musicService === 'pandora') {
         musicUrl = `https://www.pandora.com/search/${encodedArtistName}/all`;
+      } else if (musicService === 'appleMusic') {
+        musicUrl = `https://music.apple.com/us/search?term=${encodedArtistName}`;
       } else {
         musicUrl = `https://music.youtube.com/search?q=${encodedArtistName}`;
       }
