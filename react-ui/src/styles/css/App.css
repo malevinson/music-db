@@ -338,6 +338,43 @@ header {
 .relative-wrapper:hover .external-link {
   display: block; }
 
+.drag-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  color: #426bf4;
+  display: none;
+  cursor: grab;
+  z-index: 100;
+  pointer-events: auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  padding: 2px;
+  box-sizing: border-box; }
+
+.drag-handle:active {
+  cursor: grabbing; }
+
+.drag-handle svg {
+  width: 100%;
+  height: 100%; }
+
+.relative-wrapper:hover .drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.relative-wrapper.dragging .drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.relative-wrapper.dragging {
+  opacity: 0.6; }
+
 .timer-wrapper {
   justify-content: center;
   align-items: center;
@@ -398,6 +435,9 @@ header {
 .relative-wrapper {
   position: relative;
   padding: 0 2px; }
+  
+.relative-wrapper.dragging {
+  opacity: 0.5; }
 
 .relative-wrapper:hover > div {
   display: block; }

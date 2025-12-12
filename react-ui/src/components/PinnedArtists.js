@@ -3,7 +3,57 @@ import HoverImage from 'react-hover-image';
 import pinRed from '../images/pin.png';
 import pinBlack from '../images/pin2.png';
 
-const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onToggleCheckbox }) => {
+const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onToggleCheckbox, onReorderPinned }) => {
+  const handleDragStart = (e, index) => {
+    e.stopPropagation();
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
+    e.dataTransfer.setData('application/json', JSON.stringify({ index }));
+    const wrapper = e.currentTarget.closest('.relative-wrapper');
+    if (wrapper) {
+      wrapper.classList.add('dragging');
+    }
+    console.log('Drag started', index);
+  };
+
+  const handleDragEnd = (e) => {
+    const wrapper = e.currentTarget.closest('.relative-wrapper');
+    if (wrapper) {
+      wrapper.classList.remove('dragging');
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    let dragIndexStr = e.dataTransfer.getData('text/plain');
+    if (!dragIndexStr) {
+      try {
+        const data = JSON.parse(e.dataTransfer.getData('application/json'));
+        dragIndexStr = data.index.toString();
+      } catch (err) {
+        console.log('No drag data found');
+        return;
+      }
+    }
+    
+    const dragIndex = parseInt(dragIndexStr, 10);
+    console.log('Drop', { dragIndex, dropIndex });
+    if (!isNaN(dragIndex) && dragIndex !== dropIndex && dragIndex >= 0 && dropIndex >= 0) {
+      onReorderPinned(dragIndex, dropIndex);
+    }
+  };
+
+  const handleDragAreaMouseDown = (e) => {
+    e.stopPropagation();
+  };
+
   const renderPins = () => {
     if (!pinned || pinned.length === 0) {
       return (
@@ -18,12 +68,15 @@ const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onTogg
       );
     }
     
-    return pinned.map((pin) => {
+    return pinned.map((pin, index) => {
+      if (!pin || !pin.id) return null;
+      
       const id = pin.id;
       const artist = artists[ids[id]];
-      const { pinnedMeta: { artist: checkboxArtist, radio, album } } = pin;
-
+      
       if (!artist) return null;
+      
+      const { pinnedMeta: { artist: checkboxArtist, radio, album } } = pin;
 
       const encodedArtistName = encodeURIComponent(artist.name);
       let musicUrl = '';
@@ -41,7 +94,13 @@ const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onTogg
       }
 
       return (
-        <div className="relative-wrapper" key={artist._id}>
+        <div 
+          className="relative-wrapper" 
+          key={artist._id}
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, index)}
+          style={{ cursor: 'default' }}
+        >
           <div className="relative-for-checkboxes" />
           <div className="name">{artist.name}</div>
           <img src={artist.image} alt="album art" className="pinned" />
@@ -65,6 +124,21 @@ const PinnedArtists = ({ pinned, artists, ids, musicService, onTogglePin, onTogg
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
           </a>
+          <div 
+            className="drag-handle"
+            draggable="true"
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragEnd={handleDragEnd}
+            onMouseDown={handleDragAreaMouseDown}
+            onClick={(e) => e.stopPropagation()}
+            title="Drag to reorder"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="9" y1="11" x2="15" y2="11"></line>
+              <line x1="9" y1="7" x2="15" y2="7"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
           <div className="checkbox-wrap">
             <div className="checkbox-row">
               <div className="checkbox-name">Songs</div>

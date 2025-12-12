@@ -26,6 +26,7 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             musicService={musicService}
             onTogglePin={(id) => handleEvent({ action: 'togglePin', id })}
             onToggleCheckbox={(e, id) => handleEvent({ action: 'toggleCheckbox', e, id })}
+            onReorderPinned={(dragIndex, hoverIndex) => handleEvent({ action: 'reorderPinned', dragIndex, hoverIndex })}
           />
 
           <section style={{ marginTop: '1.5rem', marginBottom: '.5rem' }}>

@@ -249,7 +249,7 @@ class App extends Component {
     }
   }
 
-  handleEvent = ({ action, e, id, type }) => {
+  handleEvent = ({ action, e, id, type, dragIndex, hoverIndex }) => {
     switch (action) {
       case 'inputChange':
         this.handleInputChange(e);
@@ -281,6 +281,9 @@ class App extends Component {
         break;
       case 'toggleMusicService':
         this.handleToggleMusicService(e);
+        break;
+      case 'reorderPinned':
+        this.handleReorderPinned(dragIndex, hoverIndex);
         break;
       default:
         break;
@@ -346,6 +349,21 @@ class App extends Component {
       uiState: { musicService: { $set: serviceName } },
     });
     this.setState(newState);
+  }
+
+  handleReorderPinned = (dragIndex, hoverIndex) => {
+    const pinned = [...this.state.uiState.pinned];
+    if (dragIndex < 0 || dragIndex >= pinned.length || hoverIndex < 0 || hoverIndex >= pinned.length) {
+      return;
+    }
+    const draggedItem = pinned[dragIndex];
+    if (!draggedItem) return;
+    
+    pinned.splice(dragIndex, 1);
+    pinned.splice(hoverIndex, 0, draggedItem);
+    this.setState({
+      uiState: { ...this.state.uiState, pinned },
+    });
   }
 
   handleTogglePin = (id) => {
