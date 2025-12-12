@@ -431,7 +431,6 @@ header {
 .column {
   margin: 5px;
   padding: 3px;
-  border: 0.05rem solid red;
   display: flex;
   flex-direction: column;
   color: #426bf4;

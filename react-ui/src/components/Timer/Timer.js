@@ -7,6 +7,18 @@ const Timer = ({ timer, time, input, onInputChange, onToggleTimer }) => {
   return (
     <div className="inline-block2">
       <div className="timer-wrapper">
+        <span style={{ paddingRight: '0.5rem' }}>Mins</span>
+        <Input
+          name="timer"
+          className="timer-form"
+          value={input}
+          placeholder="25"
+          handleChange={onInputChange}
+        />
+        <Button onClick={onToggleTimer} className="button timer" style={{ marginLeft: '1rem' }}>
+          {timer.isStopped ? <span>Start</span> : <span>Stop</span>}
+          timer
+        </Button>
         <div className="timer-active">
           <div className={classNames({ showTimer: !timer.isStopped }, { hideTimer: timer.isStopped })}>
             <div id="bars">
@@ -22,19 +34,10 @@ const Timer = ({ timer, time, input, onInputChange, onToggleTimer }) => {
             </div>
           </div>
         </div>
-        Mins
-        <Input
-          name="timer"
-          className="timer-form"
-          value={input}
-          placeholder="25"
-          handleChange={onInputChange}
-        />
-        <Button onClick={onToggleTimer} className="button timer">
-          {timer.isStopped ? <span>Start</span> : <span>Stop</span>}
-          timer
-        </Button>
       </div>
+
+
+      
     </div>
   );
 };

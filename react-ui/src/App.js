@@ -20,7 +20,7 @@ class App extends Component {
           rating: '',
           artist: '',
           edit: '',
-          filter: '',
+          Filter: '',
           timer: '25',
         },
         sort: {

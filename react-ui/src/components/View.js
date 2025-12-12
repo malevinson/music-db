@@ -27,9 +27,19 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             onToggleCheckbox={(e, id) => handleEvent({ action: 'toggleCheckbox', e, id })}
           />
 
-          <section>
-            <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', gap: '2rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <section style={{ marginTop: '1.5rem', marginBottom: '.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4rem', flexWrap: 'wrap', margin: '0 50px 1rem 30px' }}>
+              <div style={{ display: 'flex', alignItems: 'center' , gap: '0.5rem'}}>
+                <div style={{ display: 'flex', alignItems: 'center', }}>
+                  <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>Notification Message</label>
+                  <Input
+                    name="notifMsg"
+                    value={input}
+                    placeholder="Change artists?"
+                    handleChange={(e) => handleEvent({ action: 'inputChange', e })}
+                  />
+                </div>
+
                 <Timer
                   timer={timer}
                   time={time}
@@ -37,17 +47,8 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
                   onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
                   onToggleTimer={() => handleEvent({ action: 'toggleTimer' })}
                 />
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem' }}>Notification Message</label>
-                  <Input
-                    name="notifMsg"
-                    value={input}
-                    placeholder="Time to change artists?"
-                    handleChange={(e) => handleEvent({ action: 'inputChange', e })}
-                  />
-                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center',  }}>
                 <div className="column" style={{ fontSize: '11px' }}>
                   <label>
                     YouTube Music
