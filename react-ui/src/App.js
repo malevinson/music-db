@@ -133,7 +133,11 @@ class App extends Component {
 
   renderTimer = (totalSeconds, startTime) => {
     const elapsed = (Date.now() - startTime) / 1000;
-    const displayedTime = totalSeconds - elapsed;
+    let displayedTime = totalSeconds - elapsed;
+    
+    if (displayedTime < 0) {
+      displayedTime = 0;
+    }
 
     console.log('renderTimer', { totalSeconds, startTime, elapsed, displayedTime });
 
@@ -169,7 +173,9 @@ class App extends Component {
   }
 
   handleToggleTimer = () => {
-    if (this.state.uiState.input.timer.length < 1) {
+    const timerInput = this.state.uiState.input.timer;
+    
+    if (!timerInput || timerInput.length < 1) {
       this.showFlashMsg('Error: enter a number');
       return;
     }
@@ -181,13 +187,19 @@ class App extends Component {
     if (this.state.uiState.timer.isStopped) {
       shouldShowNotif = false;
       startTime = Date.now();
-      const timerInput = this.state.uiState.input.timer;
-      const timerMinutes = parseInt(timerInput, 10);
+      const timerMinutes = parseFloat(timerInput);
       
-      console.log('Starting timer', { timerInput, timerMinutes, startTime });
+      console.log('Starting timer', { 
+        timerInput, 
+        timerMinutes, 
+        startTime, 
+        inputState: this.state.uiState.input,
+        timerValue: this.state.uiState.input.timer,
+        timerType: typeof this.state.uiState.input.timer
+      });
       
       if (isNaN(timerMinutes) || timerMinutes <= 0) {
-        this.showFlashMsg('Error: enter a valid number');
+        this.showFlashMsg('Error: enter a valid number greater than 0');
         return;
       }
       
