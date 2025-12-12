@@ -37,7 +37,7 @@ class App extends Component {
           startTime: null,
           runningTimer: null,
         },
-        musicService: '',
+        musicService: 'googleMusic',
       },
       app: { artists: [], ids: {} },
     };
