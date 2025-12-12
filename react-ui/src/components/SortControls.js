@@ -26,11 +26,15 @@ const SortControls = ({ activeSort, sortUp, input, onSort, onInputChange }) => {
           );
         })}
         <div>
-          <div className="filter" style={input && input.filter && input.filter.length ? { border: '3px dashed red' } : {}}>
+          <div className="filter">
             <Input
               name="filter"
               value={input}
               handleChange={onInputChange}
+              style={{
+                marginLeft: '10px',
+                ...(input.filter && input.filter.length ? { border: '4px dashed red' } : { })
+              }}
             />
           </div>
         </div>

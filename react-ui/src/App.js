@@ -337,7 +337,7 @@ class App extends Component {
     const formatedRating = parseInt(input.rating.trim(), 10);
 
     if (formatedArtist.length < 2) {
-      this.showFlashMsg('Error: Enter at least 2 characters');
+      this.showFlashMsg('Error: Enter at least 2 characters in the artist field');
       return;
     }
 
