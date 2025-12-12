@@ -37,6 +37,7 @@ class App extends Component {
           startTime: null,
           runningTimer: null,
         },
+        musicService: '',
       },
       app: { artists: [], ids: {} },
     };
@@ -278,6 +279,9 @@ class App extends Component {
       case 'toggleCheckbox':
         this.handleCheckbox(e, id);
         break;
+      case 'toggleMusicService':
+        this.handleToggleMusicService(e);
+        break;
       default:
         break;
     }
@@ -332,6 +336,14 @@ class App extends Component {
   handleInputChange = (e) => {
     const newState = update(this.state, {
       uiState: { input: { [e.target.name]: { $set: e.target.value } } },
+    });
+    this.setState(newState);
+  }
+
+  handleToggleMusicService = (e) => {
+    const serviceName = e.target.value;
+    const newState = update(this.state, {
+      uiState: { musicService: { $set: serviceName } },
     });
     this.setState(newState);
   }

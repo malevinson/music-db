@@ -10,7 +10,7 @@ import Input from './Input';
 
 const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
   const { artists, ids } = app;
-  const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer } = uiState;
+  const { pinned, input, sort, currentEdit, showFlashMsg, flashMsg, timer, musicService } = uiState;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -23,6 +23,7 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             pinned={pinned}
             artists={artists}
             ids={ids}
+            musicService={musicService}
             onTogglePin={(id) => handleEvent({ action: 'togglePin', id })}
             onToggleCheckbox={(e, id) => handleEvent({ action: 'toggleCheckbox', e, id })}
           />
@@ -52,15 +53,33 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
                 <div className="column" style={{ fontSize: '11px' }}>
                   <label>
                     YouTube Music
-                    <input name="googleMusic" type="checkbox" />
+                    <input 
+                      name="musicService" 
+                      type="radio" 
+                      value="googleMusic"
+                      checked={musicService === 'googleMusic'}
+                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
+                    />
                   </label>
                   <label>
                     Spotify
-                    <input name="spotify" type="checkbox" />
+                    <input 
+                      name="musicService" 
+                      type="radio" 
+                      value="spotify"
+                      checked={musicService === 'spotify'}
+                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
+                    />
                   </label>
                   <label>
                     Pandora
-                    <input name="pandora" type="checkbox" />
+                    <input 
+                      name="musicService" 
+                      type="radio" 
+                      value="pandora"
+                      checked={musicService === 'pandora'}
+                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
+                    />
                   </label>
                 </div>
                 <ArtistForm

@@ -301,13 +301,13 @@ header {
     justify-content: center;
     align-items: center;
     display: flex;
-    height: 69px;
-    min-width: 69px; }
+    height: 75px;
+    min-width: 75px; }
     .pinned-section .artist-well .flex .name {
       font-size: 7.5px; }
     .pinned-section .artist-well .flex .pinned {
-      width: 60px;
-      height: 60px; }
+      width: 70px;
+      height: 70px; }
 
 .pinned-section .pin {
   position: absolute;
@@ -320,6 +320,23 @@ header {
 .pinned-section .pin:hover {
   display: block;
   cursor: pointer; }
+
+.pinned-section .external-link {
+  position: absolute;
+  top: 11%;
+  right: 7%;
+  width: 17px;
+  height: 17px;
+  color: #426bf4;
+  display: none;
+  text-decoration: none;
+  cursor: pointer; }
+
+.pinned-section .external-link:hover {
+  color: #f44162; }
+
+.relative-wrapper:hover .external-link {
+  display: block; }
 
 .timer-wrapper {
   justify-content: center;
@@ -421,12 +438,16 @@ header {
   display: block; }
 
 .checkbox-wrap {
-  font-size: 10px;
+  font-size: 8px;
   position: absolute;
-  top: 30px;
-  left: 5px;
+  bottom: -55px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: white;
-  display: none; }
+  display: none;
+  padding: 2px 4px;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
 
 .column {
   margin: 5px;
