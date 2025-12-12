@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -17,8 +20,8 @@ const DB_NAME = 'musicDb';
 const STATIC_PATH = path.resolve(__dirname, './react-ui/build');
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: '31e1bf1623b849e9b389a41d995051fe',
-  clientSecret: '91d80f1f37b04d07abbc024dc483aca6',
+  clientId: process.env.SPOTIFY_CLIENT_ID,
+  clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 });
 
 let tokenExpirationTime = null;

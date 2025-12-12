@@ -51,6 +51,8 @@ cd react-ui && npm start
 
 Create a `.env` file in the root directory:
 ```
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 MONGODB_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_jwt_secret_key
 ```
@@ -58,6 +60,8 @@ JWT_SECRET=your_jwt_secret_key
 ### Netlify Deployment
 
 Set these in the Netlify Dashboard under Site Settings > Environment Variables:
+- `SPOTIFY_CLIENT_ID` - Your Spotify API client ID
+- `SPOTIFY_CLIENT_SECRET` - Your Spotify API client secret
 - `MONGODB_URI` - Your MongoDB Atlas connection string
 - `JWT_SECRET` - Secret key for JWT tokens
 
@@ -80,6 +84,6 @@ Set these in the Netlify Dashboard under Site Settings > Environment Variables:
 
 ## Notes
 
-- Spotify API credentials are hardcoded in `server/index.js` (no API keys needed for development)
+- Spotify API credentials must be set in environment variables (see Environment Variables section)
 - Desktop notifications require browser permission (Chrome recommended)
 - The app uses MongoDB Atlas for production and can use local MongoDB for development
