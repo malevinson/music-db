@@ -188,7 +188,9 @@ button:focus {
 
 .active {
   border: 3px solid #426bf4;
-  color: #f44162; }
+  color: #f44162; 
+  line-height: 9px;
+}
 
 .active:active {
   box-shadow: 0 3px 0 #426bf4; }
@@ -275,12 +277,13 @@ header {
   justify-content: center;
   align-items: center;
   display: flex;
-  background-color: lightblue;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   color: #f44162;
   box-shadow: 0rem 0rem 1rem grey;
-  height: 4vh;
-  min-height: 25px; }
+  min-height: 25px; 
+  height: 50px;
+  background: linear-gradient(to right, #10498e, #426bf4, #2e1da7);
+}
 
 .pinned-section .header {
   margin: 1rem 0 0 0; }
@@ -397,7 +400,10 @@ header {
   opacity: 0.3; }
 
 .controls {
-  padding: 1rem 0; }
+  padding: 1rem 0; 
+  padding-bottom: 0;
+
+}
 
 .photo {
   width: 100px;
@@ -477,5 +483,6 @@ img {
   height: 100%; }
 
 section {
-  margin: 1vh auto;
-  text-align: center; }
+  margin: 1vh .5vh auto;
+  text-align: center;
+ }
