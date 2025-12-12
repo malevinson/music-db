@@ -460,8 +460,8 @@ class App extends Component {
     const { user } = this.state;
     
     // Prevent deletion if demo account has 4 or fewer artists
-    if (user && user.email === 'demo@test.com' && artists.length <= 4) {
-      this.showFlashMsg('Demo account cannot have less than 4 artists');
+    if (user && user.email === 'demo@test.com' && artists.length <= 10) {
+      this.showFlashMsg('Demo account cannot have less than 10 artists');
       return;
     }
 
