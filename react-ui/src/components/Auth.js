@@ -218,7 +218,6 @@ const styles = {
     backgroundImage: `url(${blurredBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    filter: 'blur(5px)',
     zIndex: 0,
   },
   card: {

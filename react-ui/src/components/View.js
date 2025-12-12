@@ -29,8 +29,9 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             onReorderPinned={(dragIndex, hoverIndex) => handleEvent({ action: 'reorderPinned', dragIndex, hoverIndex })}
           />
 
-          <section style={{ marginTop: '1.5rem', marginBottom: '.5rem' }}>
-            <div className="controls-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4rem', flexWrap: 'wrap', margin: '0 50px 1rem 30px' }}>
+          <section style={{ maxWidth: '1400px',
+    margin: '1.5rem auto .5rem auto' }}>
+            <div className="controls-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',  flexWrap: 'wrap', margin: '0 50px 1rem 30px' }}>
               <div className="controls-row-item" style={{ display: 'flex', alignItems: 'center' , gap: '0.5rem'}}>
                 <div style={{ display: 'flex', alignItems: 'center', }}>
                   <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>Notification Message</label>
