@@ -375,6 +375,70 @@ header {
 .relative-wrapper.dragging {
   opacity: 0.6; }
 
+.pinned-dragging,
+.pinned-section .sortable-helper {
+  opacity: 0.8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: inline-block !important;
+  vertical-align: top; }
+  .pinned-dragging .relative-wrapper,
+  .pinned-section .sortable-helper .relative-wrapper {
+    width: auto !important;
+    height: auto !important;
+    position: relative !important;
+    padding: 0 2px !important;
+    display: block !important; }
+  .pinned-dragging .pinned,
+  .pinned-section .sortable-helper .pinned {
+    width: 70px !important;
+    height: 70px !important;
+    max-width: 70px !important;
+    max-height: 70px !important;
+    display: block !important;
+    object-fit: cover !important; }
+  .pinned-dragging .name,
+  .pinned-section .sortable-helper .name {
+    font-size: 7.5px !important;
+    line-height: normal !important; }
+  .pinned-dragging .pin,
+  .pinned-section .sortable-helper .pin {
+    position: absolute !important;
+    top: 11% !important;
+    left: 7% !important;
+    width: 17px !important;
+    height: auto !important;
+    display: block !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+    padding: 0 !important; }
+  .pinned-dragging .external-link,
+  .pinned-section .sortable-helper .external-link {
+    position: absolute !important;
+    top: 11% !important;
+    right: 7% !important;
+    width: 17px !important;
+    height: 17px !important;
+    display: block !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+    padding: 0 !important; }
+  .pinned-dragging .drag-handle,
+  .pinned-section .sortable-helper .drag-handle {
+    display: none !important; }
+  .pinned-dragging .checkbox-wrap,
+  .pinned-section .sortable-helper .checkbox-wrap {
+    display: none !important; }
+  .pinned-dragging .relative-for-checkboxes,
+  .pinned-section .sortable-helper .relative-for-checkboxes {
+    display: none !important; }
+
+.pinned-section .sortable-ghost {
+  opacity: 0.3; }
+
+.pinned-section[class*="Sortable"] .relative-wrapper {
+  transition: transform 0.1s ease-out; }
+
 .timer-wrapper {
   justify-content: center;
   align-items: center;
