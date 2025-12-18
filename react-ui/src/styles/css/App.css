@@ -460,6 +460,14 @@ header {
   .main input[name="artist"] {
     width: 60px;
   }
+  
+  label {
+    font-size: 11px;
+  }
+  
+  .timer-wrapper span {
+    font-size: 11px;
+  }
 }
 
 .artist .pin {
@@ -569,8 +577,6 @@ header {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
 
 .column {
-  margin: 5px;
-  padding: 3px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -588,6 +594,14 @@ header {
     align-items: center;
     justify-content: flex-end;
     gap: 0.3rem; }
+
+    @media (max-width: 600px) {
+      .column {
+
+  margin: 0px;
+  padding: 0px;
+      }
+    }
 
 .flash-msg {
   position: absolute;
@@ -634,9 +648,23 @@ section {
 
 
 .controls-row {
-    @media (max-width: 1199px) {
-        justify-content: center !important;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 50px 1rem 30px;
+}
+
+@media (max-width: 1199px) {
+  .controls-row {
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .controls-row {
+  margin: 0 0 1rem 0;
+  }
 }
 
 .controls-row-item {
@@ -660,5 +688,18 @@ section {
   
   .notification-label-short {
     display: inline;
+  }
+}
+
+@media (max-width: 500px) {
+  .button-wrapper,
+  .buttons-wrapper {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+  
+  .Filter input,
+  input[name="Filter"] {
+    width: 66.67%;
   }
 }

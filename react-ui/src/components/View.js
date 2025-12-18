@@ -27,11 +27,11 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             onTogglePin={(id) => handleEvent({ action: 'togglePin', id })}
             onToggleCheckbox={(e, id) => handleEvent({ action: 'toggleCheckbox', e, id })}
             onReorderPinned={(dragIndex, hoverIndex) => handleEvent({ action: 'reorderPinned', dragIndex, hoverIndex })}
-          />
+                />
 
           <section style={{ maxWidth: '1400px',
     margin: '1.5rem auto .5rem auto' }}>
-            <div className="controls-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',  flexWrap: 'wrap', margin: '0 50px 1rem 30px' }}>
+            <div className="controls-row">
               <div className="controls-row-item" style={{ display: 'flex', alignItems: 'center' , gap: '0.5rem'}}>
                 <div style={{ display: 'flex', alignItems: 'center', }}>
                   <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>
@@ -53,7 +53,7 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
                   onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
                   onToggleTimer={() => handleEvent({ action: 'toggleTimer' })}
                 />
-              </div>
+            </div>
               <div style={{ display: 'flex', alignItems: 'center',  }}>
                 <div className="column" style={{ fontSize: '11px' }}>
                   <label>

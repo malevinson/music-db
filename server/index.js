@@ -96,8 +96,8 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: '*',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 let mongoUri = process.env.MONGODB_URI || 'mongodb+srv://malevinsonAtlasDB:H7tm55eRGRpLHyn9@playlistq.p5uhju3.mongodb.net/musicDb?retryWrites=true&w=majority';
@@ -124,10 +124,10 @@ mongoose.connect(mongoUri, {
   w: 'majority',
 })
   .then(() => console.log(chalk.green('MongoDB connection successful!')))
-  .catch(err => {
+    .catch(err => {
     console.error(chalk.red('MongoDB connection error:'), err.message);
     console.error(chalk.red('Check your MONGODB_URI environment variable.'));
-  });
+    });
 
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
@@ -153,10 +153,10 @@ router.route('/artists')
         artist.image = image;
       } catch (err) {
         console.log('Could not fetch artist image:', err);
-      }
+          }
 
       await artist.save();
-      res.json({ artist });
+          res.json({ artist });
     } catch (err) {
       res.status(500).json({ error: 'Error creating artist.' });
     }
@@ -206,7 +206,7 @@ router.route('/artist/:artist_id')
       artist.pinnedMeta.album = req.body.pinnedMeta?.album;
 
       await artist.save();
-      res.json({ message: 'Artist updated!' });
+        res.json({ message: 'Artist updated!' });
     } catch (err) {
       res.status(500).json({ error: 'Error updating artist.' });
     }
@@ -225,7 +225,7 @@ router.route('/artist/:artist_id')
       res.json({ _id: req.params.artist_id });
     } catch (err) {
       res.status(500).json({ error: 'Error deleting artist.' });
-    }
+      }
   });
 
 app.use('/api', router);
