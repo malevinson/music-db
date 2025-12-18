@@ -456,6 +456,12 @@ header {
 .artist-input-wrapper {
   display: inline-block; }
 
+@media (max-width: 600px) {
+  .main input[name="artist"] {
+    width: 60px;
+  }
+}
+
 .artist .pin {
   position: absolute;
   top: 5px;
@@ -636,5 +642,23 @@ section {
 .controls-row-item {
   @media (max-width: 1199px) {
       margin-left: 70px;
+  }
+}
+
+.notification-label-full {
+  display: inline;
+}
+
+.notification-label-short {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .notification-label-full {
+    display: none;
+  }
+  
+  .notification-label-short {
+    display: inline;
   }
 }

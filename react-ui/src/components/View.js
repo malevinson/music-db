@@ -34,7 +34,10 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
             <div className="controls-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',  flexWrap: 'wrap', margin: '0 50px 1rem 30px' }}>
               <div className="controls-row-item" style={{ display: 'flex', alignItems: 'center' , gap: '0.5rem'}}>
                 <div style={{ display: 'flex', alignItems: 'center', }}>
-                  <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>Notification Message</label>
+                  <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>
+                    <span className="notification-label-full">Notification Message</span>
+                    <span className="notification-label-short">Msg</span>
+                  </label>
                   <Input
                     name="notifMsg"
                     value={input}
