@@ -16,7 +16,10 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div>
         <div>
-          <header>Playlist Q</header>
+          <header>
+            Playlist Q
+            <LogoutButton onLogout={onLogout} user={user} />
+          </header>
           <FlashMessage showFlashMsg={showFlashMsg} flashMsg={flashMsg} />
 
           <PinnedArtists
@@ -129,7 +132,6 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
           onInputChange={(e) => handleEvent({ action: 'inputChange', e })}
         />
       </div>
-      <LogoutButton onLogout={onLogout} user={user} />
     </div>
   );
 };

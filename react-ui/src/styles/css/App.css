@@ -274,6 +274,7 @@ i {
   animation-duration: 442ms; }
 
 header {
+  position: relative;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -283,6 +284,8 @@ header {
   min-height: 25px; 
   height: 50px;
   background: linear-gradient(to right, #10498e, #426bf4, #2e1da7);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pinned-section .header {

@@ -7,10 +7,10 @@ const LogoutButton = ({ onLogout, user }) => {
     <button
       onClick={onLogout}
       style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        padding: '10px 100px',
+        position: 'absolute',
+        top: '5px',
+        right: '10px',
+        padding: '5px 100px',
         backgroundColor: '#c62828',
         color: 'white',
         border: 'none',
@@ -20,6 +20,7 @@ const LogoutButton = ({ onLogout, user }) => {
         fontWeight: '600',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
         zIndex: 1000,
+
       }}
       onMouseOver={(e) => {
         e.target.style.backgroundColor = '#b71c1c';
