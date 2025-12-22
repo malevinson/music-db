@@ -58,47 +58,19 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
                 />
             </div>
               <div style={{ display: 'flex', alignItems: 'center',  }}>
-                <div className="column" style={{ fontSize: '11px' }}>
-                  <label>
-                    YouTube Music
-                    <input 
-                      name="musicService" 
-                      type="radio" 
-                      value="googleMusic"
-                      checked={musicService === 'googleMusic'}
-                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
-                    />
-                  </label>
-                  <label>
-                    Spotify
-                    <input 
-                      name="musicService" 
-                      type="radio" 
-                      value="spotify"
-                      checked={musicService === 'spotify'}
-                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
-                    />
-                  </label>
-                  <label>
-                    Pandora
-                    <input 
-                      name="musicService" 
-                      type="radio" 
-                      value="pandora"
-                      checked={musicService === 'pandora'}
-                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
-                    />
-                  </label>
-                  <label>
-                    Apple Music
-                    <input 
-                      name="musicService" 
-                      type="radio" 
-                      value="appleMusic"
-                      checked={musicService === 'appleMusic'}
-                      onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
-                    />
-                  </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexDirection: 'column'}}>
+                  <label className="queue-links-label">Open Queue Links In</label>
+                  <select
+                    name="musicService"
+                    value={musicService}
+                    onChange={(e) => handleEvent({ action: 'toggleMusicService', e })}
+                    className="music-service-select"
+                  >
+                    <option value="googleMusic">YouTube Music</option>
+                    <option value="spotify">Spotify</option>
+                    <option value="pandora">Pandora</option>
+                    <option value="appleMusic">Apple Music</option>
+                  </select>
                 </div>
                 <ArtistForm
                   input={input}
