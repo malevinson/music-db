@@ -1,6 +1,6 @@
 [build]
-  # Build command - install dependencies and build React app
-  command = "npm install && cd react-ui && npm install && npm run build"
+  # Build command - capture git info and build React app
+  command = "npm install && cd react-ui && npm install && export REACT_APP_GIT_COMMIT=${COMMIT_REF:-local} && export REACT_APP_GIT_COMMIT_MSG=\"$(git log -1 --pretty=%B 2>/dev/null || echo 'N/A')\" && npm run build"
   # Publish directory - where Netlify should serve static files from
   publish = "react-ui/build"
 

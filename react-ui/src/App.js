@@ -44,6 +44,15 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Log deployment info
+    const gitCommit = process.env.REACT_APP_GIT_COMMIT || process.env.REACT_APP_COMMIT_REF || 'local';
+    const gitMessage = process.env.REACT_APP_GIT_COMMIT_MSG || 'N/A';
+    console.log('═══════════════════════════════════════════════════════');
+    console.log('🚀 Playlist Q - Client App');
+    console.log(`📦 Git Commit: ${gitCommit}`);
+    console.log(`💬 Commit Message: ${gitMessage}`);
+    console.log('═══════════════════════════════════════════════════════');
+
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
     
