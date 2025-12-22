@@ -164,25 +164,21 @@ router.route('/artists')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        getIpInfo(req).then(ipInfo => {
-          notifyDemoAccountChange('Artist Created', {
-            artistName: artist.name,
-            rating: artist.rating,
-            artistId: artist._id,
-          }, ipInfo).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        }).catch(err => {
-          console.error('Failed to get IP info for notification:', err);
-          // Still send notification without IP info
-          notifyDemoAccountChange('Artist Created', {
-            artistName: artist.name,
-            rating: artist.rating,
-            artistId: artist._id,
-          }).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        });
+        try {
+          const ipInfo = await getIpInfo(req).catch(() => null);
+          await Promise.race([
+            notifyDemoAccountChange('Artist Created', {
+              artistName: artist.name,
+              rating: artist.rating,
+              artistId: artist._id,
+            }, ipInfo),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Notification timeout')), 10000)
+            )
+          ]);
+        } catch (err) {
+          // Continue anyway - don't block artist creation
+        }
       }
       
       res.json({ artist });
@@ -238,29 +234,23 @@ router.route('/artist/:artist_id')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        getIpInfo(req).then(ipInfo => {
-          notifyDemoAccountChange('Artist Updated', {
-            artistName: artist.name,
-            rating: artist.rating,
-            pinned: artist.pinned,
-            pinnedMeta: artist.pinnedMeta,
-            artistId: artist._id,
-          }, ipInfo).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        }).catch(err => {
-          console.error('Failed to get IP info for notification:', err);
-          // Still send notification without IP info
-          notifyDemoAccountChange('Artist Updated', {
-            artistName: artist.name,
-            rating: artist.rating,
-            pinned: artist.pinned,
-            pinnedMeta: artist.pinnedMeta,
-            artistId: artist._id,
-          }).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        });
+        try {
+          const ipInfo = await getIpInfo(req).catch(() => null);
+          await Promise.race([
+            notifyDemoAccountChange('Artist Updated', {
+              artistName: artist.name,
+              rating: artist.rating,
+              pinned: artist.pinned,
+              pinnedMeta: artist.pinnedMeta,
+              artistId: artist._id,
+            }, ipInfo),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Notification timeout')), 10000)
+            )
+          ]);
+        } catch (err) {
+          // Continue anyway - don't block artist update
+        }
       }
       
       res.json({ message: 'Artist updated!' });
@@ -281,21 +271,19 @@ router.route('/artist/:artist_id')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        getIpInfo(req).then(ipInfo => {
-          notifyDemoAccountChange('Artist Deleted', {
-            artistId: req.params.artist_id,
-          }, ipInfo).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        }).catch(err => {
-          console.error('Failed to get IP info for notification:', err);
-          // Still send notification without IP info
-          notifyDemoAccountChange('Artist Deleted', {
-            artistId: req.params.artist_id,
-          }).catch(err => {
-            console.error('Failed to send demo account notification:', err);
-          });
-        });
+        try {
+          const ipInfo = await getIpInfo(req).catch(() => null);
+          await Promise.race([
+            notifyDemoAccountChange('Artist Deleted', {
+              artistId: req.params.artist_id,
+            }, ipInfo),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Notification timeout')), 10000)
+            )
+          ]);
+        } catch (err) {
+          // Continue anyway - don't block artist deletion
+        }
       }
       
       res.json({ _id: req.params.artist_id });

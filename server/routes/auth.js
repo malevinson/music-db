@@ -26,24 +26,24 @@ router.post('/register', async (req, res) => {
     const user = new User({ email, password });
     await user.save();
 
-    // Notify about new user registration (with IP and location)
-    getIpInfo(req).then(ipInfo => {
-      notifyNewUser(user.email, ipInfo).catch(err => {
-        console.error('Failed to send new user notification:', err);
-      });
-    }).catch(err => {
-      console.error('Failed to get IP info for notification:', err);
-      // Still send notification without IP info
-      notifyNewUser(user.email).catch(err => {
-        console.error('Failed to send new user notification:', err);
-      });
-    });
-
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
+
+    // Send notification (wait for completion in serverless to ensure it's sent)
+    try {
+      const ipInfo = await getIpInfo(req).catch(() => null);
+      await Promise.race([
+        notifyNewUser(user.email, ipInfo),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Notification timeout')), 10000)
+        )
+      ]);
+    } catch (err) {
+      // Continue anyway - don't block user registration
+    }
 
     res.status(201).json({
       message: 'User created successfully',

@@ -58,10 +58,10 @@ JWT_SECRET=your_jwt_secret_key
 
 # Email Notifications (Optional)
 NOTIFICATION_EMAIL=
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
 ```
 
 ### Netlify Deployment
@@ -76,8 +76,8 @@ Set these in the Netlify Dashboard under Site Settings > Environment Variables:
 
 To receive email notifications for new user registrations and demo account changes:
 - `NOTIFICATION_EMAIL` - Email address to receive notifications
-- `SMTP_HOST` - SMTP server hostname (for Gmail: `smtp.gmail.com`)
-- `SMTP_PORT` - SMTP port (for Gmail: `587`)
+- `SMTP_HOST` - SMTP server hostname 
+- `SMTP_PORT` - SMTP port
 - `SMTP_USER` - Your email address for SMTP authentication
 - `SMTP_PASS` - Your email password or app password (for Gmail, use an App Password)
 - `SMTP_FROM` - (Optional) From address, defaults to SMTP_USER

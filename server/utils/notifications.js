@@ -48,31 +48,30 @@ async function getLocationFromIp(ip) {
 // Send notification via email (requires email service setup)
 async function sendEmailNotification(subject, message) {
   if (!NOTIFICATION_EMAIL) {
-    console.log('Email notifications not configured (NOTIFICATION_EMAIL not set)');
     return;
   }
 
-  // Check if SMTP is configured
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.log('Email notifications not configured (SMTP settings missing)');
     return;
   }
 
   try {
-    // Dynamic import for nodemailer (ES modules)
     const nodemailer = (await import('nodemailer')).default;
     
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT) || 587,
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
     
-    await transporter.sendMail({
+    const sendMailPromise = transporter.sendMail({
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: NOTIFICATION_EMAIL,
       subject: subject,
@@ -80,9 +79,13 @@ async function sendEmailNotification(subject, message) {
       html: `<pre style="font-family: monospace; white-space: pre-wrap;">${message.replace(/\n/g, '<br>')}</pre>`,
     });
     
-    console.log('Email notification sent successfully:', subject);
+    const sendMailTimeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Email send timeout after 30 seconds')), 30000)
+    );
+    
+    await Promise.race([sendMailPromise, sendMailTimeout]);
   } catch (error) {
-    console.error('Error sending email notification:', error);
+    console.error('Error sending email notification:', error.message);
   }
 }
 
@@ -157,15 +160,12 @@ async function sendWebhookNotification(data) {
 export async function sendNotification(subject, message, data = {}) {
   const fullMessage = `${subject}\n\n${message}`;
   
-  // Send to all configured channels (non-blocking)
-  Promise.all([
+  await Promise.allSettled([
     sendEmailNotification(subject, message),
     sendSlackNotification(fullMessage),
     sendDiscordNotification(fullMessage),
     sendWebhookNotification({ subject, message, ...data }),
-  ]).catch(err => {
-    console.error('Error in notification sending:', err);
-  });
+  ]);
 }
 
 // Specific notification helpers
