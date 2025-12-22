@@ -36,6 +36,21 @@ const ArtistList = ({ artists, pinned, input, sort, currentEdit, onEdit, onUpdat
       return artist && artist.name && artist.name.toLowerCase().indexOf(filterText) > -1;
     });
 
+  if (artists.length === 0) {
+    return (
+      <section>
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '40px 20px', 
+          color: '#666',
+          fontSize: '18px'
+        }}>
+          Add some artists to get started
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section>
       {sortedAndFilteredArtists.map((artist) => (
