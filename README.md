@@ -55,6 +55,13 @@ SPOTIFY_CLIENT_ID=your_spotify_client_id
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 MONGODB_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_jwt_secret_key
+
+# Email Notifications (Optional)
+NOTIFICATION_EMAIL=
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
 ```
 
 ### Netlify Deployment
@@ -64,6 +71,22 @@ Set these in the Netlify Dashboard under Site Settings > Environment Variables:
 - `SPOTIFY_CLIENT_SECRET` - Your Spotify API client secret
 - `MONGODB_URI` - Your MongoDB Atlas connection string
 - `JWT_SECRET` - Secret key for JWT tokens
+
+### Email Notifications (Optional)
+
+To receive email notifications for new user registrations and demo account changes:
+- `NOTIFICATION_EMAIL` - Email address to receive notifications
+- `SMTP_HOST` - SMTP server hostname (for Gmail: `smtp.gmail.com`)
+- `SMTP_PORT` - SMTP port (for Gmail: `587`)
+- `SMTP_USER` - Your email address for SMTP authentication
+- `SMTP_PASS` - Your email password or app password (for Gmail, use an App Password)
+- `SMTP_FROM` - (Optional) From address, defaults to SMTP_USER
+
+**Gmail Setup:**
+1. Enable 2-Step Verification on your Google account
+2. Go to Google Account > Security > App Passwords
+3. Generate an App Password for "Mail"
+4. Use that App Password as `SMTP_PASS` (not your regular Gmail password)
 
 ## Available Scripts
 

@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../../User.js';
 import { JWT_SECRET, authenticate } from '../middleware/auth.js';
+import { notifyNewUser } from '../utils/notifications.js';
 
 const router = express.Router();
 
@@ -24,6 +25,11 @@ router.post('/register', async (req, res) => {
 
     const user = new User({ email, password });
     await user.save();
+
+    // Notify about new user registration
+    notifyNewUser(user.email).catch(err => {
+      console.error('Failed to send new user notification:', err);
+    });
 
     const token = jwt.sign(
       { userId: user._id, email: user.email },

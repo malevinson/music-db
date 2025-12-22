@@ -14,6 +14,7 @@ import fs from 'fs';
 import Artist from '../Artist.js';
 import authRoutes from './routes/auth.js';
 import { authenticate } from './middleware/auth.js';
+import { notifyDemoAccountChange } from './utils/notifications.js';
 
 const __dirname = path.resolve();
 const DB_NAME = 'playlistq';
@@ -157,7 +158,19 @@ router.route('/artists')
           }
 
       await artist.save();
-          res.json({ artist });
+      
+      // Notify if demo account
+      if (req.user.email === 'demo@test.com') {
+        notifyDemoAccountChange('Artist Created', {
+          artistName: artist.name,
+          rating: artist.rating,
+          artistId: artist._id,
+        }).catch(err => {
+          console.error('Failed to send demo account notification:', err);
+        });
+      }
+      
+      res.json({ artist });
     } catch (err) {
       res.status(500).json({ error: 'Error creating artist.' });
     }
@@ -207,7 +220,21 @@ router.route('/artist/:artist_id')
       artist.pinnedMeta.album = req.body.pinnedMeta?.album;
 
       await artist.save();
-        res.json({ message: 'Artist updated!' });
+      
+      // Notify if demo account
+      if (req.user.email === 'demo@test.com') {
+        notifyDemoAccountChange('Artist Updated', {
+          artistName: artist.name,
+          rating: artist.rating,
+          pinned: artist.pinned,
+          pinnedMeta: artist.pinnedMeta,
+          artistId: artist._id,
+        }).catch(err => {
+          console.error('Failed to send demo account notification:', err);
+        });
+      }
+      
+      res.json({ message: 'Artist updated!' });
     } catch (err) {
       res.status(500).json({ error: 'Error updating artist.' });
     }
@@ -221,6 +248,15 @@ router.route('/artist/:artist_id')
       
       if (result.deletedCount === 0) {
         return res.status(404).json({ error: 'Artist not found or access denied.' });
+      }
+      
+      // Notify if demo account
+      if (req.user.email === 'demo@test.com') {
+        notifyDemoAccountChange('Artist Deleted', {
+          artistId: req.params.artist_id,
+        }).catch(err => {
+          console.error('Failed to send demo account notification:', err);
+        });
       }
       
       res.json({ _id: req.params.artist_id });
