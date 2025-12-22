@@ -14,7 +14,7 @@ import fs from 'fs';
 import Artist from '../Artist.js';
 import authRoutes from './routes/auth.js';
 import { authenticate } from './middleware/auth.js';
-import { notifyDemoAccountChange } from './utils/notifications.js';
+import { notifyDemoAccountChange, getIpInfo } from './utils/notifications.js';
 
 const __dirname = path.resolve();
 const DB_NAME = 'playlistq';
@@ -91,6 +91,9 @@ async function getArtistImage(artistQuery) {
 
 const app = express();
 
+// Trust proxy to get real IP addresses (important for services like Netlify)
+app.set('trust proxy', true);
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -161,12 +164,24 @@ router.route('/artists')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        notifyDemoAccountChange('Artist Created', {
-          artistName: artist.name,
-          rating: artist.rating,
-          artistId: artist._id,
+        getIpInfo(req).then(ipInfo => {
+          notifyDemoAccountChange('Artist Created', {
+            artistName: artist.name,
+            rating: artist.rating,
+            artistId: artist._id,
+          }, ipInfo).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         }).catch(err => {
-          console.error('Failed to send demo account notification:', err);
+          console.error('Failed to get IP info for notification:', err);
+          // Still send notification without IP info
+          notifyDemoAccountChange('Artist Created', {
+            artistName: artist.name,
+            rating: artist.rating,
+            artistId: artist._id,
+          }).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         });
       }
       
@@ -223,14 +238,28 @@ router.route('/artist/:artist_id')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        notifyDemoAccountChange('Artist Updated', {
-          artistName: artist.name,
-          rating: artist.rating,
-          pinned: artist.pinned,
-          pinnedMeta: artist.pinnedMeta,
-          artistId: artist._id,
+        getIpInfo(req).then(ipInfo => {
+          notifyDemoAccountChange('Artist Updated', {
+            artistName: artist.name,
+            rating: artist.rating,
+            pinned: artist.pinned,
+            pinnedMeta: artist.pinnedMeta,
+            artistId: artist._id,
+          }, ipInfo).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         }).catch(err => {
-          console.error('Failed to send demo account notification:', err);
+          console.error('Failed to get IP info for notification:', err);
+          // Still send notification without IP info
+          notifyDemoAccountChange('Artist Updated', {
+            artistName: artist.name,
+            rating: artist.rating,
+            pinned: artist.pinned,
+            pinnedMeta: artist.pinnedMeta,
+            artistId: artist._id,
+          }).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         });
       }
       
@@ -252,10 +281,20 @@ router.route('/artist/:artist_id')
       
       // Notify if demo account
       if (req.user.email === 'demo@test.com') {
-        notifyDemoAccountChange('Artist Deleted', {
-          artistId: req.params.artist_id,
+        getIpInfo(req).then(ipInfo => {
+          notifyDemoAccountChange('Artist Deleted', {
+            artistId: req.params.artist_id,
+          }, ipInfo).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         }).catch(err => {
-          console.error('Failed to send demo account notification:', err);
+          console.error('Failed to get IP info for notification:', err);
+          // Still send notification without IP info
+          notifyDemoAccountChange('Artist Deleted', {
+            artistId: req.params.artist_id,
+          }).catch(err => {
+            console.error('Failed to send demo account notification:', err);
+          });
         });
       }
       

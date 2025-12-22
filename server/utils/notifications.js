@@ -6,6 +6,45 @@ const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const CUSTOM_WEBHOOK_URL = process.env.CUSTOM_WEBHOOK_URL;
 
+// Helper function to extract IP address from Express request
+export function getClientIp(req) {
+  return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+         req.headers['x-real-ip'] ||
+         req.connection?.remoteAddress ||
+         req.socket?.remoteAddress ||
+         req.ip ||
+         'Unknown';
+}
+
+// Helper function to get location from IP address (using ip-api.com free service)
+async function getLocationFromIp(ip) {
+  // Skip for localhost/private IPs
+  if (!ip || ip === 'Unknown' || ip.startsWith('127.') || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.')) {
+    return { ip, location: 'Local/Private IP' };
+  }
+
+  try {
+    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,regionName,city,lat,lon,isp`);
+    const data = await response.json();
+    
+    if (data.status === 'success') {
+      return {
+        ip,
+        location: `${data.city || ''}, ${data.regionName || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, '').trim() || 'Unknown',
+        country: data.country || 'Unknown',
+        city: data.city || 'Unknown',
+        region: data.regionName || 'Unknown',
+        coordinates: data.lat && data.lon ? `${data.lat}, ${data.lon}` : null,
+        isp: data.isp || 'Unknown',
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching location from IP:', error);
+  }
+  
+  return { ip, location: 'Unable to determine' };
+}
+
 // Send notification via email (requires email service setup)
 async function sendEmailNotification(subject, message) {
   if (!NOTIFICATION_EMAIL) {
@@ -130,19 +169,53 @@ export async function sendNotification(subject, message, data = {}) {
 }
 
 // Specific notification helpers
-export async function notifyNewUser(userEmail) {
+export async function notifyNewUser(userEmail, ipInfo = null) {
+  let locationText = '';
+  if (ipInfo) {
+    locationText = `\nIP Address: ${ipInfo.ip}\nLocation: ${ipInfo.location}`;
+    if (ipInfo.country && ipInfo.country !== 'Unknown') {
+      locationText += `\nCountry: ${ipInfo.country}`;
+    }
+    if (ipInfo.city && ipInfo.city !== 'Unknown') {
+      locationText += `\nCity: ${ipInfo.city}`;
+    }
+    if (ipInfo.isp && ipInfo.isp !== 'Unknown') {
+      locationText += `\nISP: ${ipInfo.isp}`;
+    }
+  }
+  
   await sendNotification(
     '🎉 New User Registered',
-    `A new user has registered:\nEmail: ${userEmail}\nTime: ${new Date().toISOString()}`,
-    { type: 'new_user', email: userEmail }
+    `A new user has registered:\nEmail: ${userEmail}${locationText}\nTime: ${new Date().toISOString()}`,
+    { type: 'new_user', email: userEmail, ...(ipInfo || {}) }
   );
 }
 
-export async function notifyDemoAccountChange(action, details) {
+export async function notifyDemoAccountChange(action, details, ipInfo = null) {
+  let locationText = '';
+  if (ipInfo) {
+    locationText = `\nIP Address: ${ipInfo.ip}\nLocation: ${ipInfo.location}`;
+    if (ipInfo.country && ipInfo.country !== 'Unknown') {
+      locationText += `\nCountry: ${ipInfo.country}`;
+    }
+    if (ipInfo.city && ipInfo.city !== 'Unknown') {
+      locationText += `\nCity: ${ipInfo.city}`;
+    }
+    if (ipInfo.isp && ipInfo.isp !== 'Unknown') {
+      locationText += `\nISP: ${ipInfo.isp}`;
+    }
+  }
+  
   await sendNotification(
     `🔔 Demo Account Change: ${action}`,
-    `The demo@test.com account was modified:\nAction: ${action}\nDetails: ${JSON.stringify(details, null, 2)}\nTime: ${new Date().toISOString()}`,
-    { type: 'demo_account_change', action, ...details }
+    `The demo@test.com account was modified:\nAction: ${action}\nDetails: ${JSON.stringify(details, null, 2)}${locationText}\nTime: ${new Date().toISOString()}`,
+    { type: 'demo_account_change', action, ...details, ...(ipInfo || {}) }
   );
+}
+
+// Helper function to get IP info from request (extracts IP and fetches location)
+export async function getIpInfo(req) {
+  const ip = getClientIp(req);
+  return await getLocationFromIp(ip);
 }
 
