@@ -16,7 +16,7 @@ import authRoutes from './routes/auth.js';
 import { authenticate } from './middleware/auth.js';
 
 const __dirname = path.resolve();
-const DB_NAME = 'musicDb';
+const DB_NAME = 'playlistq';
 const STATIC_PATH = path.resolve(__dirname, './react-ui/build');
 
 const spotifyApi = new SpotifyWebApi({
@@ -100,7 +100,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-let mongoUri = process.env.MONGODB_URI || 'mongodb+srv://malevinsonAtlasDB:H7tm55eRGRpLHyn9@playlistq.p5uhju3.mongodb.net/musicDb?retryWrites=true&w=majority';
+let mongoUri = process.env.MONGODB_URI;
 
 if (!mongoUri.includes('/' + DB_NAME) && !mongoUri.includes('/?')) {
   if (mongoUri.includes('?')) {
@@ -116,6 +116,7 @@ if (!mongoUri) {
 }
 
 mongoose.connect(mongoUri, {
+  dbName: DB_NAME,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
   maxPoolSize: 1,
