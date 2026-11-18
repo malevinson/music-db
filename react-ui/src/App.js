@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import { titleCaseString } from './helpers';
 import { uiMap } from './constants';
 import { buildRequest } from './services/api';
+import { updateTimerIndicators, resetTimerIndicators } from './favicon';
 import './styles/css/App.css';
 
 class App extends Component {
@@ -162,6 +163,8 @@ class App extends Component {
     }
     const hours = Math.floor(displayedTime / (60 * 60));
 
+    updateTimerIndicators(displayedTime, totalSeconds);
+
     if (displayedTime <= 0 && !this.state.isShowingNofication) {
       console.log('Timer reached zero, calling handleNotification', {
         displayedTime,
@@ -243,6 +246,7 @@ class App extends Component {
       });
     } else {
       clearInterval(this.state.uiState.timer.runningTimer);
+      resetTimerIndicators();
       this.setState({
         isShowingNofication: shouldShowNotif,
         uiState: {
