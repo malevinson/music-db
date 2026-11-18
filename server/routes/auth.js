@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '90d' }
     );
 
     // Send notification (wait for completion in serverless to ensure it's sent)
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '90d' }
     );
 
     res.json({
