@@ -1,6 +1,6 @@
 [build]
   # Build command - capture git info and build React app
-  command = "npm install && cd react-ui && npm install && export REACT_APP_GIT_COMMIT=${COMMIT_REF:-local} && export REACT_APP_GIT_COMMIT_MSG=\"$(git log -1 --pretty=%B 2>/dev/null || echo 'N/A')\" && npm run build"
+  command = "npm install && cd react-ui && npm install && export REACT_APP_GIT_COMMIT=${COMMIT_REF:-local} && export REACT_APP_GIT_COMMIT_MSG=\"$(git log -1 --pretty=%B 2>/dev/null || echo 'N/A')\" && npm run build && cd .. && node scripts/write-version.js"
   # Publish directory - where Netlify should serve static files from
   publish = "react-ui/build"
 
@@ -38,11 +38,25 @@
   status = 200
   force = true
 
+# Serve build/version info
+[[redirects]]
+  from = "/version"
+  to = "/version.json"
+  status = 200
+  force = true
+
 # Redirect all non-API requests to index.html for React Router
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Never cache version info
+[[headers]]
+  for = "/version.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Content-Type = "application/json"
 
 # Headers for CORS and security
 [[headers]]
