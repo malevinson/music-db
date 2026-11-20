@@ -722,24 +722,6 @@ section {
   }
 }
 
-.notification-label-full {
-  display: inline;
-}
-
-.notification-label-short {
-  display: none;
-}
-
-@media (max-width: 700px) {
-  .notification-label-full {
-    display: none;
-  }
-  
-  .notification-label-short {
-    display: inline;
-  }
-}
-
 @media (max-width: 500px) {
   .button-wrapper,
   .buttons-wrapper {

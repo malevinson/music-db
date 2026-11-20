@@ -540,8 +540,7 @@ class App extends Component {
   handleNotification = () => {
     console.log('handleNotification called', {
       permission: Notification.permission,
-      isShowingNofication: this.state.isShowingNofication,
-      notifMsg: this.state.uiState.input.notifMsg
+      isShowingNofication: this.state.isShowingNofication
     });
 
     if (!('Notification' in window)) {
@@ -551,9 +550,8 @@ class App extends Component {
 
     if (Notification.permission === 'granted') {
       try {
-        const inputMessage = this.state.uiState.input.notifMsg;
         const notification = new Notification('Timer Complete', {
-          body: inputMessage || 'Timer is up!!!!',
+          body: 'Timer is up!!!!',
           requireInteraction: true,
         });
         console.log('Notification created successfully', notification);
@@ -567,9 +565,8 @@ class App extends Component {
         console.log('Permission result:', permission);
         if (permission === 'granted') {
           try {
-            const inputMessage = this.state.uiState.input.notifMsg;
             const notification = new Notification('Timer Complete', {
-              body: inputMessage || 'Timer is up!!!!',
+              body: 'Timer is up!!!!',
               requireInteraction: true,
             });
             console.log('Notification created after permission granted', notification);

@@ -6,7 +6,6 @@ import ArtistForm from './ArtistForm';
 import SortControls from './SortControls';
 import ArtistList from './ArtistList';
 import LogoutButton from './LogoutButton';
-import Input from './Input';
 
 const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
   const { artists, ids } = app;
@@ -36,19 +35,6 @@ const View = ({ handleEvent, uiState, app, time, onLogout, user }) => {
     margin: '1.5rem auto .5rem auto' }}>
             <div className="controls-row">
               <div className="controls-row-item" style={{ display: 'flex', alignItems: 'center' , gap: '0.5rem'}}>
-                <div style={{ display: 'flex', alignItems: 'center', }}>
-                  <label style={{ margin: 0, whiteSpace: 'nowrap' , }}>
-                    <span className="notification-label-full">Notification Message</span>
-                    <span className="notification-label-short">Msg</span>
-                  </label>
-                  <Input
-                    name="notifMsg"
-                    value={input}
-                    placeholder="Change artists?"
-                    handleChange={(e) => handleEvent({ action: 'inputChange', e })}
-                  />
-                </div>
-
                 <Timer
                   timer={timer}
                   time={time}
