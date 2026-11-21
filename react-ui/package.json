@@ -4,7 +4,12 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^1.1.0"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^12.1.5",
+    "@vitest/coverage-v8": "^3.2.7",
+    "jsdom": "^26.1.0",
+    "react-scripts": "^1.1.0",
+    "vitest": "^3.2.7"
   },
   "dependencies": {
     "react": "^16.2.0",
@@ -13,8 +18,10 @@
   "scripts": {
     "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "vitest run",
+    "eject": "react-scripts eject",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "proxy": "http://localhost:8888",
   "browserslist": {

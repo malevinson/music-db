@@ -16,7 +16,12 @@
     "dev-netlify": "netlify dev --dir react-ui/build --offline",
     "dev-netlify-proxy-with-frontend": "netlify dev --offline",
     "dev-netlify-with-react": "concurrently -n \"react,netlify\" -c \"blue,green\" \"cd react-ui && BROWSER=none PORT=3000 npm start\" \"wait-on http://localhost:3000 -t 30000 && netlify dev --offline\"",
-    "dev-frontend": "cd react-ui && NODE_OPTIONS=--openssl-legacy-provider npm start"
+    "dev-frontend": "cd react-ui && NODE_OPTIONS=--openssl-legacy-provider npm start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:client": "npm --prefix react-ui test",
+    "test:all": "npm test && npm run test:client"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -48,8 +53,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.7",
     "concurrently": "^8.2.2",
     "node-sass": "^8.0.0",
+    "supertest": "^7.3.2",
+    "vitest": "^3.2.7",
     "wait-on": "^7.2.0"
   }
 }

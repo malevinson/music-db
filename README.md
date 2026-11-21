@@ -97,6 +97,18 @@ To receive email notifications for new user registrations and demo account chang
 - `npm run watch-css` - Watch and compile SCSS files
 - `npm run build` - Build React app for production
 
+## Testing
+
+Unit tests use [Vitest](https://vitest.dev). The server and the React client each have their own suite.
+
+- `npm test` - Server tests (API routes, auth, models, notifications, Netlify function, build scripts)
+- `npm run test:client` - Client tests (components, App logic, API service, favicon timer)
+- `npm run test:all` - Both suites
+- `npm run test:watch` - Server tests in watch mode (`cd react-ui && npm run test:watch` for the client)
+- `npm run test:coverage` - Server coverage report (`cd react-ui && npm run test:coverage` for the client)
+
+Tests never touch real services: `.env` is not loaded, MongoDB and Spotify are mocked, and outbound HTTP/email is stubbed. Run `npm install` in both the root and `react-ui/` first.
+
 ## Tech Stack
 
 - **Frontend:** React 16.2.0

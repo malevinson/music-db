@@ -13,3 +13,6 @@ docker-compose.yml
 
 # Local Netlify folder
 .netlify
+
+# Test coverage reports
+coverage
